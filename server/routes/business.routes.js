@@ -20,7 +20,7 @@ router.post("/add-new-business", addBusiness);
 router.post("/verify-email", verifyEmail);
 router.post("/business-login", businessLogin);
 router.post("/business-logout", logout);
-router.get("/get-businesses", verifyToken, getBusinesses);
+router.get("/get-businesses", getBusinesses);
 
 // router.post("/forgot-password", forgotPassword);
 

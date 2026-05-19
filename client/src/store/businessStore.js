@@ -17,42 +17,19 @@ export const useBusinessStore = create((set) => ({
   message: null,
 
   //   get all businesses
-  getAllBusinesses: async (
-    role,
-    name,
-    admissionNumber,
-    email,
-    phoneNumber,
-    password,
-    classLevel,
-    department,
-    subject,
-    staffId,
-  ) => {
-    set({ isBizLoading: true, bizError: null });
+  getAllBusinesses: async () => {
+    set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/register`, {
-        role,
-        name,
-        admissionNumber,
-        email,
-        phoneNumber,
-        password,
-        classLevel,
-        department,
-        subject,
-        staffId,
-      });
+      const response = await axios.get(`${API_URL}/get-businesses`);
       set({
-        business: response.data.business,
-        isBizAuthenticated: true,
-        isBizLoading: false,
+        businesses: response.data.businesses,
+        isLoading: false,
       });
+      return response.data;
     } catch (error) {
       set({
-        bizError:
-          error.response?.data?.message || error.message || "Error signing up",
-        isBizLoading: false,
+        error: error.response.data.message || "Error getting Invoices",
+        isLoading: false,
       });
       throw error;
     }

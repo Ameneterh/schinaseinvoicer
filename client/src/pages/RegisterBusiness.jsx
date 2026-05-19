@@ -144,7 +144,7 @@ export default function RegisterBusiness() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.5 }}
-        className="max-w-6xl min-h-screen w-full mx-auto p-4 bg-opacity-80 text-black"
+        className="max-w-6xl min-h-screen w-full mx-auto p-4 bg-opacity-80 text-black mt-20"
       >
         <motion.div
           variants={fadeInUp}

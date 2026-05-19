@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
+import { useBusinessStore } from "../store/businessStore";
 import { formatDate } from "../../../server/utils/date";
 import MainLayout from "../layout/MainLayout";
 import ButtonSpecial from "../components/ButtonSpecial";
@@ -19,12 +20,31 @@ import registeredBusiness from "../assets/registeredBusiness.json";
 
 export default function HomePage() {
   const { user, logout, isLoading } = useAuthStore();
+  const { getAllBusinesses } = useBusinessStore();
+
+  const [businesses, setBusinesses] = useState([]);
 
   const slicedNews = news.slice(0, 8);
 
   const handleLogout = () => {
     logout();
   };
+
+  useEffect(() => {
+    const getBusinesses = async () => {
+      try {
+        const { businesses } = await getAllBusinesses();
+
+        setBusinesses(businesses);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getBusinesses();
+  }, []);
+
+  console.log(businesses);
 
   return (
     <MainLayout>
@@ -38,7 +58,7 @@ export default function HomePage() {
       <CustomerFeedbackComponent />
       <CallToActionComponent />
       {registeredBusiness.length > 0 && (
-        <OurClientListComponent clients={registeredBusiness} />
+        <OurClientListComponent clients={businesses} />
       )}
     </MainLayout>
   );

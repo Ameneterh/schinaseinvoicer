@@ -17,8 +17,6 @@ const fadeInUp = {
 };
 
 export default function AboutUsComponent() {
-  console.log(aboutcontent);
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

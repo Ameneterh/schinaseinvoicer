@@ -172,7 +172,7 @@ export default function CreateInvoice() {
   };
 
   return (
-    <div className="md:px-10">
+    <div className="md:px-10 mt-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -180,6 +180,7 @@ export default function CreateInvoice() {
         transition={{ duration: 0.5 }}
         className="min-h-screen max-w-7xl w-full mx-auto mt-2 mb-10 p-4 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl bg-white"
       >
+        <p className="text-xl font-extrabold mb-4">Create New Invoice</p>
         {/* content of invoice to print */}
         {showInvoice ? (
           <>

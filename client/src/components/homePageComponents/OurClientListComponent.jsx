@@ -29,9 +29,13 @@ export default function OurClientListComponent({ clients }) {
             className="flex gap-3 items-center rounded-md p-2 shadow-md"
             key={id}
           >
-            <img src={client.image} alt={client.name} className="h-12" />
+            <img
+              src={client.business_logo}
+              alt={client.business_name}
+              className="h-12"
+            />
             <h1 className="text-lg lg:text-3xl font-extrabold text-gray-500">
-              {client.name.split(" ")[0]}
+              {client.business_name.split(" ")[0]}
             </h1>
           </div>
         ))}

@@ -33,8 +33,6 @@ const clientFieldBack = [
 ];
 
 export default function CustomerFeedbackComponent() {
-  console.log(clientFieldBack);
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

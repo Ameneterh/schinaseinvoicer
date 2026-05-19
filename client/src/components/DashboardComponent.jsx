@@ -93,7 +93,7 @@ export default function DashboardComponent() {
   });
 
   return (
-    <div className="flex flex-col gap-4 w-full p-3">
+    <div className="flex flex-col gap-4 w-full p-3 md:mt-6">
       <div className="flex-wrap flex gap-4 justify-between">
         {/* admin views ----------------- total users, invoices, businesses */}
         {/* show total number of registered users */}
