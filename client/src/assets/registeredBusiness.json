@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Mater Christi Schools",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSy846_pmvigEIlePWnkNLuvwCXSI_s4vA-JQ&s"
+  },
+  {
+    "id": 2,
+    "name": "Infonet Grafix Global",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScFWjVPebdIZqVHJK1GNUeoMqkFfnIFpugtA&s"
+  },
+  {
+    "id": 3,
+    "name": "ChickenRepublic Nig",
+    "image": "https://miro.medium.com/v2/resize:fit:960/1*F5eHS53_C7fy2t4vG-wviw.png"
+  },
+  {
+    "id": 4,
+    "name": "InusaMotors Nig Ltd",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSc01BcrxgIIJMA1upppPTv86KYWmFoVrmkAQ&s"
+  }
+]

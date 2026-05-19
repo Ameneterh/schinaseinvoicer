@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "logo": "https://png.pngtree.com/png-clipart/20230425/original/pngtree-3d-location-icon-clipart-in-transparent-background-png-image_9095284.png",
+    "title": "Business Location",
+    "text": "Afao Road, Ado-Ekiti, Ekiti State, Nigeria."
+  },
+  {
+    "id": 2,
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png",
+    "title": "Business Contacts",
+    "text": "08154230654, 081*******"
+  },
+  {
+    "id": 3,
+    "logo": "https://imaginethatcreative.net/blog/wp-content/uploads/2023/06/2250206.png",
+    "title": "Business Emails",
+    "text": "schinase.industries@gmail.com"
+  },
+  {
+    "id": 4,
+    "logo": "https://img.freepik.com/free-vector/clock-forward-arrow_78370-7263.jpg?semt=ais_hybrid&w=740&q=80",
+    "title": "Contact Times",
+    "text": "Monday - Saturday: 8am - 5pm"
+  }
+]
