@@ -45,10 +45,25 @@ export const getClients = async (req, res) => {
   try {
     const clients = await Client.find();
 
+    const totalClients = await Client.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate(),
+    );
+    const lastMonthClients = await Client.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
     res.status(201).json({
       success: true,
       message: "Clients fetched successfully",
       clients,
+      totalClients,
+      lastMonthClients,
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

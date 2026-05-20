@@ -9,72 +9,142 @@ import { useAuthStore } from "../store/authStore";
 import AdminDashboardComponent from "./AdminDashboardComponent";
 import { UserDashboardComponents } from "./AdminDashboardComponent";
 import Divider from "./Divider";
+import { useInvoiceStore } from "../store/invoiceStore";
+import { useBusinessStore } from "../store/businessStore";
+import { useClientStore } from "../store/clientStore";
+import { get } from "mongoose";
 
 export default function DashboardComponent() {
-  const [users, setUsers] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [totalPosts, setTotalPosts] = useState(0);
-  const [totalComments, setTotalComments] = useState(0);
-  const [lastMonthUsers, setLastMonthUsers] = useState(0);
-  const [lastMonthPosts, setLastMonthPosts] = useState(0);
-  const [lastMonthComments, setLastMonthComments] = useState(0);
+  const { user } = useAuthStore();
+  const { getAllInvoices } = useInvoiceStore();
+  const { getAllBusinesses } = useBusinessStore();
+  const { getAllClients } = useClientStore();
+  const { getAllUsers } = useAuthStore();
 
   // to change later
-  const [invoices, setInvoices] = useState("");
+  const [invoices, setInvoices] = useState([]);
+  const [totalInvoices, setTotalInvoices] = useState(0);
+  const [lastMonthInvoices, setLastMonthInvoices] = useState(0);
 
-  const { user } = useAuthStore();
+  const [businesses, setBusinesses] = useState([]);
+  const [totalBusinesses, setTotalBusinesses] = useState(0);
+  const [lastMonthBusinesses, setLastMonthBusinesses] = useState(0);
+
+  const [clients, setClients] = useState([]);
+  const [totalClients, setTotalClients] = useState(0);
+  const [lastMonthClients, setLastMonthClients] = useState(0);
+
+  const [users, setUsers] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [lastMonthUsers, setLastMonthUsers] = useState(0);
+
+  console.log(users);
+
+  // get invoices
+  const getInvoices = async () => {
+    try {
+      const { invoices, totalInvoices, lastMonthInvoices } =
+        await getAllInvoices();
+
+      if (user.role === "architect") {
+        setInvoices(invoices);
+        setTotalInvoices(totalInvoices);
+        setLastMonthInvoices(lastMonthInvoices);
+      } else if (user.role === "businessAdmin") {
+        const filteredInvoice = invoices.filter(
+          (invoice) => user.business._id === invoice.company._id,
+        );
+        setInvoices(filteredInvoice);
+        setTotalInvoices(filteredInvoice.length);
+      } else {
+        const filteredInvoice = invoices.filter(
+          (invoice) => user._id === invoice.createdBy,
+        );
+        setInvoices(filteredInvoice);
+        setTotalInvoices(filteredInvoice.length);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get businesses
+  const getBusinesses = async () => {
+    try {
+      const { businesses, totalBusinesses, lastMonthBusinesses } =
+        await getAllBusinesses();
+
+      if (user.role === "architect") {
+        setBusinesses(businesses);
+        setTotalBusinesses(totalBusinesses);
+        setLastMonthBusinesses(lastMonthBusinesses);
+      } else {
+        const filteredBusiness = businesses.filter(
+          (business) => user.business._id === business._id,
+        );
+        setBusinesses(filteredBusiness);
+        setTotalBusinesses(filteredBusiness.length);
+        setLastMonthBusinesses(lastMonthBusinesses);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get clients
+  const getClients = async () => {
+    try {
+      const { clients, totalClients, lastMonthClients } = await getAllClients();
+
+      if (user.role === "architect") {
+        setClients(clients);
+        setTotalClients(totalClients);
+        setLastMonthClients(lastMonthClients);
+      } else {
+        const filteredClients = clients.filter(
+          (client) => user.client._id === client._id,
+        );
+        setClients(filteredClients);
+        setTotalClients(filteredClients.length);
+        setLastMonthClients(lastMonthClients);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // get users
+  const getUsers = async () => {
+    try {
+      const { users, totalUsers, lastMonthUsers } = await getAllUsers();
+
+      if (user.role === "architect") {
+        setUsers(users);
+        setTotalUsers(totalUsers);
+        setLastMonthUsers(lastMonthUsers);
+      } else {
+        const filteredUsers = users.filter((user) => user._id === user._id);
+        setUsers(filteredUsers);
+        setTotalUsers(filteredUsers.length);
+        setLastMonthUsers(lastMonthUsers);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch("/api/user/getusers?limit=5");
-        const data = await res.json();
-        if (res.ok) {
-          setUsers(data.users);
-          setTotalUsers(data.totalUsers);
-          setLastMonthUsers(data.lastMonthUsers);
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    const fetchPosts = async () => {
-      try {
-        const res = await fetch("/api/post/getposts?limit=5");
-        const data = await res.json();
-        if (res.ok) {
-          setPosts(data.posts);
-          setTotalPosts(data.totalPosts);
-          setLastMonthPosts(data.lastMonthPosts);
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    const fetchComments = async () => {
-      try {
-        const res = await fetch("/api/comment/getcomments?limit=5");
-        const data = await res.json();
-        if (res.ok) {
-          setComments(data.comments);
-          setTotalComments(data.totalComments);
-          setLastMonthComments(data.lastMonthComments);
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    if (user.isAdmin) {
-      fetchUsers();
-      fetchPosts();
-      fetchComments();
+    if (
+      user.role === "architect" ||
+      user.role === "businessAdmin" ||
+      user.role === "handler"
+    ) {
+      getInvoices();
+      getBusinesses();
+      getClients();
+      getUsers();
     }
-  }, [user]);
+  }, [user._id]);
 
   let paymentHistory = [];
   for (let i = 0; i < invoices.length; i++) {
@@ -94,40 +164,57 @@ export default function DashboardComponent() {
 
   return (
     <div className="flex flex-col gap-4 w-full p-3 md:mt-6">
-      <div className="flex-wrap flex gap-4 justify-between">
-        {/* admin views ----------------- total users, invoices, businesses */}
-        {/* show total number of registered users */}
-        <AdminDashboardComponent
-          totalUsers={totalUsers}
-          type="Users"
-          heading={"all users"}
-          lastMonthUsers={lastMonthUsers}
-        />
+      {user.role === "architect" ? (
+        <>
+          <h1 className="text-2xl font-bold text-center text-blue-900 bg-clip-text">
+            Architect Dashboard
+          </h1>
+          <div className="flex-wrap flex gap-4 justify-between">
+            {/* admin views ----------------- total users, invoices, businesses */}
+            {/* show total number of registered users */}
+            <AdminDashboardComponent
+              totalUsers={totalUsers}
+              type="Users"
+              heading={"all users"}
+              lastMonthUsers={lastMonthUsers}
+            />
 
-        {/* show total number of businesses */}
-        <AdminDashboardComponent
-          totalUsers={totalComments}
-          type="Businesses"
-          heading={"all businesses"}
-          lastMonthUsers={lastMonthComments}
-        />
+            {/* show total number of businesses */}
+            <AdminDashboardComponent
+              totalUsers={totalBusinesses}
+              type="Businesses"
+              heading={"all businesses"}
+              lastMonthUsers={lastMonthBusinesses}
+            />
 
-        {/* total invoices created */}
-        <AdminDashboardComponent
-          totalUsers={totalPosts}
-          type="Clients"
-          heading={"all clients"}
-          lastMonthUsers={lastMonthPosts}
-        />
+            {/* total clients created */}
+            <AdminDashboardComponent
+              totalUsers={totalClients}
+              type="Clients"
+              heading={"all clients"}
+              lastMonthUsers={lastMonthClients}
+            />
 
-        {/* total invoices created */}
-        <AdminDashboardComponent
-          totalUsers={totalPosts}
-          type="Invoices"
-          heading={"all invoices"}
-          lastMonthUsers={lastMonthPosts}
-        />
-      </div>
+            {/* total invoices created */}
+            <AdminDashboardComponent
+              totalUsers={totalInvoices}
+              type="Invoices"
+              heading={"all invoices"}
+              lastMonthUsers={lastMonthInvoices}
+            />
+          </div>
+        </>
+      ) : user.role === "businessAdmin" ? (
+        <h1 className="text-2xl font-bold text-center text-blue-900 bg-clip-text">
+          Business Admin Dashboard
+        </h1>
+      ) : (
+        user.role === "businessAdmin" && (
+          <h1 className="text-2xl font-bold text-center text-blue-900 bg-clip-text">
+            Handler Dashboard
+          </h1>
+        )
+      )}
 
       <Divider />
       <div className="flex-wrap flex gap-4 justify-between">
@@ -160,8 +247,9 @@ export default function DashboardComponent() {
 
         {/* total number of invoices raised */}
         <UserDashboardComponents
-          totalPaid={2}
+          totalPaid={invoices.length}
           text={"Number of Invoices Raised"}
+          unit={"Invoices"}
           icon={<PiInvoiceBold />}
           bgColor="white"
           // indicator="green-950"

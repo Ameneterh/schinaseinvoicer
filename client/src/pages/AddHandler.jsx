@@ -1,6 +1,14 @@
 import { motion } from "framer-motion";
 import { Input } from "../components/Input";
-import { CircleUserRound, Mail, Lock, Loader, Eye, EyeOff } from "lucide-react";
+import {
+  CircleUserRound,
+  Mail,
+  Lock,
+  Loader,
+  Eye,
+  EyeOff,
+  Phone,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
@@ -23,25 +31,24 @@ const fadeInUp = {
 
 export default function AddHandler() {
   const navigate = useNavigate();
+  const { getAllBusinesses } = useBusinessStore();
+  const { addUser, error, isLoading, user } = useAuthStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const [fullname, setFullname] = useState("");
-  const [user_email, setEmail] = useState("");
-  const [user_password, setPassword] = useState("");
-  const [affiliation, setAffiliation] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [role, setRole] = useState("handler");
+  const [password, setPassword] = useState("");
+  const [business, setBusiness] = useState("");
 
   const [businesses, setBusinesses] = useState([]);
-
-  const { addUser, error, isLoading } = useAuthStore();
-  const { getAllBusinesses } = useBusinessStore();
-
-  console.log(businesses);
 
   const handleRegisterHandler = async (e) => {
     e.preventDefault();
 
     try {
-      await addUser(fullname, user_email, user_password, affiliation);
+      await addUser({ fullname, email, phoneNumber, password, role, business });
       navigate("/activate-handler");
     } catch (error) {
       console.log(error);
@@ -52,7 +59,11 @@ export default function AddHandler() {
   const getBusinesses = async () => {
     try {
       const { businesses } = await getAllBusinesses();
-      setBusinesses(businesses);
+
+      const userBusiness = businesses.filter(
+        (business) => business._id === user.business._id,
+      );
+      setBusinesses(userBusiness);
     } catch (error) {
       console.log(error);
     }
@@ -98,11 +109,11 @@ export default function AddHandler() {
                   icon={Mail}
                   type="email"
                   placeholder="Handler Email"
-                  value={user_email}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <select
-                  onChange={(e) => setAffiliation(e.target.value)}
+                  onChange={(e) => setBusiness(e.target.value)}
                   className="w-full pl-3 pr-3 py-2 bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
                 >
                   <option>Select Business Affiliation</option>
@@ -119,12 +130,20 @@ export default function AddHandler() {
 
               <div className="flex flex-col items-start lg:flex-row gap-4">
                 <div className="flex flex-col gap-3 w-full">
+                  <Input
+                    icon={Phone}
+                    type={"text"}
+                    placeholder="Handler Phone Number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+
                   <div className="relative flex items-center w-full">
                     <Input
                       icon={Lock}
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter Strong Password"
-                      value={user_password}
+                      value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     <div
@@ -152,7 +171,7 @@ export default function AddHandler() {
                   </div>
                 </div>
                 {/* password strength meter */}
-                <PasswordStrengthMeter password={user_password} />
+                <PasswordStrengthMeter password={password} />
               </div>
 
               {error && (

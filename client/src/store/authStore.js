@@ -229,4 +229,25 @@ export const useAuthStore = create((set) => ({
       throw error;
     }
   },
+
+  // general users actions: get all users, get one user, update user, delete user
+  // 1. get all users
+  //   get all businesses
+  getAllUsers: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${API_URL}/get-users`);
+      set({
+        users: response.data.users,
+        isLoading: false,
+      });
+      return response.data;
+    } catch (error) {
+      set({
+        error: error.response.data.message || "Error getting Users",
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
 }));

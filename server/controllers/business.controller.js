@@ -176,10 +176,25 @@ export const getBusinesses = async (req, res) => {
   try {
     const businesses = await Business.find();
 
+    const totalBusinesses = await Business.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate(),
+    );
+    const lastMonthBusinesses = await Business.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
     res.status(201).json({
       success: true,
       message: "Businesses fetched successfully",
       businesses,
+      totalBusinesses,
+      lastMonthBusinesses,
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

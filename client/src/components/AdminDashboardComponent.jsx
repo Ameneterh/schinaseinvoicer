@@ -34,6 +34,7 @@ export function UserDashboardComponents({
   totalPaid,
   icon,
   text,
+  unit,
   bgColor,
   indicator,
 }) {
@@ -42,8 +43,10 @@ export function UserDashboardComponents({
       className={`flex flex-row items-center justify-between min-w-[120px] w-full sm:w-64 h-[110px] rounded overflow-hidden border border-white bg-${bgColor}`}
     >
       <div className="p-3">
-        <p className="text-2xl">NGN {totalPaid.toLocaleString()}</p>
         <h2>{text}</h2>
+        <p className="text-2xl">
+          {totalPaid.toLocaleString()} {unit}
+        </p>
       </div>
       <div
         className={`h-full  p-1 flex items-center text-3xl text-green-700 ${indicator}`}

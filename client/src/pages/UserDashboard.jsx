@@ -11,6 +11,8 @@ import DashProfile from "../components/DashProfile";
 import CreateInvoice from "./CreateInvoice";
 import DashInvoices from "../components/DashInvoices";
 import { useBusinessStore } from "../store/businessStore";
+import DashAddHandler from "../components/DashAddHandler";
+import DashMessages from "../components/DashMessages";
 
 export default function UserDashboard() {
   const { user, logout, isLoading } = useAuthStore();
@@ -57,8 +59,14 @@ export default function UserDashboard() {
         {/* for invoice creation */}
         {tab === "create-invoice" && <CreateInvoice />}
 
+        {/* for adding a new handler */}
+        {tab === "add-handler" && <DashAddHandler />}
+
         {/* view invoices */}
         {tab === "invoices" && <DashInvoices />}
+
+        {/* view messages */}
+        {tab === "messages" && <DashMessages />}
 
         {/* <div className="space-y-6">
           <motion.div

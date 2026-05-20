@@ -7,7 +7,12 @@ import {
   HiOutlineUserGroup,
   HiUser,
 } from "react-icons/hi";
-import { MdOutlineCreateNewFolder, MdAddBusiness } from "react-icons/md";
+import {
+  MdOutlineCreateNewFolder,
+  MdAddBusiness,
+  MdBusiness,
+} from "react-icons/md";
+import { FaRegAddressBook } from "react-icons/fa";
 import { TbMessage } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
@@ -19,6 +24,8 @@ export default function DashSidebar() {
 
   const location = useLocation();
   const [tab, setTab] = useState("");
+
+  console.log(user);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -64,10 +71,13 @@ export default function DashSidebar() {
                 <Sidebar.Item
                   active={tab === "profile"}
                   icon={HiUser}
-                  label={user.role}
-                  labelColor="dark"
                   as="div"
                   className="capitalize"
+                  label={
+                    <span className="bg-gray-700 text-white px-2 py-[6px] rounded-md text-xs capitalize">
+                      {user.role}
+                    </span>
+                  }
                 >
                   Profile
                 </Sidebar.Item>
@@ -93,37 +103,52 @@ export default function DashSidebar() {
             </>
           )}
 
-          {user.role === "admin" ||
-            (user.role === "architect" && (
-              <>
-                <Link to="/user-dashboard?tab=users">
-                  <Sidebar.Item
-                    active={tab === "users"}
-                    icon={HiOutlineUserGroup}
-                    as="div"
-                  >
-                    Users
-                  </Sidebar.Item>
-                </Link>
-                <Link to="/user-dashboard?tab=businesses">
-                  <Sidebar.Item
-                    active={tab === "businesses"}
-                    icon={HiAnnotation}
-                    as="div"
-                  >
-                    Businesses
-                  </Sidebar.Item>
-                </Link>
-              </>
-            ))}
+          {(user.role === "businessAdmin" || user.role === "architect") && (
+            <>
+              <Link to="/user-dashboard?tab=users">
+                <Sidebar.Item
+                  active={tab === "users"}
+                  icon={HiOutlineUserGroup}
+                  as="div"
+                >
+                  Users
+                </Sidebar.Item>
+              </Link>
+              <Link to="/user-dashboard?tab=add-handler">
+                <Sidebar.Item
+                  active={tab === "add-handler"}
+                  icon={FaRegAddressBook}
+                  as="div"
+                >
+                  Add Handler
+                </Sidebar.Item>
+              </Link>
+            </>
+          )}
 
-          <Sidebar.Item
-            icon={HiArrowSmRight}
-            className="cursor-pointer"
-            onClick={handleSignout}
-          >
-            Sign Out
-          </Sidebar.Item>
+          {/* for architect only */}
+          {user.role === "architect" && (
+            <>
+              <Link to="/user-dashboard?tab=businesses">
+                <Sidebar.Item
+                  active={tab === "businesses"}
+                  icon={MdBusiness}
+                  as="div"
+                >
+                  Businesses
+                </Sidebar.Item>
+              </Link>
+              <Link to="/user-dashboard?tab=messages">
+                <Sidebar.Item
+                  active={tab === "messages"}
+                  icon={HiAnnotation}
+                  as="div"
+                >
+                  Messages
+                </Sidebar.Item>
+              </Link>
+            </>
+          )}
         </Sidebar.ItemGroup>
       </Sidebar.Items>
 
@@ -137,11 +162,20 @@ export default function DashSidebar() {
                   Add Invoice
                 </Sidebar.Item>
               </Link>
-              <Link to="/add-client">
+              <Link to="/user-dashboard?tab=create-invoice">
                 <Sidebar.Item icon={MdAddBusiness} as="div">
                   Add Client
                 </Sidebar.Item>
               </Link>
+
+              {/* <hr />
+              <Sidebar.Item
+                icon={HiArrowSmRight}
+                className="cursor-pointer"
+                onClick={handleSignout}
+              >
+                Sign Out
+              </Sidebar.Item> */}
             </>
           )}
         </Sidebar.ItemGroup>

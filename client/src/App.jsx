@@ -141,6 +141,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/add-handler"
+          element={
+            <ProtectedRoute>
+              <AddHandler />
+            </ProtectedRoute>
+          }
+        />
         {/* <Route
           path="/create-invoice"
           element={
@@ -175,14 +183,7 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
-        <Route
-          path="/add-handler"
-          element={
-            <RedirectAuthenticatedUser>
-              <AddHandler />
-            </RedirectAuthenticatedUser>
-          }
-        />
+
         <Route
           path="/user-login"
           element={

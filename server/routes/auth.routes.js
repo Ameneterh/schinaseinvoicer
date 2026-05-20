@@ -10,6 +10,7 @@ import {
   resetPassword,
   CheckAuth,
   addHandler,
+  getUsers,
 } from "../controllers/auth.controller.js";
 import { addBusiness } from "../controllers/business.controller.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
@@ -23,6 +24,8 @@ router.post("/add-new-business", addBusiness);
 
 router.post("/user-login", login);
 router.post("/logout", logout);
+
+router.get("/get-users", getUsers);
 
 router.post("/forgot-password", forgotPassword);
 

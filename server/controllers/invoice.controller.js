@@ -79,10 +79,25 @@ export const getInvoices = async (req, res) => {
       .populate("createdBy", "fullname")
       .sort({ createdAt: -1 });
 
+    const totalInvoices = await Invoice.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate(),
+    );
+    const lastMonthInvoices = await Invoice.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
     res.status(200).json({
       success: true,
       message: "Invoices fetched successfully",
       invoices,
+      totalInvoices,
+      lastMonthInvoices,
     });
   } catch (error) {
     res.status(500).json({

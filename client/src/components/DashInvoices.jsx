@@ -95,7 +95,7 @@ export default function DashInvoices() {
               <th className="text-left px-4 py-1">Inv No</th>
               <th className="text-left px-4 py-1">Client</th>
               <th className="text-right px-4 py-1">Inv Amt</th>
-              <th className="text-right px-4 py-1">Total Pay</th>
+              <th className="text-right px-4 py-1">Total Paid</th>
               <th className="text-right px-4 py-1">Balance</th>
               <th className="text-left px-4 py-1">Actions</th>
             </tr>
@@ -134,6 +134,7 @@ export default function DashInvoices() {
                 </td>
                 <td className="px-4 text-sm flex items-center gap-2">
                   <button
+                    title="Update invoice payment"
                     onClick={() => {
                       // setUserIdToDelete(user._id);
                       handleOpenPayUpdateModal(invoice);
@@ -145,6 +146,7 @@ export default function DashInvoices() {
                     />
                   </button>
                   <button
+                    title="Delete this invoice"
                     onClick={() => {
                       // setUserIdToDelete(user._id);
                       setShowModal(true);
@@ -158,6 +160,7 @@ export default function DashInvoices() {
                   </button>
 
                   <button
+                    title="Edit this invoice"
                     onClick={() => {
                       setShowModal(true);
                     }}
@@ -172,6 +175,7 @@ export default function DashInvoices() {
                     />
                   </button>
                   <Link
+                    title="Create PDF"
                     to={`/print-pdf/${invoice._id}`}
                     target="_blank"
                     rel="noopener noreferrer"

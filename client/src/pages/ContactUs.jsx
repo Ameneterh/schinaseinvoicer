@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import { motion } from "framer-motion";
 import { FaUserInjured } from "react-icons/fa";
@@ -10,6 +10,7 @@ import {
 } from "react-icons/md";
 import schBadge from "../assets/InvoiceCore_logoName.png";
 import { useState } from "react";
+import { useContactStore } from "../store/contactStore";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -25,14 +26,24 @@ const fadeInUp = {
 };
 
 export default function ContactUs() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+  const navigate = useNavigate();
+  const { sendMessage } = useContactStore();
 
-  const handleChange = () => {};
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [text, setText] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await sendMessage({ name, email, phone, text });
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <MainLayout>
@@ -78,12 +89,11 @@ export default function ContactUs() {
               <h1 className="text-4xl font-extrabold text-orange-400 -mb-1">
                 Schinase Tech Hubb
               </h1>
-              <p>Onala, Afao Road, Ado-Ekiti, Ekiti State, Nigeria.</p>
+              <p>Aba Corner, Ado-Ijan Road, Ado-Ekiti, Ekiti State, Nigeria.</p>
             </div>
             <div className="flex flex-col">
               <p className="flex items-center gap-3 text-sm">
-                <span>08063799160</span> <span>08131930272</span>{" "}
-                <span>07032612715</span> <span>07086346809</span>
+                <span>08154230654</span> <span>09038007503</span>
               </p>
               <Link
                 to="mailto:schinase.industries@gmail.com"
@@ -101,7 +111,10 @@ export default function ContactUs() {
             animate="visible"
             className="flex-1 flex flex-col lg:flex-row"
           >
-            <form className="w-full bg-white text-black rounded-sm lg:rounded-lg p-2 lg:p-4 flex flex-col">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full bg-white text-black rounded-sm lg:rounded-lg p-2 lg:p-4 flex flex-col"
+            >
               <p className="text-lg lg:text-2xl text-center font-bold mb-4">
                 Send us a direct message
               </p>
@@ -115,8 +128,8 @@ export default function ContactUs() {
                   <input
                     type="text"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     required
                     className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
                   />
@@ -134,8 +147,8 @@ export default function ContactUs() {
                   <input
                     type="text"
                     name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     required
                     className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
                   />
@@ -153,8 +166,8 @@ export default function ContactUs() {
                   <input
                     type="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
                   />
@@ -170,10 +183,10 @@ export default function ContactUs() {
                     Your message to us:
                   </label>
                   <textarea
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    type="text"
+                    name="message"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
                     required
                     className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
                   />

@@ -49,7 +49,7 @@ export default function AboutUs() {
           >
             <h1 className="text-xl md:text-3xl font-bold border-l-[6px] border-l-orange-600 pl-3 mb-6">
               About Our <br />
-              <span className="md:text-5xl">School</span>
+              <span className="md:text-5xl">App</span>
             </h1>
 
             <motion.p
@@ -61,7 +61,7 @@ export default function AboutUs() {
               <hr className="border-t border-gray-100 my-4" />
 
               {/* vision & mission*/}
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700">
                   <h3 className="font-extrabold text-gray-800">Our Vision</h3>
                   <p className="mt-2 text-sm">
@@ -81,10 +81,10 @@ export default function AboutUs() {
                     humanity in humility and compassion.
                   </p>
                 </div>
-              </div>
+              </div> */}
             </motion.p>
 
-            <motion.p
+            {/* <motion.p
               variants={fadeInUp}
               initial="hidden"
               animate="visible"
@@ -131,9 +131,9 @@ export default function AboutUs() {
                 and chess games. Meals are provided for the pupils each day
                 (balanced diet).
               </p>
-            </motion.p>
+            </motion.p> */}
 
-            <motion.p
+            {/* <motion.p
               variants={fadeInUp}
               initial="hidden"
               animate="visible"
@@ -167,9 +167,9 @@ export default function AboutUs() {
                   </ul>
                 </div>
               </div>
-            </motion.p>
+            </motion.p> */}
 
-            <motion.p
+            {/* <motion.p
               variants={fadeInUp}
               initial="hidden"
               animate="visible"
@@ -177,7 +177,6 @@ export default function AboutUs() {
             >
               <hr className="border-t border-gray-100 my-4" />
 
-              {/* How We Work */}
               <h2 className="text-2xl font-semibold">
                 Spiritual/Moral Education
               </h2>
@@ -192,9 +191,9 @@ export default function AboutUs() {
                 noon. All these are helping our pupils to grow spiritually in
                 loving God and neighbors.
               </p>
-            </motion.p>
+            </motion.p> */}
 
-            <motion.p
+            {/* <motion.p
               variants={fadeInUp}
               initial="hidden"
               animate="visible"
@@ -202,7 +201,6 @@ export default function AboutUs() {
             >
               <hr className="border-t border-gray-100 my-4" />
 
-              {/* Services (packaging, print, web, data) */}
               <h2 className="text-2xl font-semibold my-4">Admissions</h2>
               <p className="mt-4">
                 The school admits children from two years and above in creche,
@@ -237,125 +235,7 @@ export default function AboutUs() {
               >
                 Let us mold your child together →
               </Link>
-            </motion.p>
-          </motion.div>
-
-          {/* right side panel */}
-          <motion.div className="w-full max-w-sm">
-            <h1 className="text-xl md:text-2xl font-bold text-orange-600 pl-3 mb-6">
-              Our Facilities
-            </h1>
-
-            <div className="flex flex-col w-full gap-5">
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${schcomp})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    A neat and well decorated premises, Landscaped Decorated
-                    Flowers
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${complab})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Digital computer laboratory with functional Information and
-                    Communication Technology (ICT)
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${sch_bus})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Standard School coaster buses and cars for effective
-                    transport
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${sports})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Adequate sports and modern recreational facilities
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${teachers})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Professional, experienced, hardworking, well behaved
-                    teachers and staff.
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${water})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Good water and Power supply
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${security})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Adequate and professional security formation
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex flex-col items-center justify-end w-full gap-2 mt-4 h-48 bg-top bg-cover bg-no-repeat rounded-md lg:rounded-xl overflow-hidden"
-                style={{
-                  backgroundImage: `url(${teaching_aid})`,
-                }}
-              >
-                <div className="text-center bg-black/90 w-full">
-                  {/* <h3 className="mb-1 text-sm">Product Packaging Design</h3> */}
-                  <p className="text-sm font-extralight py-1 text-white">
-                    Teaching and learning aids
-                  </p>
-                </div>
-              </div>
-            </div>
+            </motion.p> */}
           </motion.div>
         </motion.section>
       </motion.div>

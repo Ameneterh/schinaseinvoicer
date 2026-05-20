@@ -358,3 +358,34 @@ export const CheckAuth = async (req, res) => {
     res.status(400).json({ sucess: false, message: error.message });
   }
 };
+
+// general users actions
+// 1. get all users
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    const totalUsers = await User.countDocuments();
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate(),
+    );
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Users fetched successfully",
+      users,
+      totalUsers,
+      lastMonthUsers,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
