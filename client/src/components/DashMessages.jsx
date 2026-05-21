@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { useAuthStore } from "../store/authStore";
-import { useInvoiceStore } from "../store/invoiceStore";
 import { Trash2, FilePenLine, BadgePoundSterling, Share2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import DashInvoicePayUpdate from "./DashInvoicePayUpdate";
+import { useContactStore } from "../store/contactStore";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -23,42 +22,41 @@ const fadeInUp = {
 
 export default function DashMessages() {
   const { user } = useAuthStore();
-  const { getAllInvoices } = useInvoiceStore();
+  const { getAllMessages } = useContactStore();
 
-  const [invoices, setInvoices] = useState([]);
+  const [messages, setMessages] = useState([]);
+
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState("");
 
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
-    const getInvoices = async () => {
+    const getMessages = async () => {
       try {
-        const { invoices } = await getAllInvoices();
+        const { messages } = await getAllMessages();
 
         if (user.role === "architect") {
-          setInvoices(invoices);
+          setMessages(messages);
         } else {
-          const filteredInvoice = invoices.filter(
-            (invoice) => user.business._id === invoice.company._id,
+          const filteredMessage = messages.filter(
+            (message) => user.business._id === message.company._id,
           );
-          setInvoices(filteredInvoice);
+          setMessages(filteredMessage);
         }
       } catch (error) {
         console.log(error);
       }
     };
     if (
-      user.role === "architect" ||
-      user.role === "businessAdmin" ||
-      user.role === "handler"
+      user.role === "architect"
+      //   user.role === "businessAdmin" ||
+      //   user.role === "handler"
     ) {
-      getInvoices();
+      getMessages();
     }
   }, [user._id]);
-
-  console.log(selectedInvoice);
 
   const handleOpenPayUpdateModal = (invoice) => {
     setSelectedInvoice(invoice);
@@ -106,7 +104,84 @@ export default function DashMessages() {
         initial="hidden"
         animate="visible"
         className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500"
-      ></motion.div>
+      >
+        {messages.length > 0 ? (
+          <table className="border-collapse w-full">
+            <thead className="">
+              <tr className="border-b-[2px] border-b-black text-sm">
+                <th className="text-left px-4 py-1 text-nowrap">Date Sent</th>
+                <th className="text-left px-4 py-1 text-nowrap">Status</th>
+                <th className="text-left px-4 py-1 text-nowrap">
+                  Sender's Details
+                </th>
+                <th className="text-left px-4 py-1 text-nowrap flex-1">
+                  Message
+                </th>
+                <th className="text-right px-4 py-1">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {messages.map((message) => (
+                <tr key={message._id}>
+                  <td className="px-4 text-sm capitalize text-nowrap">
+                    {message.status}
+                  </td>
+                  <td className="px-4 text-sm text-nowrap">
+                    {message.createdAt
+                      ? new Date(message.createdAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )
+                      : ""}
+                  </td>
+                  <td className="px-4 text-sm capitalize font-bold text-nowrap">
+                    {message.sender_name}
+                  </td>
+                  <td
+                    className="px-4 text-sm cursor-pointer"
+                    onClick={() => alert("Read Message")}
+                  >
+                    {message.text}
+                  </td>
+                  <td className="px-4 text-sm flex items-center gap-2">
+                    <button
+                      title="Mark as Read"
+                      onClick={() => {
+                        // setUserIdToDelete(user._id);
+                        handleOpenPayUpdateModal(invoice);
+                      }}
+                      // className="bg-blue-500 text-white text-sm px-2 my-1 rounded"
+                    >
+                      <BadgePoundSterling
+                        className={`text-blue-700 size-4 transition-all duration-300 ${message.status === "read" ? "opacity-40 cursor-not-allowed text-gray-500" : "hover:scale-125"}`}
+                      />
+                    </button>
+                    <button
+                      title="Delete this Message"
+                      onClick={() => {
+                        // setUserIdToDelete(user._id);
+                        setShowModal(true);
+                      }}
+                      //   disabled={invoice.totalAmountReceived > 0}
+                      // className="bg-red-500 text-white text-sm px-2 my-1 rounded"
+                    >
+                      <Trash2
+                        className={`text-red-600 size-4 transition-all duration-300 hover:scale-125`}
+                      />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No Messages found.</p>
+        )}
+      </motion.div>
     </div>
   );
 }

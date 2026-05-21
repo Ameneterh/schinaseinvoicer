@@ -15,13 +15,13 @@ export const useContactStore = create((set) => ({
   message: null,
 
   //   send new message
-  sendMessage: async ({ name, email, phone, text }) => {
+  sendMessage: async ({ sender_name, sender_email, sender_phone, text }) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post(`${API_URL}/send-message`, {
-        name,
-        email,
-        phone,
+        sender_name,
+        sender_email,
+        sender_phone,
         text,
       });
       set({
@@ -39,20 +39,19 @@ export const useContactStore = create((set) => ({
   },
 
   // general users actions: get all users, get one user, update user, delete user
-  // 1. get all users
-  //   get all businesses
-  getAllUsers: async () => {
+  // 1. get all messages
+  getAllMessages: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${API_URL}/get-users`);
+      const response = await axios.get(`${API_URL}/get-messages`);
       set({
-        users: response.data.users,
+        messages: response.data.messages,
         isLoading: false,
       });
       return response.data;
     } catch (error) {
       set({
-        error: error.response.data.message || "Error getting Users",
+        error: error.response.data.message || "Error getting Messages",
         isLoading: false,
       });
       throw error;

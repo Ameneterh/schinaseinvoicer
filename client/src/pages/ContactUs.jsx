@@ -11,6 +11,7 @@ import {
 import schBadge from "../assets/InvoiceCore_logoName.png";
 import { useState } from "react";
 import { useContactStore } from "../store/contactStore";
+import { useAuthStore } from "../store/authStore";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -28,16 +29,22 @@ const fadeInUp = {
 export default function ContactUs() {
   const navigate = useNavigate();
   const { sendMessage } = useContactStore();
+  const { user } = useAuthStore();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(user?.fullname || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [phone, setPhone] = useState(user?.phoneNumber || "");
   const [text, setText] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await sendMessage({ name, email, phone, text });
+      await sendMessage({
+        sender_name: name.toLowerCase(),
+        sender_email: email.toLowerCase(),
+        sender_phone: phone,
+        text,
+      });
 
       navigate("/");
     } catch (error) {

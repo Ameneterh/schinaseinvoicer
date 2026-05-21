@@ -68,8 +68,9 @@ export default function DashInvoicePayUpdate({
       await updateInvoicePayment(invoice._id, paymentAmount);
       toast.success("Invoice payment updated successfully");
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to update invoice payment");
+      toast.error(
+        error.response?.data?.message || "Failed to update invoice payment",
+      );
     } finally {
       setShowModal(false);
     }

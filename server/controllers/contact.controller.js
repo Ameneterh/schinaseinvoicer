@@ -5,10 +5,10 @@ import Contact from "../models/contact.model.js";
 // create contact message
 export const sendMessage = async (req, res) => {
   try {
-    const { name, email, phone, text } = req.body;
+    const { sender_name, sender_email, sender_phone, text } = req.body;
 
     // Add validation for required fields
-    if (!name || !email || !phone || !text) {
+    if (!sender_name || !sender_email || !sender_phone || !text) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -16,9 +16,9 @@ export const sendMessage = async (req, res) => {
     }
 
     const message = await Contact.create({
-      name,
-      email,
-      phone,
+      sender_name,
+      sender_email,
+      sender_phone,
       text,
     });
 
@@ -34,8 +34,8 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// get all invoices
-export const getInvoices = async (req, res) => {
+// get all messages
+export const getMessages = async (req, res) => {
   try {
     const user = await User.findById(req.userId);
 
@@ -46,16 +46,14 @@ export const getInvoices = async (req, res) => {
       });
     }
 
-    // const invoices = await Invoice.find({
-    //   company: user.business._id,
-    // })
-    const invoices = await Invoice.find({})
-      .populate("company")
-      .populate("client")
-      .populate("createdBy", "fullname")
-      .sort({ createdAt: -1 });
-
-    const totalInvoices = await Invoice.countDocuments();
+    if (user.role !== "architect") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to view messages",
+      });
+    }
+    const messages = await Contact.find({}).sort({ createdAt: -1 });
+    const totalMessages = await Contact.countDocuments();
 
     const now = new Date();
 
@@ -64,16 +62,16 @@ export const getInvoices = async (req, res) => {
       now.getMonth() - 1,
       now.getDate(),
     );
-    const lastMonthInvoices = await Invoice.countDocuments({
+    const lastMonthMessages = await Contact.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
 
     res.status(200).json({
       success: true,
-      message: "Invoices fetched successfully",
-      invoices,
-      totalInvoices,
-      lastMonthInvoices,
+      message: "Messages fetched successfully",
+      messages,
+      totalMessages,
+      lastMonthMessages,
     });
   } catch (error) {
     res.status(500).json({

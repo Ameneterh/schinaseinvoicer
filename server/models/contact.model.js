@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 
 const contactSchema = new mongoose.Schema(
   {
-    name: {
+    sender_name: {
       type: String,
       required: true,
       trim: true,
     },
 
-    email: {
+    sender_email: {
       type: String,
       required: true,
       unique: true,
     },
 
-    phone: {
+    sender_phone: {
       type: String,
       required: true,
       trim: true,
@@ -24,6 +24,11 @@ const contactSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    status: {
+      type: String,
+      enum: ["unread", "read", "deleted"],
+      default: "unread",
     },
   },
   { timestamps: true },

@@ -165,15 +165,15 @@ export const updateInvoicePayment = async (req, res) => {
     invoice.totalAmountReceived += Number(paymentAmount);
 
     // Prevent overpayment
-    if (invoice.totalAmountReceived > invoice.totalAmount) {
+    if (invoice.totalAmountReceived > invoice.total) {
       return res.status(400).json({
         success: false,
-        message: "Payment exceeds invoice total",
+        message: "Cannot Process Payment; Invoice Total Exceeded",
       });
     }
 
     // Calculate balance
-    invoice.balanceDue = invoice.totalAmount - invoice.totalAmountReceived;
+    invoice.balanceDue = invoice.total - invoice.totalAmountReceived;
 
     // Update payment status
     if (invoice.balanceDue === 0) {
