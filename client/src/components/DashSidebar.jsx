@@ -75,7 +75,7 @@ export default function DashSidebar() {
                   className="capitalize"
                   label={
                     <span className="bg-gray-700 text-white px-2 py-[6px] rounded-md text-xs capitalize">
-                      {user.role}
+                      {user.role === "businessAdmin" ? "Admin" : user.role}
                     </span>
                   }
                 >

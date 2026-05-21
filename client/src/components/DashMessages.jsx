@@ -138,8 +138,16 @@ export default function DashMessages() {
                         )
                       : ""}
                   </td>
-                  <td className="px-4 text-sm capitalize font-bold text-nowrap">
-                    {message.sender_name}
+                  <td className="px-4 text-sm text-nowrap">
+                    <span className="capitalize font-bold">
+                      {message.sender_name}
+                    </span>
+                    <span className="text-xs block">
+                      {message.sender_email}
+                    </span>
+                    <span className="text-xs block">
+                      {message.sender_phone}
+                    </span>
                   </td>
                   <td
                     className="px-4 text-sm cursor-pointer"
