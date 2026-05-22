@@ -77,6 +77,7 @@ export const getInvoices = async (req, res) => {
       .populate("company")
       .populate("client")
       .populate("paymentRecords")
+      .populate("paymentRecords.receivedBy")
       .populate("createdBy", "fullname")
       .sort({ createdAt: -1 });
 
@@ -115,7 +116,7 @@ export const getInvoice = async (req, res) => {
   try {
     const invoice = await Invoice.findById(invoiceId)
       .populate("client")
-      .populate("paymentRecords")
+      .populate("paymentRecords.receivedBy")
       .populate("company")
       .populate("createdBy");
 

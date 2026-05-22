@@ -163,6 +163,8 @@ export default function DashboardComponent() {
   // const dueDate = new Date(invoice.dueDate);
   // dueDate.setDate(dueDate.getDate() + validity);
 
+  console.log(invoices);
+
   return (
     <div className="flex flex-col gap-4 w-full p-3 md:mt-6">
       {user.role === "architect" ? (
@@ -170,7 +172,7 @@ export default function DashboardComponent() {
           <h1 className="text-2xl font-bold text-center text-blue-900 bg-clip-text">
             Architect Dashboard
           </h1>
-          <div className="flex-wrap flex gap-4 justify-between">
+          <div className="flex-wrap flex gap-4">
             {/* admin views ----------------- total users, invoices, businesses */}
             {/* show total number of registered users */}
             <AdminDashboardComponent
@@ -218,7 +220,7 @@ export default function DashboardComponent() {
       )}
 
       <Divider />
-      <div className="flex-wrap flex gap-4 justify-between">
+      <div className="flex-wrap flex gap-4">
         {/* total for all invoices */}
         <UserDashboardComponents
           totalPaid={invoices
@@ -352,34 +354,56 @@ export default function DashboardComponent() {
         {invoices.length > 0 ? (
           <>
             <h1 className="text-lg font-bold">Recent Payments</h1>
-            <table className="w-full">
+            <table className="w-full text-sm">
               <thead className="bg-gray-200">
                 <tr className="border-b-[2px] border-b-black">
-                  <th className="text-left px-4 py-1">Inv No</th>
-                  <th className="text-left px-4 py-1">Payment Date</th>
-                  <th className="text-left px-4 py-1">Paid By</th>
-                  <th className="text-right px-4 py-1">Amt Paid</th>
-                  <th className="text-left px-4 py-1">Payment Method</th>
-                  <th className="text-left px-4 py-1">Notes</th>
+                  <th className="text-left px-2 py-1">Inv No</th>
+                  <th className="text-left px-2 py-1">Paid By</th>
+                  <th className="text-left px-42py-1">Payment Date</th>
+                  <th className="text-right px-2 py-1">Amt Paid</th>
+                  <th className="text-left px-2 py-1">Payment Method</th>
+                  <th className="text-left px-2 py-1">Received By</th>
+                  <th className="text-left px-2 py-1">Notes</th>
                 </tr>
               </thead>
 
               <tbody>
-                {invoices?.slice(-5).map((invoice) => (
-                  <tr key={invoice._id}>
-                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                    <td className="px-4 text-sm text-right">
-                      {invoice.totalAmountReceived.toLocaleString("en-NG", {
-                        style: "currency",
-                        currency: "NGN",
-                      })}
-                    </td>
-                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                  </tr>
-                ))}
+                {invoices
+                  ?.flatMap((invoice) =>
+                    invoice.paymentRecords.map((record) => ({
+                      ...record,
+                      invoiceNumber: invoice.invoiceNumber,
+                      clientName: invoice.client.client_name,
+                    })),
+                  )
+                  .sort(
+                    (a, b) => new Date(b.paymentDate) - new Date(a.paymentDate),
+                  )
+                  .slice(0, 5)
+                  .map((record) => (
+                    <tr key={record._id}>
+                      <td className="px-2 text-sm">{record.invoiceNumber}</td>
+                      <td className="px-2 text-sm">{record.clientName}</td>
+                      <td className="px-2 text-sm">
+                        {new Date(record.paymentDate).toLocaleDateString()}
+                      </td>
+                      <td className="px-2 text-sm text-right">
+                        {record.amount.toLocaleString("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        })}
+                      </td>
+                      <td className="px-2 text-sm capitalize">
+                        {record.paymentMethod}
+                      </td>
+                      <td className="px-2 text-sm">
+                        {record.receivedBy?.fullname || "-"}
+                      </td>
+                      <td className="px-2 text-sm">
+                        {record.reference || "-"}
+                      </td>
+                    </tr>
+                  ))}
 
                 {sortHistoryByDate?.slice(-10).map((record) => (
                   <tr className="" key={record?._id}>

@@ -35,24 +35,20 @@ export function PdfInvoiceNotes({ invoice }) {
   const { getAllUsers } = useAuthStore();
   const [receiver, setReceiver] = useState(null);
 
-  useEffect(() => {
-    const getUsers = async () => {
-      const users = await getAllUsers();
+  // useEffect(() => {
+  //   const getUsers = async () => {
+  //     const users = await getAllUsers();
 
-      console.log(invoice?.paymentRecords);
+  //     console.log(invoice);
 
-      const cashier = users?.users?.filter(
-        (user) => user._id === invoice?.paymentRecords?.receivedBy,
-      );
+  //     const cashier = users?.users?.filter(
+  //       (user) => user._id === invoice?.paymentRecords?.receivedBy,
+  //     );
 
-      console.log(invoice?.paymentRecords?.receivedBy);
-
-      setReceiver(cashier);
-    };
-    getUsers();
-  }, []);
-
-  // console.log(receiver);
+  //     setReceiver(cashier);
+  //   };
+  //   getUsers();
+  // }, []);
 
   return (
     <section className="mb-5 flex flex-col justify-between p-2 bg-gray-100 rounded w-full text-sm">
@@ -122,16 +118,16 @@ export function PdfInvoiceNotes({ invoice }) {
               <table className="w-full text-left border-collapse border-0">
                 <thead className="bg-gray-200 *border-b-2 border-black">
                   <tr>
-                    <th className="border px-1">Date Paid</th>
-                    <th className="border px-1">Amount Paid</th>
-                    <th className="border px-1">Payment Method</th>
+                    <th className="border px-1 text-center">Date Paid</th>
+                    <th className="border px-1 text-right">Amount Paid</th>
+                    <th className="border px-1 text-center">Payment Method</th>
                     <th className="border px-1">Receiver</th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoice?.paymentRecords?.map((record) => (
                     <tr key={record._id}>
-                      <td className="border px-1">
+                      <td className="border px-1 text-center">
                         {record.createdAt &&
                           new Date(record.createdAt).toLocaleDateString(
                             "en-US",
@@ -142,16 +138,18 @@ export function PdfInvoiceNotes({ invoice }) {
                             },
                           )}
                       </td>
-                      <td className="border px-1">
+                      <td className="border px-1 text-right">
                         {new Intl.NumberFormat("en-NG", {
                           style: "currency",
                           currency: "NGN",
                         }).format(record.amount)}
                       </td>
-                      <td className="border px-1 capitalize">
+                      <td className="border px-1 capitalize text-center">
                         {record.paymentMethod}
                       </td>
-                      <td className="border px-1">{record.receivedBy}</td>
+                      <td className="border px-1">
+                        {record?.receivedBy?.fullname}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

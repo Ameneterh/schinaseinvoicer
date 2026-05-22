@@ -36,7 +36,7 @@ export default function UserDashboard() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.5 }}
-        className="w-full min-h-screen mt-20 backdrop-filter backdrop-blur-lg shadow-2xl flex flex-col md:flex-row"
+        className="w-full min-h-screen mt-20 backdrop-filter backdrop-blur-lg shadow-2xl flex flex-col lg:flex-row"
       >
         {/* <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-600 text-transparent bg-clip-text">
           Dashboard
