@@ -25,8 +25,6 @@ export default function DashSidebar() {
   const location = useLocation();
   const [tab, setTab] = useState("");
 
-  console.log(user);
-
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");

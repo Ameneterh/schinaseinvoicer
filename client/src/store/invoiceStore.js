@@ -88,13 +88,20 @@ export const useInvoiceStore = create((set) => ({
   },
 
   // update invoice payment
-  updateInvoicePayment: async (invoiceId, paymentAmount) => {
+  updateInvoicePayment: async (
+    invoiceId,
+    paymentAmount,
+    paymentMethod,
+    reference,
+  ) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.put(
         `${API_URL}/invoice/${invoiceId}/update-payment`,
         {
           paymentAmount,
+          paymentMethod,
+          reference,
         },
       );
       set({

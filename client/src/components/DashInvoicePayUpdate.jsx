@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useInvoiceStore } from "../store/invoiceStore";
 import { useAuthStore } from "../store/authStore";
 import { use } from "react";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
 export default function DashInvoicePayUpdate({
   invoice,
@@ -12,6 +13,9 @@ export default function DashInvoicePayUpdate({
   const { user } = useAuthStore();
   const { updateInvoicePayment, getAllInvoices } = useInvoiceStore();
   const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [reference, setReference] = useState("");
+
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
 
@@ -65,7 +69,12 @@ export default function DashInvoicePayUpdate({
     e.preventDefault();
 
     try {
-      await updateInvoicePayment(invoice._id, paymentAmount);
+      await updateInvoicePayment(
+        invoice._id,
+        paymentAmount,
+        paymentMethod,
+        reference,
+      );
       toast.success("Invoice payment updated successfully");
     } catch (error) {
       toast.error(
@@ -78,7 +87,7 @@ export default function DashInvoicePayUpdate({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg w-80">
+      <div className="bg-white p-6 rounded shadow-lg w-96">
         <h2 className="text-lg mb-2 font-bold text-center">
           Update Invoice Payment{" "}
           <span className="text-sm block font-bold">
@@ -116,19 +125,54 @@ export default function DashInvoicePayUpdate({
           </p>
 
           <div className="flex mt-2 rounded">
-            <form onSubmit={handleUpdatePayment}>
-              <label htmlFor="paymentAmount" className="text-sm mb-1">
-                Payment Amount:
-              </label>
+            <form
+              onSubmit={handleUpdatePayment}
+              className="w-full flex flex-col gap-2"
+            >
+              <div className="mt-2 relative rounded-md border border-black">
+                <label className="absolute font-semibold -top-3 bg-white px-1 left-1 text-xs text-gray-800">
+                  Payment Amount:
+                </label>
+                <input
+                  type="text"
+                  id="paymentAmount"
+                  value={formatNumber(paymentAmount)}
+                  onChange={handleChange}
+                  required
+                  className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
+                />
+              </div>
+              <div className="mt-2 relative rounded-md border border-black">
+                <label className="absolute font-semibold -top-3 bg-white px-1 left-1 text-xs text-gray-800">
+                  Payment Method:
+                </label>
+                <select
+                  id="paymentMethod"
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
+                >
+                  <option value="">Select Payment Method</option>
+                  <option value="cash">Cash</option>
+                  <option value="cheque">Cheque</option>
+                  <option value="pos">POS</option>
+                  <option value="transfer">Bank Transfer</option>
+                </select>
+              </div>
+              <div className="mt-2 relative rounded-md border border-black">
+                <label className="absolute font-semibold -top-3 bg-white px-1 left-1 text-xs text-gray-800">
+                  Reference (optional):
+                </label>
+                <input
+                  type="text"
+                  id="reference"
+                  value={reference}
+                  onChange={(e) => setReference(e.target.value)}
+                  className="w-full outline-none border-none focus:outline-none focus:border-none rounded-md p-2 bg-white"
+                />
+              </div>
 
-              <input
-                type="text"
-                id="paymentAmount"
-                className=" rounded p-2 text-sm w-full"
-                placeholder="Enter payment amount"
-                value={formatNumber(paymentAmount)}
-                onChange={handleChange}
-              />
+              {/* buttons */}
               <div className="flex justify-between gap-2 mt-4">
                 <button
                   onClick={() => setShowModal(false)}

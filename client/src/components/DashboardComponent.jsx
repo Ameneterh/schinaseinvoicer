@@ -38,8 +38,6 @@ export default function DashboardComponent() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [lastMonthUsers, setLastMonthUsers] = useState(0);
 
-  console.log(users);
-
   // get invoices
   const getInvoices = async () => {
     try {
@@ -162,6 +160,9 @@ export default function DashboardComponent() {
     return d - c;
   });
 
+  // const dueDate = new Date(invoice.dueDate);
+  // dueDate.setDate(dueDate.getDate() + validity);
+
   return (
     <div className="flex flex-col gap-4 w-full p-3 md:mt-6">
       {user.role === "architect" ? (
@@ -220,31 +221,66 @@ export default function DashboardComponent() {
       <div className="flex-wrap flex gap-4 justify-between">
         {/* total for all invoices */}
         <UserDashboardComponents
-          totalPaid={100000}
+          totalPaid={invoices
+            .filter((invoice) => invoice.status !== "cancelled")
+            .reduce((sum, invoice) => sum + Number(invoice.total || 0), 0)
+            .toLocaleString("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            })}
           text={"Total for Invoices"}
           icon={<SiParamountplus />}
           bgColor="white"
           indicator="bg-blue-600"
         />
-
         {/* total received for invoices raised */}
         <UserDashboardComponents
-          totalPaid={10000}
+          totalPaid={invoices
+            .filter(
+              (invoice) =>
+                (invoice.status === "paid" ||
+                  invoice.status === "part-payment") &&
+                invoice.status !== "cancelled",
+            )
+            .reduce(
+              (sum, invoice) => sum + Number(invoice.totalAmountReceived || 0),
+              0,
+            )
+            .toLocaleString("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            })}
           text={"Total Payments Received"}
           icon={<IoMdCheckmarkCircleOutline />}
           bgColor="white"
           indicator="bg-green-800"
         />
-
         {/* total pending for invoices raised */}
         <UserDashboardComponents
-          totalPaid={90000}
+          totalPaid={(
+            invoices
+              .filter((invoice) => invoice.status !== "cancelled")
+              .reduce((sum, invoice) => sum + Number(invoice.total || 0), 0) -
+            invoices
+              .filter(
+                (invoice) =>
+                  invoice.status === "paid" ||
+                  invoice.status === "part-payment",
+              )
+              .reduce(
+                (sum, invoice) =>
+                  sum + Number(invoice.totalAmountReceived || 0),
+                0,
+              )
+          ).toLocaleString("en-NG", {
+            style: "currency",
+            currency: "NGN",
+          })}
           text={"Total Amount Pending"}
           icon={<FiPieChart />}
           bgColor="white"
           // indicator="green-950"
         />
-
         {/* total number of invoices raised */}
         <UserDashboardComponents
           totalPaid={invoices.length}
@@ -254,37 +290,55 @@ export default function DashboardComponent() {
           bgColor="white"
           // indicator="green-950"
         />
-
         {/* number of paid invoices */}
         <UserDashboardComponents
-          totalPaid={1}
+          totalPaid={
+            invoices.filter((invoice) => invoice.status === "paid").length
+          }
           text={"Paid Invoices"}
           icon={<IoMdCheckmarkCircleOutline />}
           bgColor="white"
           indicator="bg-green-800"
         />
-
         {/* number of partially paid invoices */}
         <UserDashboardComponents
-          totalPaid={0}
+          totalPaid={
+            invoices.filter((invoice) => invoice.status === "part-payment")
+              .length
+          }
           text={"Partially Paid Invoices"}
           icon={<FiPieChart />}
           bgColor="white"
           // indicator="green-950"
         />
-
         {/* number of unpaid invoices */}
         <UserDashboardComponents
-          totalPaid={1}
+          totalPaid={
+            invoices.filter(
+              (invoice) =>
+                invoice.status === "pending" && invoice.status !== "cancelled",
+            ).length
+          }
           text={"Unpaid Invoices"}
           icon={<FaRegSadTear />}
           bgColor="white"
           indicator="bg-orange-400"
         />
-
         {/* number of invoices overdue */}
         <UserDashboardComponents
-          totalPaid={1}
+          totalPaid={
+            invoices.filter((invoice) => {
+              const expiryDate = new Date(invoice.invDate);
+
+              expiryDate.setDate(
+                expiryDate.getDate() + Number(invoice.validity),
+              );
+
+              return (
+                invoice.invoiceType === "proforma" && expiryDate < new Date()
+              );
+            }).length
+          }
           text={"Overdue Invoices"}
           icon={<IoIosTimer />}
           bgColor="white"
@@ -295,28 +349,44 @@ export default function DashboardComponent() {
 
       {/* display recent payments */}
       <div className="w-full bg-slate-50 p-2 rounded">
-        <h1 className="text-center py-4 font-bold">
-          {paymentHistory.length
-            ? "Recent Payments"
-            : "No payments received yet"}
-        </h1>
-        <table className="w-full">
-          <tbody>
-            {/* {paymentHistory?.length !== 0 && ( */}
-            <tr>
-              <th style={{ padding: "15px" }}></th>
-              <th style={{ padding: "15px" }}>Paid By</th>
-              <th style={{ padding: "15px" }}>Date Paid</th>
-              <th style={{ padding: "15px" }}>Amount Paid</th>
-              <th style={{ padding: "15px" }}>Payment Method</th>
-              <th style={{ padding: "15px" }}>Note</th>
-            </tr>
-            {/* )} */}
+        {invoices.length > 0 ? (
+          <>
+            <h1 className="text-lg font-bold">Recent Payments</h1>
+            <table className="w-full">
+              <thead className="bg-gray-200">
+                <tr className="border-b-[2px] border-b-black">
+                  <th className="text-left px-4 py-1">Inv No</th>
+                  <th className="text-left px-4 py-1">Payment Date</th>
+                  <th className="text-left px-4 py-1">Paid By</th>
+                  <th className="text-right px-4 py-1">Amt Paid</th>
+                  <th className="text-left px-4 py-1">Payment Method</th>
+                  <th className="text-left px-4 py-1">Notes</th>
+                </tr>
+              </thead>
 
-            {sortHistoryByDate?.slice(-10).map((record) => (
-              <tr className="" key={record?._id}>
-                <td>{/* <button>{record?.paidBy?.charAt(0)}</button> */}</td>
-                {/* <td>{record?.paidBy}</td>
+              <tbody>
+                {invoices?.slice(-5).map((invoice) => (
+                  <tr key={invoice._id}>
+                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
+                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
+                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
+                    <td className="px-4 text-sm text-right">
+                      {invoice.totalAmountReceived.toLocaleString("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      })}
+                    </td>
+                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
+                    <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
+                  </tr>
+                ))}
+
+                {sortHistoryByDate?.slice(-10).map((record) => (
+                  <tr className="" key={record?._id}>
+                    <td>
+                      {/* <button>{record?.paidBy?.charAt(0)}</button> */}
+                    </td>
+                    {/* <td>{record?.paidBy}</td>
                 <td>{moment(record?.datePaid).format("MMMM Do YYYY")}</td>
                 <td>
                   <h3 style={{ color: "#00A86B", fontSize: "14px" }}>
@@ -325,10 +395,14 @@ export default function DashboardComponent() {
                 </td>
                 <td>{record?.paymentMethod}</td>
                 <td>{record?.note}</td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <h1 className="text-sm font-bold">No payments received yet</h1>
+        )}
       </div>
       {/* tables */}
       <div className="flex flex-wrap gap-4 py-3 mx-auto justify-center">

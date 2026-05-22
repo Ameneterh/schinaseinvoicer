@@ -48,7 +48,14 @@ export default function DashAddHandler() {
     e.preventDefault();
 
     try {
-      await addUser({ fullname, email, phoneNumber, password, role, business });
+      await addUser({
+        fullname,
+        email,
+        phoneNumber,
+        password,
+        role,
+        business: user.business._id,
+      });
       navigate("/activate-handler");
     } catch (error) {
       console.log(error);

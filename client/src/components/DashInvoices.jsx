@@ -44,8 +44,6 @@ export default function DashInvoices() {
     }
   }, [user._id]);
 
-  console.log(selectedInvoice);
-
   const handleOpenPayUpdateModal = (invoice) => {
     setSelectedInvoice(invoice);
     setShowModal(true);
@@ -139,6 +137,7 @@ export default function DashInvoices() {
                       // setUserIdToDelete(user._id);
                       handleOpenPayUpdateModal(invoice);
                     }}
+                    disabled={invoice.totalAmountReceived === invoice.total}
                     // className="bg-blue-500 text-white text-sm px-2 my-1 rounded"
                   >
                     <BadgePoundSterling
@@ -149,7 +148,7 @@ export default function DashInvoices() {
                     title="Delete this invoice"
                     onClick={() => {
                       // setUserIdToDelete(user._id);
-                      setShowModal(true);
+                      // setShowModal(true);
                     }}
                     disabled={invoice.totalAmountReceived > 0}
                     // className="bg-red-500 text-white text-sm px-2 my-1 rounded"
@@ -162,7 +161,7 @@ export default function DashInvoices() {
                   <button
                     title="Edit this invoice"
                     onClick={() => {
-                      setShowModal(true);
+                      // setShowModal(true);
                     }}
                     disabled={invoice.totalAmountReceived > 0}
                   >

@@ -76,6 +76,7 @@ export const getInvoices = async (req, res) => {
     const invoices = await Invoice.find({})
       .populate("company")
       .populate("client")
+      .populate("paymentRecords")
       .populate("createdBy", "fullname")
       .sort({ createdAt: -1 });
 
@@ -114,6 +115,7 @@ export const getInvoice = async (req, res) => {
   try {
     const invoice = await Invoice.findById(invoiceId)
       .populate("client")
+      .populate("paymentRecords")
       .populate("company")
       .populate("createdBy");
 
@@ -138,9 +140,71 @@ export const getInvoice = async (req, res) => {
 };
 
 // update invoice payment
+// export const updateInvoicePayment = async (req, res) => {
+//   try {
+//     const { paymentAmount } = req.body;
+//     const invoiceId = req.params.invoiceId;
+
+//     // Validate payment
+//     if (!paymentAmount || paymentAmount <= 0) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid payment amount",
+//       });
+//     }
+
+//     // Find invoice
+//     const invoice = await Invoice.findById(invoiceId);
+
+//     if (!invoice) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Invoice not found",
+//       });
+//     }
+
+//     // Update total payment made
+//     invoice.totalAmountReceived += Number(paymentAmount);
+
+//     // Prevent overpayment
+//     if (invoice.totalAmountReceived > invoice.total) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Cannot Process Payment; Invoice Total Exceeded",
+//       });
+//     }
+
+//     // Calculate balance
+//     invoice.balanceDue = invoice.total - invoice.totalAmountReceived;
+
+//     // Update payment status
+//     if (invoice.balanceDue === 0) {
+//       invoice.status = "paid";
+//     } else {
+//       invoice.status = "part-payment";
+//     }
+
+//     await invoice.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Payment updated successfully",
+//       invoice,
+//     });
+//   } catch (error) {
+//     console.log(error);
+
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//     });
+//   }
+// };
+
 export const updateInvoicePayment = async (req, res) => {
   try {
-    const { paymentAmount } = req.body;
+    const { paymentAmount, paymentMethod, reference } = req.body;
+    const receivedBy = req.userId;
     const invoiceId = req.params.invoiceId;
 
     // Validate payment
@@ -161,26 +225,37 @@ export const updateInvoicePayment = async (req, res) => {
       });
     }
 
-    // Update total payment made
-    invoice.totalAmountReceived += Number(paymentAmount);
+    // Prevent overpayment BEFORE updating
+    const newTotalReceived =
+      invoice.totalAmountReceived + Number(paymentAmount);
 
-    // Prevent overpayment
-    if (invoice.totalAmountReceived > invoice.total) {
+    if (newTotalReceived > invoice.total) {
       return res.status(400).json({
         success: false,
         message: "Cannot Process Payment; Invoice Total Exceeded",
       });
     }
 
-    // Calculate balance
+    // Update total received
+    invoice.totalAmountReceived = newTotalReceived;
+
+    // Update balance
     invoice.balanceDue = invoice.total - invoice.totalAmountReceived;
 
-    // Update payment status
+    // Update status
     if (invoice.balanceDue === 0) {
       invoice.status = "paid";
     } else {
       invoice.status = "part-payment";
     }
+
+    // Save payment history
+    invoice.paymentRecords.push({
+      amount: paymentAmount,
+      paymentMethod,
+      reference,
+      receivedBy,
+    });
 
     await invoice.save();
 

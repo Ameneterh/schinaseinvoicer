@@ -18,9 +18,9 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 const router = express.Router();
 
 router.get("/check-auth", verifyToken, CheckAuth);
+router.post("/add-new-business", addBusiness);
 router.post("/add-handler", addHandler);
 router.post("/verify-email", verifyEmail);
-router.post("/add-new-business", addBusiness);
 
 router.post("/user-login", login);
 router.post("/logout", logout);

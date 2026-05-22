@@ -1,6 +1,8 @@
 import React from "react";
 import { useAuthStore } from "../store/authStore";
 import { TbCurrencyNaira } from "react-icons/tb";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export default function InvoiceNotes() {
   const { user } = useAuthStore();
@@ -30,26 +32,50 @@ export default function InvoiceNotes() {
 }
 
 export function PdfInvoiceNotes({ invoice }) {
-  console.log(invoice);
+  const { getAllUsers } = useAuthStore();
+  const [receiver, setReceiver] = useState(null);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const users = await getAllUsers();
+
+      console.log(invoice?.paymentRecords);
+
+      const cashier = users?.users?.filter(
+        (user) => user._id === invoice?.paymentRecords?.receivedBy,
+      );
+
+      console.log(invoice?.paymentRecords?.receivedBy);
+
+      setReceiver(cashier);
+    };
+    getUsers();
+  }, []);
+
+  // console.log(receiver);
 
   return (
     <section className="mb-5 flex flex-col justify-between p-2 bg-gray-100 rounded w-full text-sm">
-      <ul className="flex-1">
-        <li>
-          Bank Name:{" "}
-          <span className="font-bold">{invoice?.company?.banker}</span>
+      <ul className="flex-1 text-sm">
+        <li className="flex gap-4">
+          <span>
+            Bank Name:{" "}
+            <span className="font-bold">{invoice?.company?.banker}</span>
+          </span>
+          <span className="block">
+            Account Number:{" "}
+            <span className="font-bold">
+              {invoice?.company?.account_number}
+            </span>
+          </span>
         </li>
         <li>
           Account Name:{" "}
           <span className="font-bold">{invoice?.company?.account_name}</span>
         </li>
-        <li>
-          Account Number:{" "}
-          <span className="font-bold">{invoice?.company?.account_number}</span>
-        </li>
       </ul>
 
-      <div className="flex-1 bg-white rounded px-2 py-1">
+      <div className="flex-1 bg-white rounded px-2 py-1 text-sm">
         <p className="font-bold">Payment Information:</p>
         <div className="flex items-center justify-between flex-col md:flex-row gap-2 mt-1">
           <p className="text-left">
@@ -85,6 +111,55 @@ export function PdfInvoiceNotes({ invoice }) {
               )}
             </span>
           </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col mt-2 text-[12px]">
+        <div className="block w-full mt-1">
+          {invoice?.paymentRecords?.length > 0 ? (
+            <>
+              <p className="font-bold">Details of Payment:</p>
+              <table className="w-full text-left border-collapse border-0">
+                <thead className="bg-gray-200 *border-b-2 border-black">
+                  <tr>
+                    <th className="border px-1">Date Paid</th>
+                    <th className="border px-1">Amount Paid</th>
+                    <th className="border px-1">Payment Method</th>
+                    <th className="border px-1">Receiver</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoice?.paymentRecords?.map((record) => (
+                    <tr key={record._id}>
+                      <td className="border px-1">
+                        {record.createdAt &&
+                          new Date(record.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                      </td>
+                      <td className="border px-1">
+                        {new Intl.NumberFormat("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        }).format(record.amount)}
+                      </td>
+                      <td className="border px-1 capitalize">
+                        {record.paymentMethod}
+                      </td>
+                      <td className="border px-1">{record.receivedBy}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <p>No payment records found.</p>
+          )}
         </div>
       </div>
     </section>

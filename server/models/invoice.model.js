@@ -108,14 +108,7 @@ const invoiceSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "draft",
-        "pending",
-        "paid",
-        "part-payment",
-        "overdue",
-        "cancelled",
-      ],
+      enum: ["pending", "part-payment", "paid", "cancelled"],
       default: "pending",
     },
 
@@ -138,17 +131,12 @@ const invoiceSchema = new mongoose.Schema(
       required: true,
     },
 
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
-
-    deletedBy: {
+    cancelledBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
 
-    deletedAt: Date,
+    cancelledAt: Date,
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

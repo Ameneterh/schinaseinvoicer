@@ -20,6 +20,7 @@ export const addHandler = async (req, res) => {
     phoneNumber,
     password,
     role,
+    business,
     business_name,
     business_email,
     business_phone,
@@ -62,37 +63,39 @@ export const addHandler = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
       role,
+      business,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    // await user.save();
-
     // after saving user, save business affiliation
     // const savedUser = await User.findOne({ user_email });
 
-    // check if business already exists
-    const businessAlreadyExists = await Business.findOne({ business_email });
-    if (businessAlreadyExists) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Business Already Exists!" });
+    if (role === "businessOwner") {
+      // check if business already exists
+      const businessAlreadyExists = await Business.findOne({ business_email });
+      if (businessAlreadyExists) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Business Already Exists!" });
+      }
+
+      // save new business
+      const business = await Business.create({
+        business_name,
+        business_email,
+        business_phone,
+        business_address,
+        banker,
+        account_name,
+        account_number,
+        owner: user._id,
+      });
+
+      // await business.save();
+      user.business = business._id;
     }
 
-    // save new business
-    const business = await Business.create({
-      business_name,
-      business_email,
-      business_phone,
-      business_address,
-      banker,
-      account_name,
-      account_number,
-      owner: user._id,
-    });
-
-    // await business.save();
-    user.business = business._id;
     await user.save();
 
     // generate cookie with jwt
