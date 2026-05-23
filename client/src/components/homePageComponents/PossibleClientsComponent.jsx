@@ -33,7 +33,7 @@ export default function PossibleClientsComponent() {
             It’s time to simplify how we invoice, track payments, and grow.{" "}
             <br />
             With our invoicing app, you can:
-            <ul>
+            <ul className="-ml-6">
               <li>✅ Create professional invoices in seconds</li>
               <li>✅ Track payments effortlessly</li>
               <li>✅ Stay organized and in control of your business</li>
