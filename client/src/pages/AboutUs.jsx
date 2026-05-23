@@ -45,45 +45,118 @@ export default function AboutUs() {
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="flex-1"
+            className="w-full mx-auto flex flex-col gap-2"
           >
             <h1 className="text-xl md:text-3xl font-bold border-l-[6px] border-l-orange-600 pl-3 mb-6">
-              About Our <br />
-              <span className="md:text-5xl">App</span>
+              About Us and <br />
+              <span className="md:text-5xl">Our App</span>
             </h1>
 
-            <motion.p
-              variants={fadeInUp}
-              initial="hidden"
-              animate="visible"
-              className="font-extralight md:mb-6"
-            >
-              <hr className="border-t border-gray-100 my-4" />
+            <hr className="border-t border-gray-100 my-4" />
+            <div className="flex flex-col w-full md:flex-row gap-10">
+              <motion.div
+                variants={fadeInUp}
+                initial="hidden"
+                animate="visible"
+                className="font-light md:mb-6 text-justify"
+              >
+                <h1 className="md:text-2xl font-bold">
+                  About Schinase Tech Hubb
+                </h1>
+                {/* about schinase tech hubb*/}
+                <p className="mt-2">
+                  At Schinase Tech Hubb, we believe technology should solve real
+                  problems, simplify processes, and create opportunities for
+                  growth. Founded through the collaboration of pharmacists and
+                  computer scientists, our company combines practical industry
+                  experience with modern digital innovation to deliver solutions
+                  that are both functional and impactful.
+                </p>
+                <p className="mt-2">
+                  We specialize in the design and development of websites and
+                  web applications tailored to the needs of businesses,
+                  organizations, and professionals across different sectors.
+                  Beyond development, we provide training programs for
+                  individuals and groups seeking to build digital skills,
+                  improve productivity, or transition into the tech space. We
+                  also consult for businesses and institutions moving from
+                  manual operations to efficient automated systems, helping them
+                  improve workflow, accuracy, accountability, and overall
+                  performance.
+                </p>
+                <p className="mt-2">
+                  Our mission is to bridge the gap between traditional business
+                  operations and modern technology by creating solutions that
+                  are accessible, reliable, and user-focused. At Schinase Tech
+                  Hubb, we are committed to innovation, continuous improvement,
+                  and helping businesses grow in a rapidly evolving digital
+                  world.
+                </p>
 
-              {/* vision & mission*/}
-              {/* <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700">
-                  <h3 className="font-extrabold text-gray-800">Our Vision</h3>
-                  <p className="mt-2 text-sm">
-                    To contribute to the catholic education and develop children
-                    solid foundation for future education and moral support.
+                {/* about app */}
+                <hr className="border border-gray-100 my-10" />
+                <h1 className="md:text-2xl font-bold">
+                  About the Schinase Invoicing App
+                </h1>
+                <p className="mt-2">
+                  The Schinase Invoicing App was developed to help businesses
+                  simplify invoicing, payment tracking, and financial record
+                  management in one secure and easy-to-use platform.
+                </p>
+                <p className="mt-2">
+                  Built with the realities of modern businesses in mind, the app
+                  enables organizations to create professional invoices, manage
+                  clients, monitor payments, generate reports, and maintain
+                  organized financial records from anywhere. Whether for small
+                  businesses, service providers, pharmacies, startups, or
+                  growing enterprises, the platform is designed to reduce
+                  paperwork, improve efficiency, and support better financial
+                  management.
+                </p>
+                <p className="mt-2">
+                  The app is part of Schinase Tech Hubb’s broader vision of
+                  helping businesses transition from stressful manual processes
+                  to smart digital solutions. By combining functionality,
+                  simplicity, and scalability, the Schinase Invoicing App aims
+                  to give businesses the tools they need to operate more
+                  efficiently and professionally in today’s digital economy.
+                </p>
+                <p className="mt-2">
+                  As development continues, we remain committed to improving the
+                  platform with features that enhance productivity,
+                  collaboration, accessibility, and business growth.
+                </p>
+                <p className="mt-2"></p>
+
+                <Link
+                  to="/add-new-business"
+                  className="mt-5 max-w-56 py-2 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 cursor-pointer text-white flex items-center justify-center hover:scale-110 transition-all duration-500"
+                >
+                  Try InvoiceCore for FREE!"
+                </Link>
+              </motion.div>
+
+              {/* right side for adverts */}
+              <motion.div className="min-w-96 flex flex-col gap-4">
+                <div className="w-full flex flex-col p-2 bg-black rounded-2xl">
+                  <img
+                    src="https://res.cloudinary.com/ameneterh/image/upload/v1779532352/website_design_gig_jhzsxx.jpg"
+                    alt="website design gig"
+                    className="rounded-lg"
+                  />
+                  <p className="text-center text-white mt-1">
+                    Call now: <b>+2348154230654</b>
                   </p>
                 </div>
-
-                <div className="p-4 rounded-lg border border-gray-100 bg-gray-50 text-gray-700">
-                  <h3 className="font-extrabold">Our Mission</h3>
-                  <p className="mt-2 text-sm">
-                    To provide a catholic education with a learning community
-                    committed to academic excellence; bringing a girl child to
-                    her full potential in a safe and conducive environment under
-                    the spiritual guidance of the sisters of the Immaculate
-                    Heart of Mary, Mother of Christ called to serve God and
-                    humanity in humility and compassion.
-                  </p>
+                <div className="w-full flex flex-col p-2 bg-black rounded-2xl">
+                  <img
+                    src="https://res.cloudinary.com/ameneterh/image/upload/v1779532364/Web_Dev_Flyer_bk6skf.png"
+                    alt="website design gig"
+                    className="rounded-lg"
+                  />
                 </div>
-              </div> */}
-            </motion.p>
-
+              </motion.div>
+            </div>
             {/* <motion.p
               variants={fadeInUp}
               initial="hidden"
