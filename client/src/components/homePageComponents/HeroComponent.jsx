@@ -64,7 +64,7 @@ export default function HeroComponent() {
           </div>
           <div className="flex flex-col gap-2 relative items-center justify-center">
             <img src={logo} alt="" className="rounded-xl" />
-            <p className="px-2 py-1 text-sm text-black bg-yellow-200 absolute bottom-2 w-[97%] rounded-md text-center font-bold italic font-serif">
+            <p className="px-2 py-2 md:py-3 text-sm text-white bg-yellow-700 absolute bottom-2 w-[97%] rounded-md text-center font-bold italic font-serif md:text-lg">
               Smart Invoicing. Stronger Business
             </p>
             {/* <p className="text-center text-sm text-white font-bold max-w-xl">

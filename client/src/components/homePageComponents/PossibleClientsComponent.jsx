@@ -26,24 +26,32 @@ export default function PossibleClientsComponent() {
           </h1>
 
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
-            eveniet soluta id sequi expedita necessitatibus rem, illo ut
-            consectetur. Necessitatibus totam enim debitis aperiam tempore
-            sequi, eveniet dicta repellat culpa. Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Rerum quos, nam libero nulla
-            assumenda ad officiis. Ab, eveniet temporibus placeat, esse
-            consectetur officiis eaque nesciunt libero exercitationem debitis
-            quis sint?
+            Whether you're a freelancer, school owner, shop owner,
+            company/business owner, or skilled artisan, one thing connects us
+            all: getting paid smoothly and managing our business with ease.{" "}
+            <br />
+            It’s time to simplify how we invoice, track payments, and grow.{" "}
+            <br />
+            With our invoicing app, you can:
+            <ul>
+              <li>✅ Create professional invoices in seconds</li>
+              <li>✅ Track payments effortlessly</li>
+              <li>✅ Stay organized and in control of your business</li>
+              <li>✅ Build trust with your clients and customers</li>
+            </ul>{" "}
+            No matter your industry, we’re stronger when we work smarter,
+            together.{" "}
+            <span className="block mt-4">Join the movement, and ...</span>
           </p>
 
           <Link
             to="/add-new-business"
-            className="mt-5 max-w-48 py-2 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 cursor-pointer text-white flex items-center justify-center hover:scale-110 transition-all duration-500"
+            className="mt-5 max-w-56 py-2 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 cursor-pointer text-white flex items-center justify-center hover:scale-110 transition-all duration-500"
           >
             {isLoading ? (
               <Loader className="animate-spin mx-auto" />
             ) : (
-              "Try InvoiceCore Now!"
+              "Try InvoiceCore for FREE!"
             )}
           </Link>
         </div>

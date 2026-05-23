@@ -23,7 +23,7 @@ export default function OurClientListComponent({ clients }) {
           Our Esteemed Clients
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
         {clients.map((client, id) => (
           <div
             className="flex gap-3 items-center rounded-md p-2 shadow-md"
@@ -34,8 +34,8 @@ export default function OurClientListComponent({ clients }) {
               alt={client.business_name}
               className="h-12"
             />
-            <h1 className="text-lg lg:text-3xl font-extrabold text-gray-500">
-              {client.business_name.split(" ")[0]}
+            <h1 className="text-sm md:text-lg font-extrabold text-gray-500 line-clamp-1">
+              {client.business_name}
             </h1>
           </div>
         ))}
