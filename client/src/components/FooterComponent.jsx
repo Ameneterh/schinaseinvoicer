@@ -40,15 +40,7 @@ export default function FooterComponent() {
             </li>
             <li className="mt-2">
               <Link
-                to="/awards"
-                className="hover:underline hover:font-semibold underline-offset-2"
-              >
-                Awards & Prices
-              </Link>
-            </li>
-            <li className="mt-2">
-              <Link
-                to="/admissions"
+                to="/tutorials"
                 className="hover:underline hover:font-semibold underline-offset-2"
               >
                 Video Tutorial

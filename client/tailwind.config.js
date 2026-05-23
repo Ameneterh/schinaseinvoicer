@@ -6,7 +6,11 @@ export default {
     // "node_modules/flowbite-react/lib/esm/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        "spin-slow": "spin 4s linear infinite",
+      },
+    },
   },
   plugins: [],
 };
