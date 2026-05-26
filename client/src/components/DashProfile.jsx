@@ -292,10 +292,13 @@ export default function DashProfile() {
             color="red"
             placeholder="User Creation Date"
             className="flex-1 w-full"
-            defaultValue={new Date(user.createdAt).toLocaleDateString("en-US", {
+            defaultValue={new Date(user.createdAt).toLocaleString("en-US", {
               year: "numeric",
               month: "short",
               day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
             })}
             disabled
           />
@@ -307,10 +310,13 @@ export default function DashProfile() {
             color="red"
             placeholder="User Last Login"
             className="flex-1 w-full"
-            defaultValue={new Date(user.lastLogin).toLocaleDateString("en-US", {
+            defaultValue={new Date(user.lastLogin).toLocaleString("en-US", {
               year: "numeric",
               month: "short",
               day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
             })}
             disabled
           />
@@ -322,10 +328,13 @@ export default function DashProfile() {
             color="red"
             placeholder="* User Last Update"
             className="flex-1 w-full"
-            defaultValue={new Date(user.updatedAt).toLocaleDateString("en-US", {
+            defaultValue={new Date(user.updatedAt).toLocaleString("en-US", {
               year: "numeric",
               month: "short",
               day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
             })}
             disabled
           />
@@ -357,8 +366,8 @@ export default function DashProfile() {
           user.role === "architect" ||
           user.role === "businessAdmin" ? (
             <Link
-              to="/create-invoice"
-              className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
+              to="/user-dashboard?tab=create-invoice"
+              className="w-full py-3 px-4 bg-gradient-to-r from-blue-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-blue-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -370,10 +379,16 @@ export default function DashProfile() {
         </div>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
-        <span onClick={() => setShowModal(true)} className="cursor-pointer">
+        <span
+          onClick={() => setShowModal(true)}
+          className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
+        >
           Delete Account
         </span>
-        <span onClick={handleLogout} className="cursor-pointer">
+        <span
+          onClick={handleLogout}
+          className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
+        >
           Sign Out
         </span>
       </div>

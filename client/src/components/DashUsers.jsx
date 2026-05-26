@@ -110,6 +110,7 @@ export default function DashUsers() {
               <th className="px-4 py-1 text-left">Name of User</th>
               <th className="px-4 py-1 text-left">Affiliation</th>
               <th className="px-4 py-1 text-left">User Email</th>
+              <th className="px-4 py-1 text-left">User Phone</th>
               <th className="px-4 py-1 text-left">User Role</th>
               <th className="px-4 py-1 text-left">Actions</th>
             </tr>
@@ -124,6 +125,9 @@ export default function DashUsers() {
                   {user.business.business_name}
                 </td>
                 <td className="px-4 py-1 text-sm text-nowrap">{user.email}</td>
+                <td className="px-4 py-1 text-sm text-nowrap">
+                  {user.phoneNumber}
+                </td>
                 <td className="px-4 py-1 text-sm text-nowrap capitalize">
                   {user.role}
                 </td>
