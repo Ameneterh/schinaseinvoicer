@@ -85,7 +85,7 @@ export default function TableForm({
   };
 
   return (
-    <div className="px-4 mt-5 mb-10">
+    <div className="mb-10 p-4 border rounded-lg">
       <div className="flex items-center w-full gap-3 mb-5">
         <h1 className="text-xl font-bold">Enter Job Details</h1>
         <p className="flex-1 h-[1px] bg-gray-600"></p>
@@ -93,29 +93,35 @@ export default function TableForm({
 
       <form onSubmit={handleSubmit}>
         <div className="md:grid grid-cols-2 gap-10">
-          <div className="flex flex-col">
-            <label htmlFor="job_title" className="text-sm mb-1">
+          <div className="flex flex-col relative">
+            <label
+              htmlFor="job_title"
+              className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
+            >
               Item/Job Title
             </label>
             <input
               type="text"
               name="job_title"
               id="job_title"
-              placeholder="Item/Job Title"
+              // placeholder="Item/Job Title"
               className="p-2"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="job_description" className="text-sm mb-1">
+          <div className="flex flex-col relative">
+            <label
+              htmlFor="job_description"
+              className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
+            >
               Item/Job Description
             </label>
             <input
               type="text"
               name="job_description"
               id="job_description"
-              placeholder="Item/Job Description"
+              // placeholder="Item/Job Description"
               className="p-2"
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
@@ -124,36 +130,45 @@ export default function TableForm({
         </div>
 
         <div className="md:grid grid-cols-3 gap-10 mt-6">
-          <div className="flex flex-col">
-            <label htmlFor="quantity" className="text-sm mb-1">
+          <div className="flex flex-col relative">
+            <label
+              htmlFor="quantity"
+              className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
+            >
               Quantity
             </label>
             <input
               type="text"
               name="quantity"
               id="quantity"
-              placeholder="Quantity"
+              // placeholder="Quantity"
               className="p-2"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="rate" className="text-sm mb-1">
+          <div className="flex flex-col relative">
+            <label
+              htmlFor="rate"
+              className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
+            >
               Rate
             </label>
             <input
               type="text"
               name="rate"
               id="rate"
-              placeholder="Rate"
+              // placeholder="Rate"
               className="p-2"
               value={rate}
               onChange={(e) => setRate(e.target.value)}
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="amount" className="text-sm mb-1">
+          <div className="flex flex-col relative">
+            <label
+              htmlFor="amount"
+              className="text-sm px-1 mb-1 absolute -top-[10px] left-2"
+            >
               Amount
             </label>
             <p className="font-bold flex flex-1 items-center bg-[#f1f1f1] px-3 py-4 md:py-0 rounded">
@@ -178,7 +193,7 @@ export default function TableForm({
         <h1 className="mb-1 text-xl font-bold">Added Item/Job</h1>
         <table width="100%">
           <thead>
-            <tr className="bg-gray-50 h-10 border-none">
+            <tr className="bg-gray-50 h-10 border-none text-sm">
               <td className="font-bold text-center">S/N</td>
               <td className="font-bold">Item/Job Description</td>
               <td className="font-bold text-right md:pr-3">Qty</td>
@@ -193,7 +208,7 @@ export default function TableForm({
               index,
             ) => (
               <React.Fragment key={id}>
-                <tbody>
+                <tbody className="text-sm">
                   <tr className="">
                     <td className="text-center">{index + 1}</td>
                     <td>

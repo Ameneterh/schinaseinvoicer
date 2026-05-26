@@ -14,11 +14,20 @@ import { app } from "../firebase.js";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { Input } from "./Input";
-import { AtSign, Loader, LockKeyhole, User } from "lucide-react";
+import {
+  AtSign,
+  Loader,
+  LockKeyhole,
+  User,
+  CalendarClock,
+  PhoneOutgoing,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function DashProfile() {
   const { user, logout, isLoading, error } = useAuthStore();
+
+  console.log(user);
 
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -147,8 +156,8 @@ export default function DashProfile() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-3 w-full">
-      <h1 className="sm:my-7 text-center font-semibold text-3xl text-white">
+    <div className="mx-auto p-3 md:px-10 w-full bg-white">
+      <h1 className="sm:my-7 text-center font-semibold text-3xl text-green-950">
         Profile
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -200,34 +209,59 @@ export default function DashProfile() {
           <Alert color="failure">{imageFileUploadError}</Alert>
         )}
 
-        <Input
-          icon={User}
-          type="text"
-          id="fullname"
-          placeholder="fullname"
-          defaultValue={user.fullname}
-          onChange={(e) =>
-            setFormData({ ...formData, fullname: e.target.value })
-          }
-        />
+        <div className="flex items-center flex-col sm:flex-row justify-between gap-3">
+          <Input
+            icon={User}
+            type="text"
+            id="fullname"
+            label="User Full Name"
+            placeholder="fullname"
+            defaultValue={user.fullname}
+            onChange={(e) =>
+              setFormData({ ...formData, fullname: e.target.value })
+            }
+          />
+
+          <Input
+            icon={User}
+            type="text"
+            id="business_name"
+            label="* User Affiliation"
+            color="red"
+            placeholder="Business Affiliation"
+            defaultValue={user.business.business_name}
+            disabled
+          />
+          <Input
+            icon={User}
+            type="text"
+            id="role"
+            label="* User Role"
+            color="red"
+            placeholder="role"
+            defaultValue={user.role}
+            disabled
+          />
+        </div>
+
         <div className="flex items-center flex-col sm:flex-row justify-between gap-3">
           <Input
             icon={AtSign}
             type="email"
             id="email"
+            label="User Email"
             placeholder="user@company.com"
             className="flex-1 w-full"
-            defaultValue={user.user_email}
+            defaultValue={user.email}
             onChange={(e) =>
-              setFormData({ ...formData, user_email: e.target.value })
+              setFormData({ ...formData, email: e.target.value })
             }
           />
-
-          {/* </div> */}
           <Input
             icon={LockKeyhole}
             type="password"
             id="password"
+            label="User Password"
             placeholder="Your Password"
             className="flex-1 w-full"
             // defaultValue={user.user_password}
@@ -235,35 +269,105 @@ export default function DashProfile() {
               setFormData({ ...formData, user_password: e.target.value })
             }
           />
+          <Input
+            icon={PhoneOutgoing}
+            type="text"
+            id="phoneNumber"
+            label="User Phone Number"
+            placeholder="Your Phone Number"
+            className="flex-1 w-full"
+            defaultValue={user.phoneNumber}
+            onChange={(e) =>
+              setFormData({ ...formData, phoneNumber: e.target.value })
+            }
+          />
         </div>
 
-        <motion.button
-          className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          type="submit"
-          disabled={isLoading || imageFileUploading}
-        >
-          {isLoading ? (
-            <div className="flex gap-3 items-center text-white">
-              <Loader className="w-6 h-6 animate-spin mx-auto font-bold" />
-              <p>Updating ...</p>
-            </div>
-          ) : (
-            "Update"
-          )}
-        </motion.button>
+        <div className="flex items-center flex-col sm:flex-row justify-between gap-3">
+          <Input
+            icon={CalendarClock}
+            type="text"
+            id="createdAt"
+            label="* User Creation Date"
+            color="red"
+            placeholder="User Creation Date"
+            className="flex-1 w-full"
+            defaultValue={new Date(user.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+            disabled
+          />
+          <Input
+            icon={CalendarClock}
+            type="text"
+            id="lastLogin"
+            label="* User Last Login"
+            color="red"
+            placeholder="User Last Login"
+            className="flex-1 w-full"
+            defaultValue={new Date(user.lastLogin).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+            disabled
+          />
+          <Input
+            icon={CalendarClock}
+            type="text"
+            id="updatedAt"
+            label="User Last Update"
+            color="red"
+            placeholder="* User Last Update"
+            className="flex-1 w-full"
+            defaultValue={new Date(user.updatedAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+            disabled
+          />
+        </div>
 
-        {user.role === "Finance Officer" || user.isAdmin ? (
-          <Link
-            to="/create-invoice"
-            className="w-full py-2 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-yellow-500 hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-yellow-500"
+        <p className="text-red-600 text-sm">
+          * Represents fields users cannot edit
+        </p>
+
+        <div className="flex flex-col md:flex-row gap-3">
+          <motion.button
+            className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            disabled={isLoading || imageFileUploading}
           >
-            Create Invoice
-          </Link>
-        ) : (
-          <></>
-        )}
+            {isLoading ? (
+              <div className="flex gap-3 items-center text-white">
+                <Loader className="w-6 h-6 animate-spin mx-auto font-bold" />
+                <p>Updating ...</p>
+              </div>
+            ) : (
+              "Update User Details"
+            )}
+          </motion.button>
+
+          {user.role === "handler" ||
+          user.role === "architect" ||
+          user.role === "businessAdmin" ? (
+            <Link
+              to="/create-invoice"
+              className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Create Invoice
+            </Link>
+          ) : (
+            <></>
+          )}
+        </div>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span onClick={() => setShowModal(true)} className="cursor-pointer">

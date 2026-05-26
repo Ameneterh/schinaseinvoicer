@@ -8,6 +8,7 @@ import {
   MapPinHouse,
   FilePenLine,
   FilePlus,
+  Handshake,
   Loader,
   Eye,
   EyeOff,
@@ -150,10 +151,10 @@ export default function RegisterBusiness() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="w-full bg-blue-950 bg-opacity-90 backdrop-filter backdrop-blur-xl rounded-lg shadow-xl overflow-hidden my-10"
+          className="w-full bg-white backdrop-filter backdrop-blur-xl rounded-lg shadow-xl overflow-hidden my-10"
         >
           <div className="p-8">
-            <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to bg-blue-500 text-transparent bg-clip-text">
+            <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-950 to bg-blue-500 text-transparent bg-clip-text">
               Register Your Account/Business
             </h2>
 
@@ -162,22 +163,27 @@ export default function RegisterBusiness() {
               className="flex flex-col gap-3"
             >
               {/* business owner details */}
-              <p className="text-orange-500 text-xl md:text-2xl font-bold">
-                Business Owner Details
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-orange-500 text-xl md:text-2xl font-bold">
+                  Business Owner Details
+                </p>
+                <p className="h-[2px] bg-orange-500 w-full flex-1 hidden md:inline-block"></p>
+              </div>
 
               <div className="flex flex-col lg:flex-row gap-4">
                 <Input
                   icon={CircleUserRound}
                   type="text"
-                  placeholder="Business Owner's Name"
+                  // placeholder="Business Owner's Name"
+                  label="Business Owner's Name"
                   value={fullname}
                   onChange={(e) => setFullname(e.target.value)}
                 />
                 <Input
                   icon={Mail}
                   type="email"
-                  placeholder="Business Owner's Email"
+                  // placeholder="Business Owner's Email"
+                  label="Business Owner's Email"
                   value={email}
                   onChange={(e) => setUserEmail(e.target.value)}
                 />
@@ -187,7 +193,8 @@ export default function RegisterBusiness() {
                 <Input
                   icon={Lock}
                   type="text"
-                  placeholder="Business Owner's Phone"
+                  // placeholder="Business Owner's Phone"
+                  label="Business Owner's Phone"
                   value={phoneNumber}
                   onChange={(e) => setUserPhone(e.target.value)}
                 />
@@ -196,7 +203,8 @@ export default function RegisterBusiness() {
                     <Input
                       icon={Lock}
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter Strong Password"
+                      // placeholder="Enter Strong Password"
+                      label="Create Strong Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -212,13 +220,21 @@ export default function RegisterBusiness() {
                     </div>
                   </div>
                 </div>
-                <select
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full pl-3 pr-3 py-2 bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
-                >
-                  <option value="">Select Role</option>
-                  <option value="businessAdmin">Business Admin</option>
-                </select>
+                <div className="flex flex-col w-full relative mt-2">
+                  <label
+                    htmlFor="validity"
+                    className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+                  >
+                    Select User Role
+                  </label>
+                  <select
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                  >
+                    <option value="">Select User Role</option>
+                    <option value="businessAdmin">Business Admin</option>
+                  </select>
+                </div>
               </div>
               {/* password strength meter */}
               <PasswordStrengthMeter password={password} />
@@ -245,21 +261,27 @@ export default function RegisterBusiness() {
             > */}
 
               {/* business details */}
-              <p className="text-orange-500 text-xl md:text-2xl font-bold">
-                Business Details
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-orange-500 text-xl md:text-2xl font-bold">
+                  Business Details
+                </p>
+                <p className="h-[2px] bg-orange-500 w-full flex-1 hidden md:inline-block"></p>
+              </div>
+
               <div className="flex flex-col lg:flex-row gap-4">
                 <Input
                   icon={CircleUserRound}
                   type="text"
-                  placeholder="Name of Business"
+                  // placeholder="Name of Business"
+                  label="Business Name"
                   value={business_name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <Input
                   icon={Mail}
                   type="email"
-                  placeholder="Business Email"
+                  // placeholder="Business Email"
+                  label="Business Email"
                   value={business_email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -269,14 +291,16 @@ export default function RegisterBusiness() {
                 <Input
                   icon={Lock}
                   type="text"
-                  placeholder="Business Phone"
+                  // placeholder="Business Phone"
+                  label="Business Phone"
                   value={business_phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
                 <Input
                   icon={MapPinHouse}
                   type="text"
-                  placeholder="Business Address"
+                  // placeholder="Business Address"
+                  label="Business Address"
                   value={business_address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
@@ -329,21 +353,24 @@ export default function RegisterBusiness() {
                 <Input
                   icon={FilePenLine}
                   type="text"
-                  placeholder="Banker's Name"
+                  // placeholder="Banker's Name"
+                  label="Banker's Name"
                   value={banker}
                   onChange={(e) => setBanker(e.target.value)}
                 />
                 <Input
                   icon={FilePenLine}
                   type="text"
-                  placeholder="Account Name"
+                  // placeholder="Account Name"
+                  label="Account Name"
                   value={account_name}
                   onChange={(e) => setAccountName(e.target.value)}
                 />
                 <Input
                   icon={FilePenLine}
                   type="text"
-                  placeholder="Account Number"
+                  // placeholder="Account Number"
+                  label="Account Number"
                   value={account_number}
                   onChange={(e) => setAccountNumber(e.target.value)}
                 />
@@ -370,7 +397,7 @@ export default function RegisterBusiness() {
               )}
 
               <motion.button
-                className="mt-5 max-w-fit py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center self-center"
+                className="py-3 px-8 bg-gradient-to-r from-slate-600 to-blue-800 rounded-lg hover:border-white hover:from-blue-800 hover:to-slate-600 border focus:outline-none transition duration-200 cursor-pointer flex items-center justify-center text-white"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
@@ -378,23 +405,23 @@ export default function RegisterBusiness() {
                 {isLoading ? (
                   <Loader className="animate-spin mx-auto" />
                 ) : (
-                  "Register Account/Business"
+                  <span className="flex items-center gap-2">
+                    <Handshake size={18} />
+                    Register Account/Business
+                  </span>
                 )}
               </motion.button>
             </form>
           </div>
 
-          <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
-            <p className="text-sm text-gray-400">
+          <div className="px-8 py-4 bg-gray-400 bg-opacity-50 flex justify-center">
+            <p className="text-sm text-black">
               Already registered your business?{" "}
-              <Link
-                to="/add-handler"
-                className="text-green-400 hover:underline"
-              >
+              <Link to="/add-handler" className="text-blue-800 hover:underline">
                 Add Handler
               </Link>{" "}
               or{" "}
-              <Link to="/user-login" className="text-green-400 hover:underline">
+              <Link to="/user-login" className="text-blue-800 hover:underline">
                 Login
               </Link>
             </p>

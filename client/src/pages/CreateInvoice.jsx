@@ -308,23 +308,30 @@ export default function CreateInvoice() {
                   {!client && isChecked && (
                     <>
                       {/* save client functionality */}
-                      <form onSubmit={handleAddClient} className="w-full">
+                      <form
+                        onSubmit={handleAddClient}
+                        className="w-full px-2 border border-gray-400 shadow-md shadow-gray-700 rounded-md"
+                      >
+                        <p className="text-red-950 text-lg py-2 font-bold">
+                          Add New Client:
+                        </p>
                         <div className="md:grid grid-cols-3 gap-10">
                           <div className="flex flex-col flex-1">
-                            <label
+                            {/* <label
                               htmlFor="client_name"
                               className="text-sm mb-1"
                             >
                               Enter Client's Name
-                            </label>
+                            </label> */}
                             <InvInput
                               icon={FolderPen}
                               type="text"
                               name="client_name"
                               id="client_name"
-                              placeholder={
-                                client?.client_name || "Enter Client Name"
-                              }
+                              // placeholder={
+                              //   client?.client_name || "Enter Client Name"
+                              // }
+                              label={client?.client_name || "Enter Client Name"}
                               autoComplete="off"
                               value={client?.client_name || client_name}
                               onChange={(e) => setName(e.target.value)}
@@ -333,19 +340,19 @@ export default function CreateInvoice() {
                             />
                           </div>
                           <div className="flex flex-col flex-1">
-                            {" "}
-                            <label
+                            {/* <label
                               htmlFor="client_phone"
                               className="text-sm mb-1"
                             >
                               Enter Client's Phone
-                            </label>
+                            </label> */}
                             <InvInput
                               icon={PhoneCall}
                               type="text"
                               name="client_phone"
                               id="client_phone"
-                              placeholder="Enter Client Phone"
+                              // placeholder="Enter Client Phone"
+                              label="Enter Client Phone"
                               autoComplete="off"
                               value={client?.client_phone || client_phone}
                               onChange={(e) => setPhone(e.target.value)}
@@ -353,18 +360,19 @@ export default function CreateInvoice() {
                             />
                           </div>
                           <div className="flex flex-col flex-1">
-                            <label
+                            {/* <label
                               htmlFor="client_email"
                               className="text-sm mb-1"
                             >
                               Enter Client's Email
-                            </label>
+                            </label> */}
                             <InvInput
                               icon={Mail}
                               type="text"
                               name="client_email"
                               id="client_email"
-                              placeholder="Enter Client Email"
+                              // placeholder="Enter Client Email"
+                              label="Enter Client Email"
                               autoComplete="off"
                               className="p-2"
                               value={client?.client_email || client_email}
@@ -376,17 +384,18 @@ export default function CreateInvoice() {
 
                         <div className="flex items-end gap-2 mb-4">
                           <div className="flex flex-col flex-1">
-                            <label
+                            {/* <label
                               htmlFor="client_address"
                               className="text-sm mb-1"
                             >
                               Enter Client's Address
-                            </label>
+                            </label> */}
                             <InvInput
                               icon={MapPinCheck}
                               name="client_address"
                               id="client_address"
-                              placeholder="Enter Client Address"
+                              // placeholder="Enter Client Address"
+                              label="Enter Client Address"
                               autoComplete="off"
                               value={client?.client_address || client_address}
                               onChange={(e) => setAddress(e.target.value)}
@@ -413,15 +422,16 @@ export default function CreateInvoice() {
               <article className="flex flex-col gap-y-3 px-5 border border-gray-300 rounded">
                 <div className="md:grid grid-cols-4 gap-10 my-3">
                   <div className="flex flex-col flex-1">
-                    <label htmlFor="inv_number" className="text-sm mb-1">
+                    {/* <label htmlFor="inv_number" className="text-sm mb-1">
                       Invoice Number
-                    </label>
+                    </label> */}
                     <InvInput
                       icon={FileDigit}
                       type="text"
                       name="inv_number"
                       id="inv_number"
-                      placeholder="Invoice Number"
+                      label="Invoice Number"
+                      // placeholder="Invoice Number"
                       autoComplete="off"
                       value={invoiceNumber}
                       // onChange={(e) => setInvNumber(e.target.value)}
@@ -429,15 +439,16 @@ export default function CreateInvoice() {
                     />
                   </div>
                   <div className="flex flex-col flex-1">
-                    <label htmlFor="inv_date" className="text-sm mb-1">
+                    {/* <label htmlFor="inv_date" className="text-sm mb-1">
                       Invoice Date
-                    </label>
+                    </label> */}
                     <InvInput
                       icon={CalendarDays}
                       type="string"
                       name="inv_date"
                       id="inv_date"
-                      placeholder="Enter Invoice Date"
+                      label="Invoice Date"
+                      // placeholder="Enter Invoice Date"
                       autoComplete="off"
                       className="p-2"
                       value={new Date().toLocaleDateString()}
@@ -445,8 +456,11 @@ export default function CreateInvoice() {
                       disabled
                     />
                   </div>
-                  <div className="flex flex-col flex-1">
-                    <label htmlFor="validity" className="text-sm mb-1">
+                  <div className="flex flex-col flex-1 relative mt-2">
+                    <label
+                      htmlFor="validity"
+                      className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+                    >
                       Invoice Type
                     </label>
                     <select
@@ -464,15 +478,16 @@ export default function CreateInvoice() {
 
                   {invoiceType === "proforma" ? (
                     <div className="flex flex-col flex-1">
-                      <label htmlFor="validity" className="text-sm mb-1">
+                      {/* <label htmlFor="validity" className="text-sm mb-1">
                         Validity Period (Days)
-                      </label>
+                      </label> */}
                       <InvInput
                         icon={Mail}
                         type="number"
                         name="validity"
                         id="validity"
-                        placeholder="Validity Period (Days)"
+                        // placeholder="Validity Period (Days)"
+                        label="Validity Period (Days)"
                         autoComplete="off"
                         value={validity}
                         onChange={(e) => setValidity(e.target.value)}
@@ -515,16 +530,6 @@ export default function CreateInvoice() {
                   <VscPreview className="mr-2" size={18} />
                   Preview Invoice
                 </motion.button>
-
-                {/* <motion.button
-                  className="w-full mx-auto lg:w-1/4 py-3 px-8 bg-gradient-to-r from-green-700 to-emerald-700 rounded-lg hover:border-white hover:from-green-600 hover:to-emerald-700 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center text-white"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={saveInvoice}
-                >
-                  <FaSave className="mr-2" size={18} />
-                  SAVE AND CONTINUE
-                </motion.button> */}
               </div>
             </div>
           </>

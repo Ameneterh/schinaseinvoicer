@@ -41,9 +41,9 @@ export default function LoginPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-md mx-auto w-full bg-blue-950 bg-opacity-80 backdrop-filter backdrop-blur-xl rounded-lg shadow-xl overflow-hidden my-10 flex flex-col"
+          className="max-w-md mx-auto w-full bg-white backdrop-filter backdrop-blur-xl rounded-lg shadow-xl overflow-hidden my-10 flex flex-col"
         >
-          <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to bg-blue-500 text-transparent bg-clip-text pt-8">
+          <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-950 to bg-blue-500 text-transparent bg-clip-text pt-8">
             Welcome Back!
           </h2>
 
@@ -53,7 +53,8 @@ export default function LoginPage() {
               <Input
                 icon={Mail}
                 type="email"
-                placeholder="Handler Email"
+                // placeholder="Handler Email"
+                label="User Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -61,7 +62,8 @@ export default function LoginPage() {
                 <Input
                   icon={Lock}
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter Strong Password"
+                  // placeholder="Enter Strong Password"
+                  label="User Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -80,7 +82,7 @@ export default function LoginPage() {
               <div>
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-green-400 hover:underline"
+                  className="text-sm text-green-800 hover:underline"
                 >
                   Forgot Password?
                 </Link>
@@ -93,7 +95,7 @@ export default function LoginPage() {
               )}
 
               <motion.button
-                className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 border border-green-700 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center self-center"
+                className="py-3 px-8 bg-gradient-to-r from-slate-600 to-blue-800 rounded-lg hover:border-white hover:from-blue-800 hover:to-slate-600 border focus:outline-none transition duration-200 cursor-pointer flex items-center justify-center text-white"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"

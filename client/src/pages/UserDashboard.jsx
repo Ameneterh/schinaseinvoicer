@@ -13,6 +13,7 @@ import DashInvoices from "../components/DashInvoices";
 import { useBusinessStore } from "../store/businessStore";
 import DashAddHandler from "../components/DashAddHandler";
 import DashMessages from "../components/DashMessages";
+import DashClients from "../components/DashClients";
 
 export default function UserDashboard() {
   const { user, logout, isLoading } = useAuthStore();
@@ -64,6 +65,9 @@ export default function UserDashboard() {
 
         {/* view invoices */}
         {tab === "invoices" && <DashInvoices />}
+
+        {/* view clients */}
+        {tab === "clients" && <DashClients />}
 
         {/* view messages */}
         {tab === "messages" && <DashMessages />}

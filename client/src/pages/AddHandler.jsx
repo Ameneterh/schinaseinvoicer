@@ -181,7 +181,7 @@ export default function AddHandler() {
               )}
 
               <motion.button
-                className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg hover:from-green-600 hover:to-emerald-700 border border-green-700 hover:border-white hover:text-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center"
+                className="py-3 px-8 bg-gradient-to-r from-slate-600 to-blue-800 rounded-lg hover:border-white hover:from-blue-800 hover:to-slate-600 border focus:outline-none transition duration-200 cursor-pointer flex items-center justify-center text-white"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
@@ -190,9 +190,21 @@ export default function AddHandler() {
                 {isLoading ? (
                   <Loader className="animate-spin mx-auto" />
                 ) : (
-                  "Add Handler"
+                  <span className="flex items-center gap-2">Add Handler</span>
                 )}
               </motion.button>
+
+              {/* <motion.button
+                className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg hover:from-green-600 hover:to-emerald-700 border border-green-700 hover:border-white hover:text-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isLoading ? (
+                  <Loader className="animate-spin mx-auto" />
+                ) : (
+                  "Add Handler"
+                )}
+              </motion.button> */}
             </form>
           </div>
 

@@ -163,8 +163,6 @@ export default function DashboardComponent() {
   // const dueDate = new Date(invoice.dueDate);
   // dueDate.setDate(dueDate.getDate() + validity);
 
-  console.log(invoices);
-
   return (
     <div className="flex flex-col gap-4 w-full p-3 md:mt-6">
       {user.role === "architect" ? (

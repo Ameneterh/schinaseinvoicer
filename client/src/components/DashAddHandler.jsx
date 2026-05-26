@@ -5,6 +5,7 @@ import {
   Mail,
   Lock,
   Loader,
+  UserRoundPlus,
   Eye,
   EyeOff,
   Phone,
@@ -81,17 +82,17 @@ export default function DashAddHandler() {
   }, []);
 
   return (
-    <div className="md:px-10 mt-6 w-full">
+    <div className="mx-auto p-3 md:px-10 w-full bg-white">
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="w-full bg-white rounded-lg shadow-xl overflow-hidden p-6"
+        className="w-full bg-white rounded-lg shadow-xl overflow-hidden p-2 md:p-6"
       >
         <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to bg-blue-500 text-transparent bg-clip-text">
           Add Handler
         </h2>
-        <div className="p-8">
+        <div className="p-2">
           <form
             onSubmit={handleRegisterHandler}
             className="flex flex-col gap-3"
@@ -100,31 +101,41 @@ export default function DashAddHandler() {
               <Input
                 icon={CircleUserRound}
                 type="text"
-                placeholder="Name of Handler"
+                // placeholder="Name of Handler"
+                label="Name of Handler"
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
               />
               <Input
                 icon={Mail}
                 type="email"
-                placeholder="Handler Email"
+                // placeholder="Handler Email"
+                label="Handler Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <select
-                onChange={(e) => setBusiness(e.target.value)}
-                className="w-full pl-3 pr-3 py-2 bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
-              >
-                <option>Select Business Affiliation</option>
-                {businesses &&
-                  businesses.map((business, index) => {
-                    return (
-                      <option key={index} value={business._id}>
-                        {business.business_name}
-                      </option>
-                    );
-                  })}
-              </select>
+              <div className="flex flex-col w-full relative mt-2">
+                <label
+                  htmlFor="validity"
+                  className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+                >
+                  Select Business Affiliation
+                </label>
+                <select
+                  onChange={(e) => setBusiness(e.target.value)}
+                  className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                >
+                  <option>Select Business Affiliation</option>
+                  {businesses &&
+                    businesses.map((business, index) => {
+                      return (
+                        <option key={index} value={business._id}>
+                          {business.business_name}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
             </div>
 
             <div className="flex flex-col items-start lg:flex-row gap-4">
@@ -132,7 +143,8 @@ export default function DashAddHandler() {
                 <Input
                   icon={Phone}
                   type={"text"}
-                  placeholder="Handler Phone Number"
+                  // placeholder="Handler Phone Number"
+                  label="Handler Phone Number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
@@ -141,7 +153,8 @@ export default function DashAddHandler() {
                   <Input
                     icon={Lock}
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter Strong Password"
+                    // placeholder="Enter Strong Password"
+                    label="Enter Strong Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -180,7 +193,7 @@ export default function DashAddHandler() {
             )}
 
             <motion.button
-              className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg hover:from-green-600 hover:to-emerald-700 border border-green-700 hover:border-white hover:text-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center"
+              className="py-3 px-8 bg-gradient-to-r from-slate-600 to-blue-800 rounded-lg hover:border-white hover:from-blue-800 hover:to-slate-600 border focus:outline-none transition duration-200 cursor-pointer flex items-center justify-center text-white"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
@@ -189,24 +202,14 @@ export default function DashAddHandler() {
               {isLoading ? (
                 <Loader className="animate-spin mx-auto" />
               ) : (
-                "Add Handler"
+                <span className="flex items-center gap-2">
+                  <UserRoundPlus className="size-5" />
+                  Add Handler
+                </span>
               )}
             </motion.button>
           </form>
         </div>
-
-        {/* <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
-          <p className="text-sm text-gray-400">
-            Already registered your Handler?{" "}
-            <Link to="/add-handler" className="text-green-400 hover:underline">
-              Add Another
-            </Link>{" "}
-            or{" "}
-            <Link to="/user-login" className="text-green-400 hover:underline">
-              Login
-            </Link>
-          </p>
-        </div> */}
       </motion.div>
     </div>
   );

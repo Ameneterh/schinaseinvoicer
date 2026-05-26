@@ -82,10 +82,10 @@ textarea:focus {
   box-shadow: none !important;
 }
 
-button {
+/* button {
   height: 42px !important;
   box-shadow: none !important;
-}
+} */
 
 table {
   border-top: 2px solid rgb(160, 160, 160);
