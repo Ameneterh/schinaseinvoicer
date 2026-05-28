@@ -84,16 +84,15 @@ export default function FooterComponent() {
             </li>
             <li className="mt-2 flex gap-2 items-center">
               <MdAlternateEmail size={16} />
-              <Link
-                to="mailto:materchristibasicschool@gmail.com
-"
-              >
+              <Link to="mailto:schinase.industries@gmail.com">
                 schinase.industries@gmail.com
               </Link>
             </li>
             <li className="mt-2 flex gap-2 items-start">
               <MdLocationOn size={16} />
-              Onala, Afao Road, Ado-Ekiti, Ekiti State, Nigeria.
+              <span className="line-clamp-1">
+                Km 8, Afe Babalola Way, Erifun, Ado-Ekiti, Ekiti State, Nigeria.
+              </span>
             </li>
           </ul>
         </div>

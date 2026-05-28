@@ -33,22 +33,6 @@ export default function DashSidebar() {
     }
   }, [location.search]);
 
-  const handleSignout = async () => {
-    try {
-      const res = await fetch("/api/user/signout", {
-        method: "POST",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signOutSuccess());
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
   return (
     // <div className="min-h-screen w-full">
     <Sidebar className="w-full min-h-screen flex flex-col justify-between">
@@ -165,15 +149,6 @@ export default function DashSidebar() {
                   Add Client
                 </Sidebar.Item>
               </Link>
-
-              {/* <hr />
-              <Sidebar.Item
-                icon={HiArrowSmRight}
-                className="cursor-pointer"
-                onClick={handleSignout}
-              >
-                Sign Out
-              </Sidebar.Item> */}
             </>
           )}
         </Sidebar.ItemGroup>

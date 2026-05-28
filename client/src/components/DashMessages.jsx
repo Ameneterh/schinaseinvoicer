@@ -122,7 +122,7 @@ export default function DashMessages() {
             </thead>
             <tbody>
               {messages.map((message) => (
-                <tr key={message._id}>
+                <tr key={message._id} className="">
                   <td className="px-4 text-sm capitalize text-nowrap">
                     {message.status}
                   </td>
@@ -155,7 +155,7 @@ export default function DashMessages() {
                   >
                     {message.text}
                   </td>
-                  <td className="px-4 text-sm flex items-center gap-2">
+                  <td className="px-4 py-1 text-sm text-nowrap">
                     <button
                       title="Mark as Read"
                       onClick={() => {
@@ -178,7 +178,7 @@ export default function DashMessages() {
                       // className="bg-red-500 text-white text-sm px-2 my-1 rounded"
                     >
                       <Trash2
-                        className={`text-red-600 size-4 transition-all duration-300 hover:scale-125`}
+                        className={`text-red-600 size-4 transition-all duration-300 hover:scale-125 ml-1`}
                       />
                     </button>
                   </td>

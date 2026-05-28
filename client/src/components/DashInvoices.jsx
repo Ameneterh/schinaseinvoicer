@@ -101,7 +101,7 @@ export default function DashInvoices() {
           <tbody>
             {invoices.map((invoice) => (
               <tr key={invoice._id} className="">
-                <td className="px-4 text-sm">
+                <td className="px-4 text-sm py-1">
                   {invoice.invDate
                     ? new Date(invoice.invDate).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -110,27 +110,29 @@ export default function DashInvoices() {
                       })
                     : ""}
                 </td>
-                <td className="px-4 text-sm">{invoice.invoiceNumber}</td>
-                <td className="px-4 text-sm">{invoice.client.client_name}</td>
-                <td className="px-4 text-sm text-right">
+                <td className="px-4 text-sm py-1">{invoice.invoiceNumber}</td>
+                <td className="px-4 text-sm py-1">
+                  {invoice.client.client_name}
+                </td>
+                <td className="px-4 text-sm py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.total)}
                 </td>
-                <td className="px-4 text-sm text-right">
+                <td className="px-4 text-sm py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.totalAmountReceived)}
                 </td>
-                <td className="px-4 text-sm text-right">
+                <td className="px-4 text-sm py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.total - invoice.totalAmountReceived)}
                 </td>
-                <td className="px-4 text-sm flex items-center gap-2">
+                <td className="px-4 text-sm py-1 flex items-center gap-2">
                   <button
                     title="Update invoice payment"
                     onClick={() => {

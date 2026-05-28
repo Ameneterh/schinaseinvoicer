@@ -25,6 +25,10 @@ import { RxHamburgerMenu, RxAvatar } from "react-icons/rx";
 import { MdLogout } from "react-icons/md";
 import { useAuthStore } from "../store/authStore";
 import logo from "../assets/InvoiceCore_logoName.png";
+import { IoMdCloseCircle } from "react-icons/io";
+import { TbMessage, TbStarFilled } from "react-icons/tb";
+import { Input } from "./Input";
+import { useRatingStore } from "../store/ratingStore";
 
 export default function HeaderComponent({ business }) {
   const menuItems = [
@@ -52,11 +56,39 @@ export default function HeaderComponent({ business }) {
 
   const [visible, setVisible] = useState(true);
   const [showNav, setShowNav] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const { error, isLoading, logout, user } = useAuthStore();
+  const { addRating, getRatings } = useRatingStore();
 
   const handleLogout = () => {
-    logout();
+    setShowModal(true);
+  };
+
+  const confirmLogout = () => {
+    try {
+      logout();
+      setShowModal(false);
+    } catch (error) {
+      console.log("Error logging out!");
+    } finally {
+      navigate("/");
+    }
+  };
+
+  const submitRating = async (e) => {
+    e.preventDefault();
+
+    try {
+      await addRating({ rating, comment, rater: user._id });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      confirmLogout();
+    }
   };
 
   return (
@@ -182,6 +214,77 @@ export default function HeaderComponent({ business }) {
         </motion.div>
       ) : (
         <></>
+      )}
+
+      {/* show modal on logout */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+          <div className="relative bg-white p-4 rounded-lg w-full max-w-96 mx-auto">
+            <IoMdCloseCircle
+              className="text-red-600 absolute top-1 right-1 size-7 cursor-pointer"
+              title="Close"
+              onClick={() => confirmLogout()}
+            />
+            <h2 className="text-xl mb-3 font-bold text-center">
+              Before you go,
+              <span className="block text-xs -mt-1">
+                take a moment to rate us
+              </span>
+            </h2>
+
+            <p className="h-[2px] bg-blue-800 w-full mb-3"></p>
+
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-2 mb-4">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className={`text-3xl ${
+                      star <= rating ? "text-yellow-400" : "text-gray-300"
+                    }`}
+                  >
+                    <TbStarFilled
+                      className="cursor-pointer hover:scale-110 transition-all duration-300"
+                      size={24}
+                    />
+                  </button>
+                ))}
+              </div>
+              <form
+                onSubmit={submitRating}
+                className="flex flex-col w-full items-center"
+              >
+                <div className="relative w-full">
+                  <p className="text-sm bg-white absolute -top-2 left-2 px-1">
+                    Your message (max 300 characters)
+                  </p>
+                  <textarea
+                    rows="10"
+                    className="w-full h-96 px-2 text-sm pt-3"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  ></textarea>
+                </div>
+                <p className="text-sm font-bold flex gap-1 -mt-2 mb-3 self-end">
+                  {comment.length}{" "}
+                  {comment.length === 0
+                    ? ""
+                    : comment.length > 1
+                      ? "characters"
+                      : "character"}
+                </p>
+
+                <button
+                  type="submit"
+                  className="py-2 px-4 bg-blue-800 text-center rounded-md text-white hover:opacity-70 transition-all duration-300"
+                >
+                  Submit Rating
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       )}
     </header>
   );

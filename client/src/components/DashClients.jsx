@@ -107,7 +107,7 @@ export default function DashClients() {
           <tbody>
             {clients.map((client) => (
               <tr key={client._id} className="text-sm">
-                <td className="px-4 text-sm">
+                <td className="px-4 text-sm py-1">
                   {client.createdAt
                     ? new Date(client.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",
@@ -116,7 +116,7 @@ export default function DashClients() {
                       })
                     : ""}
                 </td>
-                <td className="px-4 text-sm">
+                <td className="px-4 text-sm py-1">
                   <button
                     title="View client details"
                     onClick={() => {
@@ -127,7 +127,7 @@ export default function DashClients() {
                     {client.client_name}
                   </button>
                 </td>
-                <td className="px-4 text-sm">
+                <td className="px-4 text-sm py-1">
                   <Link
                     to={`tel:client.client_phone`}
                     className="text-blue-900 text-sm hover:font-bold hover:underline underline-offset-2"
@@ -135,7 +135,7 @@ export default function DashClients() {
                     {client.client_phone}
                   </Link>
                 </td>
-                <td className="px-4 text-sm">
+                <td className="px-4 text-sm py-1">
                   <Link
                     to={`mailto:client.client_email`}
                     className="text-blue-900 text-sm hover:font-bold hover:underline underline-offset-2"

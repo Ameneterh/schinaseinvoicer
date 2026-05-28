@@ -1,6 +1,6 @@
 import MainLayout from "../layout/MainLayout";
 import { motion } from "framer-motion";
-import news from "../components/homePageComponents/gallery.json";
+// import news from "../components/homePageComponents/gallery.json";
 import { useParams } from "react-router-dom";
 import {
   MdOutlineAccessTime,

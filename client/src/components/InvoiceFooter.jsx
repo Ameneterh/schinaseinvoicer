@@ -44,15 +44,15 @@ export default function InvoiceFooter() {
         <Divider />
       </div>
       <div className="text-xs flex items-center gap-2 w-full justify-center">
-        <p>
-          <b>InvoiceGen</b> - coded and maintained by{" "}
-          <Link to="https://ameneterh-portfolio.onrender.com">
-            AMENE Ter'Hemen
-          </Link>{" "}
-        </p>
+        <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
         <span className="flex items-center">
           <MdWhatsapp /> <MdAddCall className="mx-1" />
-          08154230654
+          <Link
+            to="tel:+2349028531506"
+            className="text-blue-600 hover:underline underline-offset-2 font-bold"
+          >
+            09028531506
+          </Link>
         </span>
       </div>
     </footer>
@@ -105,15 +105,15 @@ export function PdfInvoiceFooter({ invoice }) {
         <Divider />
       </div>
       <div className="text-xs flex items-center gap-2 w-full justify-center">
-        <p>
-          <b>InvoiceGen</b> - coded and maintained by{" "}
-          <Link to="https://ameneterh-portfolio.onrender.com">
-            AMENE Ter'Hemen
-          </Link>{" "}
-        </p>
+        <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
         <span className="flex items-center">
           <MdWhatsapp /> <MdAddCall className="mx-1" />
-          08154230654
+          <Link
+            to="tel:+2349028531506"
+            className="text-blue-600 hover:underline underline-offset-2 font-bold"
+          >
+            09028531506
+          </Link>
         </span>
       </div>
     </footer>

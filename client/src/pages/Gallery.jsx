@@ -2,8 +2,8 @@ import MainLayout from "../layout/MainLayout";
 import { motion } from "framer-motion";
 import staffOfMonth from "../assets/staff_of_month.jpeg";
 import { useEffect, useState } from "react";
-import GalleryComponent from "../components/homePageComponents/GalleryComponent";
-import news from "../components/homePageComponents/gallery.json";
+// import GalleryComponent from "../components/homePageComponents/GalleryComponent";
+// import news from "../components/homePageComponents/gallery.json";
 
 export default function Gallery() {
   const [showModal, setShowModal] = useState(false);

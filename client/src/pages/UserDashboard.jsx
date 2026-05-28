@@ -14,6 +14,7 @@ import { useBusinessStore } from "../store/businessStore";
 import DashAddHandler from "../components/DashAddHandler";
 import DashMessages from "../components/DashMessages";
 import DashClients from "../components/DashClients";
+import DashBusinesses from "../components/DashBusinesses";
 
 export default function UserDashboard() {
   const { user, logout, isLoading } = useAuthStore();
@@ -71,6 +72,9 @@ export default function UserDashboard() {
 
         {/* view messages */}
         {tab === "messages" && <DashMessages />}
+
+        {/* view business */}
+        {tab === "businesses" && <DashBusinesses />}
 
         {/* <div className="space-y-6">
           <motion.div

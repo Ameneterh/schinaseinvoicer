@@ -385,12 +385,12 @@ export default function DashProfile() {
         >
           Delete Account
         </span>
-        <span
+        {/* <span
           onClick={handleLogout}
           className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
         >
           Sign Out
-        </span>
+        </span> */}
       </div>
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">

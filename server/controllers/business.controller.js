@@ -174,7 +174,7 @@ export const logout = async (req, res) => {
 // get all registered businesses
 export const getBusinesses = async (req, res) => {
   try {
-    const businesses = await Business.find();
+    const businesses = await Business.find().populate("owner");
 
     const totalBusinesses = await Business.countDocuments();
 

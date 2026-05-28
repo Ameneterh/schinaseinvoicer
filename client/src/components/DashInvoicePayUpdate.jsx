@@ -176,13 +176,13 @@ export default function DashInvoicePayUpdate({
               <div className="flex justify-between gap-2 mt-4">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="bg-gray-500 text-white px-4 rounded"
+                  className="bg-gray-500 text-white px-4 rounded py-2"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 rounded"
+                  className="bg-blue-500 text-white px-4 rounded py-2"
                 >
                   Update Payment
                 </button>

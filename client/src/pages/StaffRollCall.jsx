@@ -2,9 +2,9 @@ import MainLayout from "../layout/MainLayout";
 import { motion } from "framer-motion";
 import staffOfMonth from "../assets/staff_of_month.jpeg";
 import { useEffect, useState } from "react";
-import GalleryComponent from "../components/homePageComponents/GalleryComponent";
-import staffList from "../assets/staffdetails.json";
-import StaffDetailsComponent from "../components/StaffDetailsComponent";
+// import GalleryComponent from "../components/homePageComponents/GalleryComponent";
+// import staffList from "../assets/staffdetails.json";
+// import StaffDetailsComponent from "../components/StaffDetailsComponent";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
