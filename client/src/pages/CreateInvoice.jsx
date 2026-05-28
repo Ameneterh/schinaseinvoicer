@@ -68,17 +68,22 @@ export default function CreateInvoice() {
   const getRegisteredClients = async () => {
     try {
       const { clients } = await getAllClients();
-      setClients(clients);
+      const filteredClients = clients.filter(
+        (client) => user.business._id === client.staff.business,
+      );
+      setClients(filteredClients);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // console.log(filteredClients);
+
   const getInvoices = async () => {
     try {
       const { invoices } = await getAllInvoices();
       // const filteredInvoices = invoices.filter(
-      //   (invoice) => user.affiliation._id === invoice.company._id,
+      //   (invoice) => user.business._id === invoice.company._id,
       // );
       setInvoices(invoices);
       setInvNumber((invoices.length + 1).toString().padStart(6, "0"));

@@ -14,8 +14,6 @@ export default function DashUsers() {
   const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState("");
 
-  console.log(users);
-
   useEffect(() => {
     const getUsers = async () => {
       try {
