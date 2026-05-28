@@ -87,13 +87,13 @@ export default function DashBusinesses() {
   };
 
   return (
-    <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="w-full min-h-screen table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       <h1 className="text-xl font-extrabold mb-4">List of Businesses:</h1>
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500"
+        className="w-full md:mt-4 md:mx-auto p-3"
       >
         {businesses.length > 0 ? (
           <table className="border-collapse w-full border-none">

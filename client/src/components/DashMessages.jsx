@@ -103,11 +103,11 @@ export default function DashMessages() {
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500"
+        className="w-full md:mt-4 md:mx-auto p-3"
       >
         {messages.length > 0 ? (
-          <table className="border-collapse w-full">
-            <thead className="">
+          <table className="border-collapse border-none w-full">
+            <thead className="bg-gray-400">
               <tr className="border-b-[2px] border-b-black text-sm">
                 <th className="text-left px-4 py-1 text-nowrap">Date Sent</th>
                 <th className="text-left px-4 py-1 text-nowrap">Status</th>
@@ -122,7 +122,7 @@ export default function DashMessages() {
             </thead>
             <tbody>
               {messages.map((message) => (
-                <tr key={message._id} className="">
+                <tr key={message._id} className="border-b border-b-gray-600">
                   <td className="px-4 text-sm capitalize text-nowrap">
                     {message.status}
                   </td>

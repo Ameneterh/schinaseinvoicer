@@ -43,7 +43,13 @@ export const addClient = async (req, res) => {
 // get all registered clients
 export const getClients = async (req, res) => {
   try {
-    const clients = await Client.find().populate("staff");
+    const clients = await Client.find().populate({
+      path: "staff",
+      populate: {
+        path: "business",
+        model: "Business",
+      },
+    });
 
     const totalClients = await Client.countDocuments();
 

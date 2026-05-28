@@ -102,9 +102,9 @@ export default function DashUsers() {
     <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       <h1 className="text-xl font-extrabold mb-4">List of Users:</h1>
       {users.length > 0 ? (
-        <table className="border-collapse leading-tight">
-          <thead className="bg-gray-300">
-            <tr className="border-b-black text-sm">
+        <table className="border-collapse border-none leading-tight">
+          <thead className="bg-gray-400">
+            <tr className="border-b-black border-b-2 text-sm">
               <th className="px-4 py-1 text-left">Name of User</th>
               <th className="px-4 py-1 text-left">Affiliation</th>
               <th className="px-4 py-1 text-left">User Email</th>

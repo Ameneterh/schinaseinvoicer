@@ -11,7 +11,6 @@ const contactSchema = new mongoose.Schema(
     sender_email: {
       type: String,
       required: true,
-      unique: true,
     },
 
     sender_phone: {

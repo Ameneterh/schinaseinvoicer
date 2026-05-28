@@ -86,8 +86,8 @@ export default function DashInvoices() {
     <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       <h1 className="text-xl font-extrabold mb-4">List of Invoices:</h1>
       {invoices.length > 0 ? (
-        <table className="border-collapse">
-          <thead className="">
+        <table className="border-collapse border-none">
+          <thead className="bg-gray-400">
             <tr className="border-b-[2px] border-b-black">
               <th className="text-left px-4 py-1">Inv Date</th>
               <th className="text-left px-4 py-1">Inv No</th>
@@ -188,6 +188,51 @@ export default function DashInvoices() {
                 </td>
               </tr>
             ))}
+            <tr className="border-t-[2px] border-t-black py-1 bg-gray-400">
+              <td className="py-2"></td>
+              <td className="py-2"></td>
+              <td className="py-2"></td>
+              <td className="py-2 text-right font-bold text-sm px-4">
+                {new Intl.NumberFormat("en-NG", {
+                  style: "currency",
+                  currency: "NGN",
+                }).format(
+                  invoices.reduce(
+                    (sum, invoice) => sum + Number(invoice.total || 0),
+                    0,
+                  ),
+                )}
+              </td>
+              <td className="py-2 text-right font-bold text-sm px-4">
+                {new Intl.NumberFormat("en-NG", {
+                  style: "currency",
+                  currency: "NGN",
+                }).format(
+                  invoices.reduce(
+                    (sum, invoice) =>
+                      sum + Number(invoice.totalAmountReceived || 0),
+                    0,
+                  ),
+                )}
+              </td>
+              <td className="py-2 text-right font-bold text-sm px-4">
+                {new Intl.NumberFormat("en-NG", {
+                  style: "currency",
+                  currency: "NGN",
+                }).format(
+                  invoices.reduce(
+                    (sum, invoice) => sum + Number(invoice.total || 0),
+                    0,
+                  ) -
+                    invoices.reduce(
+                      (sum, invoice) =>
+                        sum + Number(invoice.totalAmountReceived || 0),
+                      0,
+                    ),
+                )}
+              </td>
+              <td className="py-2"></td>
+            </tr>
           </tbody>
         </table>
       ) : (
