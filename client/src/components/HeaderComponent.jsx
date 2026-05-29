@@ -166,7 +166,7 @@ export default function HeaderComponent({ business }) {
 
         {/* for small screens */}
         <div
-          className="block 2xl:hidden z-99"
+          className="block lg:hidden z-99"
           onClick={() => setShowNav(!showNav)}
         >
           <MdMenu className="text-white" size={30} />
@@ -180,7 +180,7 @@ export default function HeaderComponent({ business }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.5 }}
-          className="block md:hidden w-full sm:w-[50%] h-screen bg-black text-white absolute top-12 right-0 opacity-90 p-4"
+          className="block lg:hidden w-full sm:w-[50%] h-screen bg-black text-white absolute top-12 right-0 opacity-90 p-4"
         >
           <div className="flex flex-col p-4 w-full">
             <div className="flex items-center justify-between w-full gap-4">
