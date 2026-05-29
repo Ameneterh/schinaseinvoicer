@@ -28,18 +28,18 @@ export default function DashClients() {
 
   const [selectedClient, setSelectedClient] = useState(null);
 
-  console.log(clients);
-
   useEffect(() => {
     const getClients = async () => {
       try {
         const { clients } = await getAllClients();
 
+        console.log(clients);
+
         if (user.role === "architect") {
           setClients(clients);
         } else {
           const filteredClients = clients.filter(
-            (client) => user.business._id === client?.staff?.business,
+            (client) => user.business._id === client?.staff?.business._id,
           );
 
           console.log(filteredClients);
