@@ -166,7 +166,7 @@ export default function HeaderComponent({ business }) {
 
         {/* for small screens */}
         <div
-          className="block lg:hidden z-99"
+          className="block 2xl:hidden z-99"
           onClick={() => setShowNav(!showNav)}
         >
           <MdMenu className="text-white" size={30} />
