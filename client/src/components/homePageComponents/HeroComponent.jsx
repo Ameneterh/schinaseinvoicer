@@ -26,7 +26,7 @@ export default function HeroComponent() {
       //   backgroundImage: `url(${schimage})`,
       // }}
     >
-      <div className="h-full w-full bg-gradient-to-tr from-slate-200 via-white to-gray-200 flex flex-col lg:flex-row items-center justify-center min-h-screen">
+      <div className="h-full pt-10 md:pt-20 w-full bg-gradient-to-tr from-slate-200 via-white to-gray-200 flex flex-col lg:flex-row items-center justify-center min-h-screen">
         <div className="pb-6 h-full w-full px-4 max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-10">
           <div className="flex flex-col items-center gap-3 w-full max-w-2xl">
             <p className="capitalize text-lg lg:text-2xl text-blue-950 font-semibold">

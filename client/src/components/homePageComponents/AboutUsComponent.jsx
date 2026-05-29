@@ -35,11 +35,13 @@ export default function AboutUsComponent() {
         <h1 className="font-extrabold text-xl lg:text-3xl text-yellow-800">
           Schinase Tech Hubb, Ado-Ekiti,
         </h1>
-        <p className="text-center font-extralight">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus ut
-          tempora magni aliquam, consequuntur quaerat ea ratione atque harum
-          impedit neque rem doloremque doloribus nostrum laudantium officia in
-          ab. Quis. Lorem ipsum dolor sit amet.
+        <p className="text-center text-sm font-extralight">
+          At Schinase Tech Hubb, we believe technology should solve real
+          problems, simplify processes, and create opportunities for growth.
+          Founded through the collaboration of pharmacists and computer
+          scientists, our company combines practical industry experience with
+          modern digital innovation to deliver solutions that are both
+          functional and impactful.
         </p>
         <Link
           to="/about"

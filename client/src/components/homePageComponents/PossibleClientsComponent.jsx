@@ -20,7 +20,7 @@ export default function PossibleClientsComponent() {
           <img src={schinaseCoverage} alt="company_logo" className="w-fit" />
         </div>
 
-        <div className="flex flex-col w-full md:w-1/2 mt-8 gap-4">
+        <div className="flex flex-col w-full lg:w-1/2 mt-8 gap-4">
           <h1 className="text-lg lg:text-3xl text-white font-bold">
             All Work Together
           </h1>

@@ -93,10 +93,12 @@ export default function ContactUs() {
               }}
             ></div>
             <div className="flex flex-col gap-0">
-              <h1 className="text-4xl font-extrabold text-orange-400 -mb-1">
+              <h1 className="text-4xl font-extrabold text-orange-700 -mb-1">
                 Schinase Tech Hubb
               </h1>
-              <p>Aba Corner, Ado-Ijan Road, Ado-Ekiti, Ekiti State, Nigeria.</p>
+              <p className="text-sm">
+                Km 8, Afe Babalola Way, Erifun, Ado-Ekiti, Ekiti State, Nigeria.
+              </p>
             </div>
             <div className="flex flex-col">
               <p className="flex items-center gap-3 text-sm">

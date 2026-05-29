@@ -21,6 +21,8 @@ import {
   User,
   CalendarClock,
   PhoneOutgoing,
+  EyeOff,
+  Eye,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -29,6 +31,7 @@ export default function DashProfile() {
 
   console.log(user);
 
+  const [showPassword, setShowPassword] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -257,18 +260,30 @@ export default function DashProfile() {
               setFormData({ ...formData, email: e.target.value })
             }
           />
-          <Input
-            icon={LockKeyhole}
-            type="password"
-            id="password"
-            label="User Password"
-            placeholder="Your Password"
-            className="flex-1 w-full"
-            // defaultValue={user.user_password}
-            onChange={(e) =>
-              setFormData({ ...formData, user_password: e.target.value })
-            }
-          />
+          <div className="relative flex items-center w-full">
+            <Input
+              icon={LockKeyhole}
+              type={showPassword ? "text" : "password"}
+              id="password"
+              label="User Password"
+              placeholder="Your Password"
+              className="flex-1 w-full bg-transparent"
+              // defaultValue={user.password}
+              onChange={(e) =>
+                setFormData({ ...formData, user_password: e.target.value })
+              }
+            />
+            <div
+              className="absolute right-2 inset-y-0 cursor-pointer flex items-center"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <EyeOff className="size-5 text-green-500" />
+              ) : (
+                <Eye className="size-5 text-green-500" />
+              )}
+            </div>
+          </div>
           <Input
             icon={PhoneOutgoing}
             type="text"

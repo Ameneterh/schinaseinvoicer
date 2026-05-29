@@ -114,7 +114,7 @@ export default function HeaderComponent({ business }) {
                   (isActive
                     ? "border-b-2 border-b-white flex items-center"
                     : "") +
-                  "flex items-center px-4 p-2 rounded-md transition-all duration-300 border-b-2 border-b-transparent hover:border-b-2 hover:border-b-white"
+                  "flex items-center px-4 p-2 rounded-md transition-all duration-300 border-b-2 border-b-transparent hover:border-b-2 hover:border-b-yellow-500"
                 }
                 to={item.path}
               >
