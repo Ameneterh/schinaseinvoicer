@@ -3,7 +3,8 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { useAuthStore } from "../store/authStore";
 import { useClientStore } from "../store/clientStore";
-import { Trash2 } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
+import { Input } from "./Input";
 
 export default function DashUsers() {
   const { user } = useAuthStore();
@@ -100,9 +101,21 @@ export default function DashUsers() {
 
   return (
     <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      <h1 className="text-xl font-extrabold mb-4">List of Users:</h1>
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <h1 className="text-xl font-extrabold">List of Users:</h1>
+        <div className="w-full max-w-96">
+          <Input
+            icon={Search}
+            type="text"
+            // placeholder="Business Phone"
+            // label="Search"
+            // value={business_phone}
+            // onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+      </div>
       {users.length > 0 ? (
-        <table className="border-collapse border-none leading-tight">
+        <table className="border-collapse border-none leading-tight w-full">
           <thead className="bg-gray-400">
             <tr className="border-b-black border-b-2 text-sm">
               <th className="px-4 py-1 text-left">Name of User</th>

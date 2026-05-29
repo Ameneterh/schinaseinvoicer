@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { Trash2, FilePenLine, BadgePoundSterling, Share2 } from "lucide-react";
+import {
+  Trash2,
+  FilePenLine,
+  BadgePoundSterling,
+  Share2,
+  Search,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { useBusinessStore } from "../store/businessStore";
+import { Input } from "./Input";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -88,12 +95,24 @@ export default function DashBusinesses() {
 
   return (
     <div className="w-full min-h-screen table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      <h1 className="text-xl font-extrabold mb-4">List of Businesses:</h1>
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <h1 className="text-xl font-extrabold">List of Businesses:</h1>
+        <div className="w-full max-w-96">
+          <Input
+            icon={Search}
+            type="text"
+            // placeholder="Business Phone"
+            // label="Search"
+            // value={business_phone}
+            // onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+      </div>
       <motion.div
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="w-full md:mt-4 md:mx-auto p-3"
+        className="w-full md:mx-auto"
       >
         {businesses.length > 0 ? (
           <table className="border-collapse w-full border-none">

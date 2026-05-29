@@ -3,11 +3,18 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { useAuthStore } from "../store/authStore";
 import { useInvoiceStore } from "../store/invoiceStore";
-import { Trash2, FilePenLine, BadgePoundSterling, Share2 } from "lucide-react";
+import {
+  Trash2,
+  FilePenLine,
+  BadgePoundSterling,
+  Share2,
+  Search,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import DashInvoicePayUpdate from "./DashInvoicePayUpdate";
 import { useClientStore } from "../store/clientStore";
 import ClientDetailsComponent from "./ClientDetailsComponent";
+import { Input } from "./Input";
 
 export default function DashClients() {
   const { user } = useAuthStore();
@@ -92,7 +99,19 @@ export default function DashClients() {
 
   return (
     <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      <h1 className="text-xl font-extrabold mb-4">List of Clients:</h1>
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <h1 className="text-xl font-extrabold">List of Clients:</h1>
+        <div className="w-full max-w-96">
+          <Input
+            icon={Search}
+            type="text"
+            // placeholder="Business Phone"
+            // label="Search"
+            // value={business_phone}
+            // onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+      </div>
       {clients.length > 0 ? (
         <table className="border-collapse w-full">
           <thead className="bg-gray-400">
