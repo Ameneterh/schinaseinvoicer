@@ -180,7 +180,7 @@ export default function HeaderComponent({ business }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.5 }}
-          className="block lg:hidden w-full sm:w-[50%] h-screen bg-black text-white absolute top-12 right-0 opacity-90 p-4"
+          className="block 2xl:hidden w-full sm:w-[50%] h-screen bg-black text-white absolute top-12 right-0 opacity-90 p-4"
         >
           <div className="flex flex-col p-4 w-full">
             <div className="flex items-center justify-between w-full gap-4">
