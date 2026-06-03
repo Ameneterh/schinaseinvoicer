@@ -17,14 +17,16 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
   message: null,
 
-  //   add new new handler account
+  //   add new new user account
   addUser: async ({
     fullname,
     email,
     phoneNumber,
     password,
     role,
-    business,
+    avatar,
+    staff_signature,
+    business_logo,
     business_name,
     business_email,
     business_password,
@@ -36,13 +38,15 @@ export const useAuthStore = create((set) => ({
   }) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/add-handler`, {
+      const response = await axios.post(`${API_URL}/add-user`, {
         fullname,
         email,
         phoneNumber,
         password,
         role,
-        business,
+        avatar,
+        staff_signature,
+        business_logo,
         business_name,
         business_email,
         business_password,
@@ -68,6 +72,44 @@ export const useAuthStore = create((set) => ({
   },
 
   //   add new new handler account
+  addHandler: async ({
+    fullname,
+    email,
+    phoneNumber,
+    password,
+    role,
+    avatar,
+    staff_signature,
+    business,
+  }) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.post(`${API_URL}/add-handler`, {
+        fullname,
+        email,
+        phoneNumber,
+        password,
+        role,
+        avatar,
+        staff_signature,
+        business,
+      });
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message || error.message || "Error signing up",
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
+  //   add new new business account
   addBusiness: async ({
     business_name,
     business_email,

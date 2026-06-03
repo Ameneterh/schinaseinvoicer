@@ -21,6 +21,11 @@ export default function DashClients() {
   const { getAllInvoices } = useInvoiceStore();
   const { getAllClients } = useClientStore();
 
+  // state for search and sorting
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState("createdAt");
+  const [sortDirection, setSortDirection] = useState("desc");
+
   const [clients, setClients] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -33,16 +38,12 @@ export default function DashClients() {
       try {
         const { clients } = await getAllClients();
 
-        console.log(clients);
-
         if (user.role === "architect") {
           setClients(clients);
         } else {
           const filteredClients = clients.filter(
             (client) => user.business._id === client?.staff?.business._id,
           );
-
-          console.log(filteredClients);
 
           setClients(filteredClients);
         }

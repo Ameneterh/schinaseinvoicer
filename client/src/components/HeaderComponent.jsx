@@ -186,7 +186,7 @@ export default function HeaderComponent({ business }) {
             <div className="flex items-center justify-between w-full gap-4">
               <p className="flex-1 h-[1px] bg-gray-500"></p>
               <MdCloseFullscreen
-                className="text-gray-500"
+                className="text-gray-500 cursor-pointer"
                 size={20}
                 onClick={() => setShowNav(!showNav)}
               />
@@ -199,16 +199,18 @@ export default function HeaderComponent({ business }) {
                 <Link to="/about">ABOUT US</Link>
               </li>
               <li>
-                <Link to="/gallery">GALLERY</Link>
-              </li>
-              <li>
                 <Link to="/contact">CONTACT US</Link>
               </li>
-              <li>
-                <p onClick={handleLogout} className="text-red-500 font-bold">
-                  LOG OUT
-                </p>
-              </li>
+              {user && (
+                <li>
+                  <p
+                    onClick={handleLogout}
+                    className="text-red-500 font-bold cursor-pointer"
+                  >
+                    LOG OUT
+                  </p>
+                </li>
+              )}
             </ul>
           </div>
         </motion.div>

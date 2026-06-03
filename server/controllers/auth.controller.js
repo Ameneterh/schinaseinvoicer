@@ -12,6 +12,115 @@ import {
 } from "../mailtrap/emails.js";
 import { log } from "console";
 
+// add new user
+export const addUser = async (req, res) => {
+  const {
+    fullname,
+    email,
+    phoneNumber,
+    password,
+    role,
+    avatar,
+    staff_signature,
+    business_logo,
+    business_name,
+    business_email,
+    business_phone,
+    business_address,
+    banker,
+    account_name,
+    account_number,
+  } = req.body;
+
+  try {
+    // check content from req.body
+    if (!fullname || !email || !phoneNumber || !password || !role) {
+      throw new Error("All fields are required!");
+    }
+
+    // check if user already exists
+    const userAlreadyExists = await User.findOne({ email });
+    if (userAlreadyExists) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
+    }
+
+    // generate temporary password
+    // const tempPassword =
+    //   "Invoice@app" + Math.floor(100000 + Math.random() * 900000).toString();
+
+    // hash password and generate verification token
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    // generate verification token
+    const verificationToken = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
+
+    // save new user
+    const user = await User.create({
+      fullname,
+      email,
+      phoneNumber,
+      password: hashedPassword,
+      role,
+      avatar,
+      staff_signature,
+      verificationToken,
+      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
+    });
+
+    // after saving user, save business affiliation
+    const savedUser = await User.findOne({ email });
+
+    if (role === "businessAdmin") {
+      // check if business already exists
+      const businessAlreadyExists = await Business.findOne({ business_email });
+      if (businessAlreadyExists) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Business Already Exists!" });
+      }
+
+      // save new business
+      const business = await Business.create({
+        business_logo,
+        business_name,
+        business_email,
+        business_phone,
+        business_address,
+        banker,
+        account_name,
+        account_number,
+        owner: user._id,
+      });
+
+      await business.save();
+      user.business = business._id;
+    }
+
+    await user.save();
+
+    // generate cookie with jwt
+    generateTokenAndSetCookie(res, user._id);
+    await sendTemporaryHandlerCredentials(user.email, password);
+
+    // const savedUser = await User.findOne({ email }).populate("business");
+
+    await sendHandlerActivationEmail(user.email, verificationToken);
+
+    res.status(201).json({
+      success: true,
+      message: "New Business and Owner Created Successfully",
+      user: { ...user._doc, password: undefined },
+      business,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 // add handler
 export const addHandler = async (req, res) => {
   const {
@@ -20,6 +129,9 @@ export const addHandler = async (req, res) => {
     phoneNumber,
     password,
     role,
+    avatar,
+    staff_signature,
+    business_logo,
     business,
     business_name,
     business_email,
@@ -63,13 +175,15 @@ export const addHandler = async (req, res) => {
       phoneNumber,
       password: hashedPassword,
       role,
+      avatar,
+      staff_signature,
       business,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
     // after saving user, save business affiliation
-    // const savedUser = await User.findOne({ user_email });
+    // const savedUser = await User.findOne({ email });
 
     if (role === "businessOwner") {
       // check if business already exists
@@ -82,6 +196,7 @@ export const addHandler = async (req, res) => {
 
       // save new business
       const business = await Business.create({
+        business_logo,
         business_name,
         business_email,
         business_phone,

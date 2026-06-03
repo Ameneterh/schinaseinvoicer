@@ -60,7 +60,10 @@ export default function HomePage() {
       <HeroComponent />
       <PossibleClientsComponent />
       <AboutUsComponent />
-      <BillingPlansComponent />
+
+      <div id="account-types">
+        <BillingPlansComponent />
+      </div>
       {/* <div className="px-20 mt-10 bg-white">
         <GalleryComponent title="View Gallery" news={slicedNews} />
       </div> */}

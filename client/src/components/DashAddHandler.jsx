@@ -33,7 +33,7 @@ const fadeInUp = {
 export default function DashAddHandler() {
   const navigate = useNavigate();
   const { getAllBusinesses } = useBusinessStore();
-  const { addUser, error, isLoading, user } = useAuthStore();
+  const { addUser, addHandler, error, isLoading, user } = useAuthStore();
 
   const [showPassword, setShowPassword] = useState(false);
   const [fullname, setFullname] = useState("");
@@ -49,7 +49,7 @@ export default function DashAddHandler() {
     e.preventDefault();
 
     try {
-      await addUser({
+      await addHandler({
         fullname,
         email,
         phoneNumber,

@@ -1,8 +1,6 @@
 import { Eye } from "lucide-react";
 
 export const Input = ({ icon: Icon, label, color, ...props }) => {
-  console.log(color);
-
   return (
     <div className="flex flex-col relative w-full">
       <p

@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Input } from "../components/Input";
+import { HashLink } from "react-router-hash-link";
+import toast from "react-hot-toast";
 import {
   CircleUserRound,
   Mail,
@@ -47,6 +49,7 @@ const fadeInUp = {
 export default function RegisterBusiness() {
   const navigate = useNavigate();
 
+  const [regPackage, setRegPackage] = useState("freeTrial");
   const [fullname, setFullname] = useState("");
   const [email, setUserEmail] = useState("");
   const [phoneNumber, setUserPhone] = useState("");
@@ -62,28 +65,164 @@ export default function RegisterBusiness() {
   const [banker, setBanker] = useState("");
   const [account_name, setAccountName] = useState("");
   const [account_number, setAccountNumber] = useState("");
+
   const [bizLogo, setBizLogo] = useState(null);
   const [addedLogo, setAddedLogo] = useState(null);
+
+  const [avatar, setAvatar] = useState(null);
+  const [addedAvatar, setAddedAvatar] = useState(null);
+
+  const [userSignature, setUserSignature] = useState(null);
+  const [addedSignature, setAddedSignature] = useState(null);
 
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
 
-  // const { addBusiness, error, isLoading } = useBusinessStore();
+  const [avatarUploadProgress, setAvatarUploadProgress] = useState(null);
+  const [avatarUploadError, setAvatarUploadError] = useState(null);
+
+  const [signatureUploadProgress, setSignatureUploadProgress] = useState(null);
+  const [signatureUploadError, setSignatureUploadError] = useState(null);
+
   const { addUser, error, isLoading } = useAuthStore();
 
-  console.log(bizLogo);
+  // image max size
+  const MAX_FILE_SIZE = 300 * 1024; // 300 KB
+
+  const handleUploadAvatar = async () => {
+    try {
+      if (!avatar) {
+        toast.error("Please, select an image");
+        return;
+      }
+
+      // Validate file size
+      if (avatar.size > MAX_FILE_SIZE) {
+        toast.error(
+          `Image size must not exceed 500 KB. Your file is ${(avatar.size / 1024).toFixed(0)} KB.`,
+        );
+        return;
+      }
+
+      setAvatarUploadError(null);
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + "-" + avatar.name;
+
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, avatar);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setAvatarUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          toast.error("Image upload failed!");
+          setAvatarUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setAvatarUploadProgress(null);
+            setAvatarUploadError(null);
+            setAddedAvatar({ image: downloadURL });
+          });
+          toast.success("Image uploaded successfully!");
+        },
+      );
+    } catch (error) {
+      toast.error("An error occurred while uploading the image.");
+      console.log(error);
+
+      if (error.code === "storage/unauthorized") {
+        toast.error(
+          "Upload failed. The image may exceed the allowed size limit.",
+        );
+      } else {
+        toast.error("Image upload failed.");
+      }
+
+      setAvatarUploadProgress(null);
+    }
+  };
+
+  const handleUploadSignature = async () => {
+    try {
+      if (!userSignature) {
+        toast.error("Please, select an image");
+        return;
+      }
+
+      // Validate file size
+      if (userSignature.size > MAX_FILE_SIZE) {
+        toast.error(
+          `Image size must not exceed 500 KB. Your file is ${(userSignature.size / 1024).toFixed(0)} KB.`,
+        );
+        return;
+      }
+
+      setSignatureUploadError(null);
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + "-" + userSignature.name;
+
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, userSignature);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setSignatureUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          setSignatureUploadError("Image upload failed!");
+          setSignatureUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setSignatureUploadProgress(null);
+            setSignatureUploadError(null);
+            setAddedSignature({ image: downloadURL });
+          });
+          toast.success("Image uploaded successfully!");
+        },
+      );
+    } catch (error) {
+      console.log(error);
+
+      if (error.code === "storage/unauthorized") {
+        toast.error(
+          "Upload failed. The image may exceed the allowed size limit.",
+        );
+      } else {
+        toast.error("Image upload failed.");
+      }
+
+      setSignatureUploadProgress(null);
+      // setSignatureUploadError("Image upload failed!!" + error);
+      // setSignatureUploadProgress(null);
+      // console.log(error);
+    }
+  };
 
   const handleUploadBizLogo = async () => {
     try {
       if (!bizLogo) {
-        setImageUploadError("Please, select an image");
+        toast.error("Please, select an image");
         return;
       }
+
+      // Validate file size
+      if (bizLogo.size > MAX_FILE_SIZE) {
+        toast.error(
+          `Image size must not exceed 500 KB. Your file is ${(bizLogo.size / 1024).toFixed(0)} KB.`,
+        );
+        return;
+      }
+
       setImageUploadError(null);
       const storage = getStorage(app);
       const fileName = new Date().getTime() + "-" + bizLogo.name;
-
-      console.log(fileName);
 
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, bizLogo);
@@ -95,7 +234,7 @@ export default function RegisterBusiness() {
           setImageUploadProgress(progress.toFixed(0));
         },
         (error) => {
-          setImageUploadError("Image upload failed!");
+          toast.error("Image upload failed!");
           setImageUploadProgress(null);
         },
         () => {
@@ -104,11 +243,23 @@ export default function RegisterBusiness() {
             setImageUploadError(null);
             setAddedLogo({ image: downloadURL });
           });
+          toast.success("Image uploaded successfully!");
         },
       );
     } catch (error) {
-      setImageUploadError("Image upload failed!!");
+      console.log(error);
+
+      if (error.code === "storage/unauthorized") {
+        toast.error(
+          "Upload failed. The image may exceed the allowed size limit.",
+        );
+      } else {
+        toast.error("Image upload failed.");
+      }
+
       setImageUploadProgress(null);
+      // setImageUploadError("Image upload failed!!" + error);
+      // setImageUploadProgress(null);
       // console.log(error);
     }
   };
@@ -123,6 +274,8 @@ export default function RegisterBusiness() {
         phoneNumber,
         password,
         role,
+        avatar: addedAvatar?.image,
+        staff_signature: addedSignature?.image,
         business_name,
         business_email,
         business_phone,
@@ -135,6 +288,7 @@ export default function RegisterBusiness() {
       navigate("/verify-email");
     } catch (error) {
       console.log(error);
+      toast.error("Failed to register business owner.");
     }
   };
 
@@ -162,6 +316,39 @@ export default function RegisterBusiness() {
               onSubmit={handleRegisterBusinessOwner}
               className="flex flex-col gap-3"
             >
+              {/* account type */}
+              <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-start">
+                <div className="flex flex-col w-full md:w-1/2 relative mt-2">
+                  <label
+                    htmlFor="validity"
+                    className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+                  >
+                    Select your preferred Account Type
+                  </label>
+                  <select
+                    onChange={(e) => setRegPackage(e.target.value)}
+                    className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                  >
+                    <option value="" disabled>
+                      Select your preferred account type
+                    </option>
+                    <option value="freeTrial">Free Trial</option>
+                    <option value="starterPackage">Starter Package</option>
+                    <option value="enterprisePackage">
+                      Enterprise Package
+                    </option>
+                  </select>
+                </div>
+
+                <HashLink
+                  smooth
+                  to="/#account-types"
+                  className="bg-blue-900 px-4 py-2 hover:opacity-85 text-white rounded font-medium text-nowrap"
+                >
+                  Review account types Here
+                </HashLink>
+              </div>
+
               {/* business owner details */}
               <div className="flex items-center gap-2">
                 <p className="text-orange-500 text-xl md:text-2xl font-bold">
@@ -191,7 +378,7 @@ export default function RegisterBusiness() {
 
               <div className="flex flex-col items-start lg:flex-row gap-4">
                 <Input
-                  icon={Lock}
+                  icon={Headset}
                   type="text"
                   // placeholder="Business Owner's Phone"
                   label="Business Owner's Phone"
@@ -222,7 +409,7 @@ export default function RegisterBusiness() {
                 </div>
                 <div className="flex flex-col w-full relative mt-2">
                   <label
-                    htmlFor="validity"
+                    htmlFor="role"
                     className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
                   >
                     Select User Role
@@ -236,29 +423,140 @@ export default function RegisterBusiness() {
                   </select>
                 </div>
               </div>
+
+              {/* add user avatar and user signature */}
+              <div className="flex flex-col lg:flex-row gap-4 mt-2">
+                {/* add user avatar */}
+                <div className="flex flex-col w-full">
+                  {regPackage !== "freeTrial" && (
+                    <div className="flex flex-col md:flex-row gap-4 items-end justify-between rounded-lg">
+                      <div className="flex flex-col font-light w-full md:w-1/2">
+                        <div className="text-sm font-medium">
+                          <p className="md:text-nowrap">
+                            User Avatar (Max 200kb)
+                          </p>
+                          {avatar && (
+                            <p className="text-sm text-red-400 font-medium block">
+                              Selected file size:{" "}
+                              {(avatar.size / 1024).toFixed(0)} KB
+                            </p>
+                          )}
+                        </div>
+                        <Input
+                          icon={FilePlus}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setAvatar(e.target.files[0])}
+                        />
+                      </div>
+
+                      {avatar && (
+                        <img
+                          src={avatar ? URL.createObjectURL(avatar) : ""}
+                          alt="avatar preview"
+                          className="w-10, h-10 object-cover rounded-full"
+                        />
+                      )}
+
+                      <motion.div
+                        className="w-fit text-nowrap py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        // type="submit"
+                        icon={FilePenLine}
+                        onClick={handleUploadAvatar}
+                        disabled={avatarUploadProgress}
+                      >
+                        {avatarUploadProgress ? (
+                          <div className="flex items-center gap-2">
+                            <CircularProgressbar
+                              className="h-8 w-8"
+                              value={avatarUploadProgress}
+                            />
+                            <span>{`${avatarUploadProgress || 0}%`}</span>
+                          </div>
+                        ) : (
+                          "Upload Avatar"
+                        )}
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {avatarUploadError && (
+                    <span className="text-red-500">{avatarUploadError}</span>
+                  )}
+                </div>
+
+                <div className="h-full bg-blue-950 w-2"></div>
+
+                {/* add user signature */}
+                <div className="flex flex-col w-full">
+                  {regPackage !== "freeTrial" && (
+                    <div className="flex flex-col md:flex-row gap-4 items-end justify-between rounded-lg">
+                      <div className="flex flex-col font-light w-full md:w-1/2">
+                        <div className="text-sm font-medium">
+                          <p className="md:text-nowrap">
+                            User Signature (Max 200kb)
+                          </p>
+                          {userSignature && (
+                            <p className="text-sm text-red-400 font-medium block">
+                              Selected file size:{" "}
+                              {(userSignature.size / 1024).toFixed(0)} KB
+                            </p>
+                          )}
+                        </div>
+                        <Input
+                          icon={FilePlus}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setUserSignature(e.target.files[0])}
+                        />
+                      </div>
+
+                      {userSignature && (
+                        <img
+                          src={
+                            userSignature
+                              ? URL.createObjectURL(userSignature)
+                              : ""
+                          }
+                          alt="User Signature Preview"
+                          className="w-10, h-10 object-cover rounded-full"
+                        />
+                      )}
+
+                      <motion.div
+                        className="w-fit text-nowrap py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        // type="submit"
+                        icon={FilePenLine}
+                        onClick={handleUploadSignature}
+                        disabled={signatureUploadProgress}
+                      >
+                        {signatureUploadProgress ? (
+                          <div className="flex items-center gap-2">
+                            <CircularProgressbar
+                              className="h-8 w-8"
+                              value={signatureUploadProgress}
+                            />
+                            <span>{`${signatureUploadProgress || 0}%`}</span>
+                          </div>
+                        ) : (
+                          "Upload Signature"
+                        )}
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {signatureUploadError && (
+                    <span className="text-red-500">{signatureUploadError}</span>
+                  )}
+                </div>
+              </div>
+
               {/* password strength meter */}
               <PasswordStrengthMeter password={password} />
-
-              {/* <motion.button
-                className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg hover:from-green-600 hover:to-emerald-700 border border-green-700 hover:border-white hover:text-white focus:outline-none focus:ring-1 focus:ring-green-500 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer flex items-center justify-center"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader className="animate-spin mx-auto" />
-                ) : (
-                  "Add Handler"
-                )}
-              </motion.button> */}
-              {/* </form> */}
-
-              {/* business details */}
-              {/* <form
-              onSubmit={handleRegisterBusiness}
-              className="flex flex-col gap-3"
-            > */}
 
               {/* business details */}
               <div className="flex items-center gap-2">
@@ -309,45 +607,69 @@ export default function RegisterBusiness() {
               {/* <Input
                 icon={MapPinHouse}
                 type="file"
-                value={file}
-                onChange={(e) => setFile(e.target.value)}
+                value={bizLogo}
+                onChange={(e) => setBizLogo(e.target.value)}
               /> */}
 
-              {/* <div className="flex flex-col md:flex-row gap-4 items-end justify-between border-4 border-teal-500 border-dotted p-3 rounded-lg">
-                <div className="flex flex-col font-light w-full">
-                  <p className="text-white md:text-nowrap">Business Logo</p>
-                  <Input
-                    icon={FilePlus}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setBizLogo(e.target.files[0])}
-                    // value={bizLogo}
-                    // onChange={(e) => setBizLogo(e.target.value)}
-                  />
-                </div>
-
-                <motion.div
-                  className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  // type="submit"
-                  icon={FilePenLine}
-                  onClick={handleUploadBizLogo}
-                  disabled={imageUploadProgress}
-                >
-                  {imageUploadProgress ? (
-                    <div className="flex items-center gap-2">
-                      <CircularProgressbar
-                        className="h-8 w-8"
-                        value={imageUploadProgress}
+              <div className="flex flex-col mb-2">
+                {regPackage !== "freeTrial" && (
+                  <div className="flex flex-col md:flex-row gap-4 items-end justify-between p-3 rounded-lg">
+                    <div className="flex flex-col font-light w-full">
+                      <div className="text-sm font-medium">
+                        <p className="md:text-nowrap">
+                          Business Logo (Max 200kb)
+                        </p>
+                        {bizLogo && (
+                          <p className="text-sm text-red-400 font-medium block">
+                            Selected file size:{" "}
+                            {(bizLogo.size / 1024).toFixed(0)} KB
+                          </p>
+                        )}
+                      </div>
+                      <Input
+                        icon={FilePlus}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setBizLogo(e.target.files[0])}
                       />
-                      <span>{`${imageUploadProgress || 0}%`}</span>
                     </div>
-                  ) : (
-                    "Upload Logo"
-                  )}
-                </motion.div>
-              </div> */}
+
+                    {bizLogo && (
+                      <img
+                        src={bizLogo ? URL.createObjectURL(bizLogo) : ""}
+                        alt="business logo preview"
+                        className="w-10, h-10 object-cover rounded-full"
+                      />
+                    )}
+
+                    <motion.div
+                      className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      // type="submit"
+                      icon={FilePenLine}
+                      onClick={handleUploadBizLogo}
+                      disabled={imageUploadProgress}
+                    >
+                      {imageUploadProgress ? (
+                        <div className="flex items-center gap-2">
+                          <CircularProgressbar
+                            className="h-8 w-8"
+                            value={imageUploadProgress}
+                          />
+                          <span>{`${imageUploadProgress || 0}%`}</span>
+                        </div>
+                      ) : (
+                        "Upload Logo"
+                      )}
+                    </motion.div>
+                  </div>
+                )}
+
+                {imageUploadError && (
+                  <span className="text-red-500">{imageUploadError}</span>
+                )}
+              </div>
 
               <div className="flex flex-col lg:flex-row gap-4">
                 <Input

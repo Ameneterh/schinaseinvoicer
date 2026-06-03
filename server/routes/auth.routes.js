@@ -11,6 +11,7 @@ import {
   CheckAuth,
   addHandler,
   getUsers,
+  addUser,
 } from "../controllers/auth.controller.js";
 import { addBusiness } from "../controllers/business.controller.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
@@ -19,6 +20,7 @@ const router = express.Router();
 
 router.get("/check-auth", verifyToken, CheckAuth);
 router.post("/add-new-business", addBusiness);
+router.post("/add-user", addUser);
 router.post("/add-handler", addHandler);
 router.post("/verify-email", verifyEmail);
 

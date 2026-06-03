@@ -65,19 +65,21 @@ export default function CreateInvoice() {
   const [invoices, setInvoices] = useState([]);
   const { registerClient, getAllClients, getOneClient } = useClientStore();
 
+  console.log(user);
+  console.log(clients);
+
   const getRegisteredClients = async () => {
     try {
       const { clients } = await getAllClients();
       const filteredClients = clients.filter(
-        (client) => user.business._id === client.staff.business,
+        (client) => user.business._id === client.staff.business._id,
       );
+      console.log(filteredClients);
       setClients(filteredClients);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // console.log(filteredClients);
 
   const getInvoices = async () => {
     try {
