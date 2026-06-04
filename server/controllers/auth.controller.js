@@ -232,67 +232,161 @@ export const addHandler = async (req, res) => {
   }
 };
 
-// add handler
-export const editUser = async (req, res) => {
-  const { fullname, user_email, business } = req.body;
-
+// update a user
+export const updateUser = async (req, res) => {
   try {
-    // check content from req.body
-    if (!fullname || !user_email || !affiliation) {
-      throw new Error("All fields are required!");
+    const { userId } = req.params;
+
+    const existingUser = await User.findById(userId).populate("business");
+
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    // check if user already exists
-    const userAlreadyExists = await User.findOne({ user_email });
-    if (userAlreadyExists) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
+    const updates = {};
+
+    // Only update fields that were actually sent
+    const allowedFields = [
+      "fullname",
+      "email",
+      "phoneNumber",
+      "avatar",
+      "isDeleted",
+      "isActive",
+    ];
+
+    for (const field of allowedFields) {
+      if (
+        req.body[field] !== undefined &&
+        String(req.body[field]) !== String(existingUser[field] ?? "")
+      ) {
+        updates[field] = req.body[field];
+      }
     }
 
-    // generate temporary password
-    const tempPassword =
-      "Invoice@app" + Math.floor(100000 + Math.random() * 900000).toString();
+    // Avatar plan restriction
+    if (updates.avatar) {
+      const business = existingUser.business;
 
-    // hash password and generate verification token
-    const hashedPassword = bcryptjs.hashSync(tempPassword, 10);
+      if (business?.plan?.toLowerCase() === "trial") {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Avatar updates are available only on Basic and Premium plans. Upgrade your subscription to update avatar.",
+        });
+      }
+    }
 
-    // generate verification token
-    const verificationToken = Math.floor(
-      100000 + Math.random() * 900000,
-    ).toString();
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No changes detected",
+      });
+    }
 
-    // save new user
-    const user = new User({
-      fullname,
-      user_email,
-      user_password: hashedPassword,
-      affiliation,
-      verificationToken,
-      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
-    });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      {
+        new: true,
+        // runValidators: true,
+      },
+    ).populate("business");
 
-    await user.save();
-
-    // generate cookie with jwt
-    generateTokenAndSetCookie(res, user._id);
-    await sendTemporaryHandlerCredentials(user.user_email, tempPassword);
-
-    const savedUser = await User.findOne({ user_email }).populate(
-      "affiliation",
-    );
-    await sendHandlerActivationEmail(
-      savedUser.affiliation.business_email,
-      verificationToken,
-    );
-
-    res.status(201).json({
+    return res.status(200).json({
       success: true,
-      message: "User created successfully",
-      user: { ...user._doc, user_password: undefined },
+      message: "User updated successfully",
+      user: updatedUser,
     });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    console.error("Update User Error:", error);
+    console.error(error.stack);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update user",
+    });
+  }
+};
+
+// update user password
+export const updatePassword = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { oldPassword, password } = req.body;
+
+    // check user exists
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // check if old password supplied matches password on record
+    const isValidPassword = bcryptjs.compareSync(
+      oldPassword,
+      existingUser.password,
+    );
+
+    if (!isValidPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Old password is incorrect!",
+      });
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "New password is required",
+      });
+    }
+
+    const isSamePassword = bcryptjs.compareSync(
+      password,
+      existingUser.password,
+    );
+
+    if (isSamePassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password must be different from the current password",
+      });
+    }
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    const updates = {
+      password: hashedPassword,
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      {
+        new: true,
+      },
+    ).populate("business");
+
+    return res.status(200).json({
+      success: true,
+      message: "User password updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update User Password Error:", error);
+    console.error(error.stack);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update user password",
+    });
   }
 };
 
@@ -425,7 +519,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
-    const { user_password } = req.body;
+    const { password } = req.body;
 
     const user = await User.findOne({
       resetPasswordToken: token,
@@ -439,9 +533,9 @@ export const resetPassword = async (req, res) => {
     }
 
     // update password
-    const hashedPassword = bcryptjs.hashSync(user_password, 10);
+    const hashedPassword = bcryptjs.hashSync(password, 10);
 
-    user.user_password = hashedPassword;
+    user.password = hashedPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiresAt = undefined;
 
@@ -450,7 +544,7 @@ export const resetPassword = async (req, res) => {
 
     res
       .status(200)
-      .json({ sucess: true, message: "Password reset successful" });
+      .json({ success: true, message: "Password reset successful" });
   } catch (error) {
     console.log("Error in resetPassword", error);
     res.status(400).json({ success: false, message: error.message });

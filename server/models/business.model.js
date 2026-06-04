@@ -53,8 +53,14 @@ const businessSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "active", "inactive", "suspended", "banned"],
-      default: "pending",
+      enum: ["active", "suspended", "banned"],
+      default: "active",
+    },
+
+    plan: {
+      type: String,
+      enum: ["trial", "basic", "premium"],
+      default: "trial",
     },
   },
   { timestamps: true },

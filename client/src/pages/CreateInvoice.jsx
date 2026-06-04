@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import { useReactToPrint } from "react-to-print";
 import InvoiceHeader from "../components/InvoiceHeader";
 import InvoiceFooter from "../components/InvoiceFooter";
@@ -64,9 +65,6 @@ export default function CreateInvoice() {
   const [client, setClient] = useState(null);
   const [invoices, setInvoices] = useState([]);
   const { registerClient, getAllClients, getOneClient } = useClientStore();
-
-  console.log(user);
-  console.log(clients);
 
   const getRegisteredClients = async () => {
     try {
@@ -172,6 +170,7 @@ export default function CreateInvoice() {
         createdBy: user._id,
         client: client._id,
       });
+      toast.success("Invoice saved successfully");
       navigate("/user-dashboard?tab=invoices");
     } catch (error) {
       console.log(error);

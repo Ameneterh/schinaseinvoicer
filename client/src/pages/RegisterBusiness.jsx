@@ -49,7 +49,7 @@ const fadeInUp = {
 export default function RegisterBusiness() {
   const navigate = useNavigate();
 
-  const [regPackage, setRegPackage] = useState("freeTrial");
+  const [regPackage, setRegPackage] = useState("trial");
   const [fullname, setFullname] = useState("");
   const [email, setUserEmail] = useState("");
   const [phoneNumber, setUserPhone] = useState("");
@@ -281,6 +281,7 @@ export default function RegisterBusiness() {
         business_phone,
         business_address,
         banker,
+        plan: regPackage,
         account_name,
         account_number,
         business_logo: addedLogo?.image,
@@ -332,10 +333,12 @@ export default function RegisterBusiness() {
                     <option value="" disabled>
                       Select your preferred account type
                     </option>
-                    <option value="freeTrial">Free Trial</option>
-                    <option value="starterPackage">Starter Package</option>
-                    <option value="enterprisePackage">
-                      Enterprise Package
+                    <option value="trial">Free Trial</option>
+                    <option value="basic" disabled>
+                      Basic Package
+                    </option>
+                    <option value="premium" disabled>
+                      Premium Package
                     </option>
                   </select>
                 </div>

@@ -276,7 +276,6 @@ export const useAuthStore = create((set) => ({
 
   // general users actions: get all users, get one user, update user, delete user
   // 1. get all users
-  //   get all businesses
   getAllUsers: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -291,6 +290,59 @@ export const useAuthStore = create((set) => ({
         error: error.response.data.message || "Error getting Users",
         isLoading: false,
       });
+      throw error;
+    }
+  },
+
+  // 2. update a user
+  updateUser: async (userId, formData) => {
+    try {
+      set({ isLoading: true });
+
+      const response = await axios.put(
+        `${API_URL}/update-user/${userId}`,
+        formData,
+      );
+
+      set((state) => ({
+        users: state.users.map((user) =>
+          user._id === userId ? response.data.user : user,
+        ),
+        user: state.user?._id === userId ? response.data.user : state.user,
+        isLoading: false,
+      }));
+
+      return response.data;
+    } catch (error) {
+      set({ isLoading: false });
+
+      // throw (
+      //   error.response?.data || {
+      //     message: "Failed to update user",
+      //   }
+      // );
+    }
+  },
+
+  // 3. update user password
+  updatePassword: async ({ userId, oldPassword, password }) => {
+    try {
+      set({ isLoading: true });
+
+      const response = await axios.put(`${API_URL}/update-password/${userId}`, {
+        oldPassword,
+        password,
+      });
+
+      set((state) => ({
+        user: state.user?._id === userId ? response.data.user : state.user,
+        isLoading: false,
+      }));
+
+      return response.data;
+    } catch (error) {
+      set({ isLoading: false });
+
       throw error;
     }
   },

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "../components/Input";
-import { Lock } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function PasswordResetPage() {
@@ -28,7 +28,7 @@ export default function PasswordResetPage() {
       await resetPassword(token, user_password);
 
       toast.success(
-        "Password reset successfully, redirecting to login page..."
+        "Password reset successfully, redirecting to login page...",
       );
       setTimeout(() => {
         navigate("/user-login");

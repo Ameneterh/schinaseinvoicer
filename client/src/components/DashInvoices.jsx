@@ -156,7 +156,7 @@ export default function DashInvoices() {
 
   return (
     <div className="w-full table-auto overflow-x-scroll md:mt-4 md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      <div className="flex items-center justify-between mb-3 gap-4">
+      <div className="flex flex-col lg:flex-row items-center justify-between mb-3 gap-4">
         <h1 className="text-xl font-extrabold">List of Invoices:</h1>
         <div className="flex flex-wrap gap-3 text-sm">
           <select
@@ -198,7 +198,7 @@ export default function DashInvoices() {
           <Input
             icon={Search}
             type="text"
-            placeholder="Search invoice, client, date..."
+            placeholder="Search invoice, client ..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -222,35 +222,41 @@ export default function DashInvoices() {
           </thead>
           <tbody>
             {selectedInvoices.map((invoice) => (
-              <tr key={invoice._id} className="">
+              <tr key={invoice._id} className="text-xs">
                 <td
-                  className="px-4 text-sm py-1 text-nowrap"
-                  title={new Date(invoice.invDate).toLocaleDateString("en-US", {
+                  className="px-4 py-1 text-nowrap"
+                  title={new Date(invoice.invDate).toLocaleString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
                   })}
                 >
                   {invoice.invDate
-                    ? new Date(invoice.invDate).toLocaleDateString("en-US", {
+                    ? new Date(invoice.invDate).toLocaleString("en-US", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
                       })
                     : ""}
                 </td>
-                <td className="px-4 text-sm py-1" title={invoice.invoiceNumber}>
+                <td className="px-4 py-1" title={invoice.invoiceNumber}>
                   {invoice.invoiceNumber}
                 </td>
                 <td
-                  className="px-4 text-sm py-1 line-clamp-1"
+                  className="px-4 py-1 line-clamp-1"
                   title={invoice.client.client_name}
                 >
                   {invoice.client.client_name}
                 </td>
                 {user.role === "architect" && (
                   <td
-                    className="px-4 text-sm py-1"
+                    className="px-4 py-1"
                     title={invoice.company?.business_name}
                   >
                     <div className="truncate max-w-[100px]">
@@ -258,25 +264,25 @@ export default function DashInvoices() {
                     </div>
                   </td>
                 )}
-                <td className="px-4 text-sm py-1 text-right">
+                <td className="px-4 py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.total)}
                 </td>
-                <td className="px-4 text-sm py-1 text-right">
+                <td className="px-4 py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.totalAmountReceived)}
                 </td>
-                <td className="px-4 text-sm py-1 text-right">
+                <td className="px-4 py-1 text-right">
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
                     currency: "NGN",
                   }).format(invoice.total - invoice.totalAmountReceived)}
                 </td>
-                <td className="px-4 text-sm py-1 flex items-center gap-2">
+                <td className="px-4 py-1 flex items-center gap-2">
                   <button
                     title="Update invoice payment"
                     onClick={() => {
@@ -333,6 +339,7 @@ export default function DashInvoices() {
               </tr>
             ))}
             <tr className="border-t-[2px] border-t-black py-1 bg-gray-400">
+              <td className="py-2"></td>
               <td className="py-2"></td>
               <td className="py-2"></td>
               <td className="py-2"></td>

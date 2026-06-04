@@ -35,7 +35,7 @@ export default function DashSidebar() {
 
   return (
     // <div className="min-h-screen w-full">
-    <Sidebar className="w-full min-h-screen flex flex-col justify-between">
+    <Sidebar className="w-full md:min-h-screen flex flex-col justify-between">
       <Sidebar.Items className="mb-5">
         <Sidebar.ItemGroup className="flex flex-col gap-1">
           {user && (

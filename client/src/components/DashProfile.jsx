@@ -11,7 +11,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { Input } from "./Input";
 import {
@@ -23,13 +23,15 @@ import {
   PhoneOutgoing,
   EyeOff,
   Eye,
+  KeySquare,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import DashUpdatePassword from "./DashUpdatePassword.jsx";
 
 export default function DashProfile() {
-  const { user, logout, isLoading, error } = useAuthStore();
-
-  console.log(user);
+  const { user, updateUser, logout, isLoading, error } = useAuthStore();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [imageFile, setImageFile] = useState(null);
@@ -39,7 +41,9 @@ export default function DashProfile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
+  const [showUpdatePassword, setShowUpdatePassword] = useState(false);
 
   const [formData, setFormData] = useState({});
 
@@ -75,7 +79,7 @@ export default function DashProfile() {
       },
       (error) => {
         setImageFileUploadError(
-          "Could not upload image (file must be less than 2MB)",
+          "Could not upload image (file must be less than 500kB)",
         );
         setImageFileUploadProgress(null);
         setImageFile(null);
@@ -98,8 +102,6 @@ export default function DashProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUpdateUserError(null);
-    setUpdateUserSuccess(null);
 
     if (Object.keys(formData).length === 0) {
       setUpdateUserError("No changes made!");
@@ -112,26 +114,27 @@ export default function DashProfile() {
     }
 
     try {
-      // dispatch(updateStart());
-      const res = await fetch(`/server/user/update/${user._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
+      const changedFields = {};
 
-      if (!res.ok) {
-        // dispatch(updateFailure(data.message));
-        setUpdateUserError(data.message);
-      } else {
-        // dispatch(updateSuccess(data));
-        setUpdateUserSuccess("User's profile updated successfully");
-      }
+      if (formData.fullname !== user.fullname)
+        changedFields.fullname = formData.fullname;
+
+      if (formData.email !== user.email) changedFields.email = formData.email;
+
+      if (formData.phoneNumber !== user.phoneNumber)
+        changedFields.phoneNumber = formData.phoneNumber;
+
+      if (imageFileUrl) changedFields.avatar = imageFileUrl;
+
+      // if (signatureUrl !== user.staff_signature)
+      //   changedFields.staff_signature = signatureUrl;
+
+      await updateUser(user._id, changedFields);
+      toast.success("User details updated successfully!");
+      navigate("/user-dashboard?tab=dash");
     } catch (error) {
-      // dispatch(updateFailure(error.message));
-      setUpdateUserError(data.message);
+      toast.error(error.message);
+      // setUpdateUserError(data.message);
     }
   };
 
@@ -159,7 +162,7 @@ export default function DashProfile() {
   };
 
   return (
-    <div className="mx-auto p-3 md:px-10 w-full bg-white">
+    <div className="relative mx-auto p-3 md:px-10 w-full bg-white">
       <h1 className="sm:my-7 text-center font-semibold text-3xl text-green-950">
         Profile
       </h1>
@@ -260,30 +263,40 @@ export default function DashProfile() {
               setFormData({ ...formData, email: e.target.value })
             }
           />
-          <div className="relative flex items-center w-full">
-            <Input
-              icon={LockKeyhole}
-              type={showPassword ? "text" : "password"}
-              id="password"
-              label="User Password"
-              placeholder="Your Password"
-              className="flex-1 w-full bg-transparent"
-              // defaultValue={user.password}
-              onChange={(e) =>
-                setFormData({ ...formData, user_password: e.target.value })
-              }
-            />
+          <div className="flex items-center gap-2 w-full">
+            <div className="relative flex items-center w-full">
+              <Input
+                icon={LockKeyhole}
+                type={showPassword ? "text" : "password"}
+                id="password"
+                label="User Password"
+                placeholder="Your Password"
+                className="flex-1 w-full bg-transparent"
+                disabled
+                // defaultValue={user.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+              <div
+                className="absolute right-2 inset-y-0 cursor-pointer flex items-center mt-2"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="size-5 text-green-500" />
+                ) : (
+                  <Eye className="size-5 text-green-500" />
+                )}
+              </div>
+            </div>
             <div
-              className="absolute right-2 inset-y-0 cursor-pointer flex items-center"
-              onClick={() => setShowPassword(!showPassword)}
+              className="text-xs font-bold px-2 py-2 bg-blue-600 rounded text-white hover:opacity-75 cursor-pointer"
+              onClick={() => setShowUpdatePassword(true)}
             >
-              {showPassword ? (
-                <EyeOff className="size-5 text-green-500" />
-              ) : (
-                <Eye className="size-5 text-green-500" />
-              )}
+              Update
             </div>
           </div>
+
           <Input
             icon={PhoneOutgoing}
             type="text"
@@ -339,9 +352,9 @@ export default function DashProfile() {
             icon={CalendarClock}
             type="text"
             id="updatedAt"
-            label="User Last Update"
+            label="* User Last Update"
             color="red"
-            placeholder="* User Last Update"
+            placeholder="User Last Update"
             className="flex-1 w-full"
             defaultValue={new Date(user.updatedAt).toLocaleString("en-US", {
               year: "numeric",
@@ -393,20 +406,18 @@ export default function DashProfile() {
           )}
         </div>
       </form>
-      <div className="text-red-500 flex justify-between mt-5">
-        <span
-          onClick={() => setShowModal(true)}
-          className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
-        >
-          Delete Account
-        </span>
-        {/* <span
-          onClick={handleLogout}
-          className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
-        >
-          Sign Out
-        </span> */}
-      </div>
+
+      {user.role !== "architect" && (
+        <div className="text-red-500 flex justify-between mt-5">
+          <span
+            onClick={() => setShowModal(true)}
+            className="cursor-pointer px-4 py-2 bg-red-200 rounded-md hover:scale-110 transition-all duration-300"
+          >
+            Delete Account
+          </span>
+        </div>
+      )}
+
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">
           {updateUserSuccess}
@@ -446,6 +457,10 @@ export default function DashProfile() {
           </div>
         </Modal.Body>
       </Modal>
+
+      {showUpdatePassword && (
+        <DashUpdatePassword setShowUpdatePassword={setShowUpdatePassword} />
+      )}
     </div>
   );
 }

@@ -173,9 +173,7 @@ export default function DashBusinesses() {
                   <td className="px-4 py-1 text-sm text-nowrap">
                     <select className="bg-transparent">
                       <option>Update Status</option>
-                      <option>Pending</option>
                       <option>Active</option>
-                      <option>In-Active</option>
                       <option>Suspended</option>
                       <option>Banned</option>
                     </select>

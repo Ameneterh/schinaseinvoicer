@@ -161,7 +161,7 @@ export default function CallToActionComponent() {
             {/* starter tier */}
             <div className="p-4 w-full h-fit bg-white rounded-lg">
               <h3 className="font-bold w-full p-2 rounded bg-[#C4C4C4]">
-                STARTER PACK <br />
+                BASIC PLAN <br />
                 ₦5,000 – ₦15,000/MONTH
               </h3>
               <p>Affordable entry-level for small businesses</p>
