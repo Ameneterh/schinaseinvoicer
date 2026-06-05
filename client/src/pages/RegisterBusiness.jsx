@@ -400,7 +400,7 @@ export default function RegisterBusiness() {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     <div
-                      className="absolute right-2 inset-y-0 cursor-pointer flex items-center"
+                      className="absolute right-2 inset-y-0 cursor-pointer flex items-center mt-2"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (

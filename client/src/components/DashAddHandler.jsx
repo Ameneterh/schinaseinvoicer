@@ -308,7 +308,7 @@ export default function DashAddHandler() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <div
-                    className="absolute right-2 inset-y-0 cursor-pointer flex items-center"
+                    className="absolute right-2 inset-y-0 cursor-pointer flex items-center mt-2"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -332,14 +332,14 @@ export default function DashAddHandler() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 w-full flex-1">
+              <div className="flex flex-col gap-3 w-full">
                 {/* add user avatar and user signature */}
-                <div className="flex flex-col lg:flex-row gap-4 mt-2">
+                <div className="flex flex-col lg:flex-row gap-4 mt-2 w-full">
                   {/* add user avatar */}
                   <div className="flex flex-col w-full">
                     {user?.business?.plan !== "trial" && (
                       <div className="flex gap-4 items-end rounded-lg">
-                        <div className="flex flex-col font-light w-full">
+                        <div className="flex flex-col font-light w-full md:max-w-1/2">
                           <div className="text-sm font-medium">
                             <p className="md:text-nowrap">
                               User Avatar (Max 200kb)
@@ -363,7 +363,7 @@ export default function DashAddHandler() {
                           <img
                             src={avatar ? URL.createObjectURL(avatar) : ""}
                             alt="avatar preview"
-                            className="w-10, h-10 object-cover rounded-full"
+                            className="w-10 min-w-0 h-10 object-cover rounded-full"
                           />
                         )}
 
@@ -397,10 +397,8 @@ export default function DashAddHandler() {
                     )}
                   </div>
 
-                  <div className="h-full bg-blue-950 w-2"></div>
-
                   {/* add user signature */}
-                  <div className="flex flex-col w-full">
+                  <div className="flex flex-col w-full md:max-w-1/2">
                     {user?.business?.plan !== "trial" && (
                       <div className="flex gap-4 items-end rounded-lg">
                         <div className="flex flex-col font-light w-full">
@@ -433,7 +431,7 @@ export default function DashAddHandler() {
                                 : ""
                             }
                             alt="User Signature Preview"
-                            className="w-10, h-10 object-cover rounded-full"
+                            className="w-10 min-w-0 h-10 object-cover rounded-full"
                           />
                         )}
 
