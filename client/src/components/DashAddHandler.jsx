@@ -1,15 +1,28 @@
 import { motion } from "framer-motion";
 import { Input } from "../components/Input";
+import toast from "react-hot-toast";
+import {
+  getDownloadURL,
+  getStorage,
+  uploadBytesResumable,
+  ref,
+} from "firebase/storage";
+import { app } from "../firebase.js";
 import {
   CircleUserRound,
   Mail,
   Lock,
+  FilePlus,
+  FilePenLine,
   Loader,
   UserRoundPlus,
   Eye,
   EyeOff,
   Phone,
+  CloudUpload,
 } from "lucide-react";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
@@ -45,6 +58,140 @@ export default function DashAddHandler() {
 
   const [businesses, setBusinesses] = useState([]);
 
+  const [avatar, setAvatar] = useState(null);
+  const [addedAvatar, setAddedAvatar] = useState(null);
+
+  const [userSignature, setUserSignature] = useState(null);
+  const [addedSignature, setAddedSignature] = useState(null);
+
+  const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState(null);
+
+  const [avatarUploadProgress, setAvatarUploadProgress] = useState(null);
+  const [avatarUploadError, setAvatarUploadError] = useState(null);
+
+  const [signatureUploadProgress, setSignatureUploadProgress] = useState(null);
+  const [signatureUploadError, setSignatureUploadError] = useState(null);
+
+  // image max size
+  const MAX_FILE_SIZE = 300 * 1024; // 300 KB
+
+  const handleUploadAvatar = async () => {
+    try {
+      if (!avatar) {
+        toast.error("Please, select an image");
+        return;
+      }
+
+      // Validate file size
+      if (avatar.size > MAX_FILE_SIZE) {
+        toast.error(
+          `Image size must not exceed 500 KB. Your file is ${(avatar.size / 1024).toFixed(0)} KB.`,
+        );
+        return;
+      }
+
+      setAvatarUploadError(null);
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + "-" + avatar.name;
+
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, avatar);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setAvatarUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          toast.error("Image upload failed!");
+          setAvatarUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setAvatarUploadProgress(null);
+            setAvatarUploadError(null);
+            setAddedAvatar({ image: downloadURL });
+          });
+          toast.success("Image uploaded successfully!");
+        },
+      );
+    } catch (error) {
+      toast.error("An error occurred while uploading the image.");
+      console.log(error);
+
+      if (error.code === "storage/unauthorized") {
+        toast.error(
+          "Upload failed. The image may exceed the allowed size limit.",
+        );
+      } else {
+        toast.error("Image upload failed.");
+      }
+
+      setAvatarUploadProgress(null);
+    }
+  };
+
+  const handleUploadSignature = async () => {
+    try {
+      if (!userSignature) {
+        toast.error("Please, select an image");
+        return;
+      }
+
+      // Validate file size
+      if (userSignature.size > MAX_FILE_SIZE) {
+        toast.error(
+          `Image size must not exceed 500 KB. Your file is ${(userSignature.size / 1024).toFixed(0)} KB.`,
+        );
+        return;
+      }
+
+      setSignatureUploadError(null);
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + "-" + userSignature.name;
+
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, userSignature);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setSignatureUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          setSignatureUploadError("Image upload failed!");
+          setSignatureUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setSignatureUploadProgress(null);
+            setSignatureUploadError(null);
+            setAddedSignature({ image: downloadURL });
+          });
+          toast.success("Image uploaded successfully!");
+        },
+      );
+    } catch (error) {
+      console.log(error);
+
+      if (error.code === "storage/unauthorized") {
+        toast.error(
+          "Upload failed. The image may exceed the allowed size limit.",
+        );
+      } else {
+        toast.error("Image upload failed.");
+      }
+
+      setSignatureUploadProgress(null);
+      // setSignatureUploadError("Image upload failed!!" + error);
+      // setSignatureUploadProgress(null);
+      // console.log(error);
+    }
+  };
+
   const handleRegisterHandler = async (e) => {
     e.preventDefault();
 
@@ -55,6 +202,8 @@ export default function DashAddHandler() {
         phoneNumber,
         password,
         role,
+        avatar: addedAvatar ? addedAvatar.image : null,
+        staff_signature: addedSignature ? addedSignature.image : null,
         business: user.business._id,
       });
       navigate("/activate-handler");
@@ -139,7 +288,7 @@ export default function DashAddHandler() {
             </div>
 
             <div className="flex flex-col items-start lg:flex-row gap-4">
-              <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-col gap-3 w-full md:max-w-80">
                 <Input
                   icon={Phone}
                   type={"text"}
@@ -182,8 +331,148 @@ export default function DashAddHandler() {
                   </p>
                 </div>
               </div>
-              {/* password strength meter */}
-              <PasswordStrengthMeter password={password} />
+
+              <div className="flex flex-col gap-3 w-full flex-1">
+                {/* add user avatar and user signature */}
+                <div className="flex flex-col lg:flex-row gap-4 mt-2">
+                  {/* add user avatar */}
+                  <div className="flex flex-col w-full">
+                    {user?.business?.plan !== "trial" && (
+                      <div className="flex gap-4 items-end rounded-lg">
+                        <div className="flex flex-col font-light w-full">
+                          <div className="text-sm font-medium">
+                            <p className="md:text-nowrap">
+                              User Avatar (Max 200kb)
+                            </p>
+                            {avatar && (
+                              <p className="text-sm text-red-400 font-medium block">
+                                Selected file size:{" "}
+                                {(avatar.size / 1024).toFixed(0)} KB
+                              </p>
+                            )}
+                          </div>
+                          <Input
+                            icon={FilePlus}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setAvatar(e.target.files[0])}
+                          />
+                        </div>
+
+                        {avatar && (
+                          <img
+                            src={avatar ? URL.createObjectURL(avatar) : ""}
+                            alt="avatar preview"
+                            className="w-10, h-10 object-cover rounded-full"
+                          />
+                        )}
+
+                        <motion.div
+                          className="w-fit text-nowrap py-2 px-2 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white text-sm flex items-center justify-center"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          // type="submit"
+                          icon={FilePenLine}
+                          onClick={handleUploadAvatar}
+                          disabled={avatarUploadProgress}
+                        >
+                          {avatarUploadProgress ? (
+                            <div className="flex items-center gap-2">
+                              <CircularProgressbar
+                                className="h-8 w-8"
+                                value={avatarUploadProgress}
+                              />
+                              <span>{`${avatarUploadProgress || 0}%`}</span>
+                            </div>
+                          ) : (
+                            // "Upload Avatar"
+                            <CloudUpload />
+                          )}
+                        </motion.div>
+                      </div>
+                    )}
+
+                    {avatarUploadError && (
+                      <span className="text-red-500">{avatarUploadError}</span>
+                    )}
+                  </div>
+
+                  <div className="h-full bg-blue-950 w-2"></div>
+
+                  {/* add user signature */}
+                  <div className="flex flex-col w-full">
+                    {user?.business?.plan !== "trial" && (
+                      <div className="flex gap-4 items-end rounded-lg">
+                        <div className="flex flex-col font-light w-full">
+                          <div className="text-sm font-medium">
+                            <p className="md:text-nowrap">
+                              User Signature (Max 200kb)
+                            </p>
+                            {userSignature && (
+                              <p className="text-sm text-red-400 font-medium block">
+                                Selected file size:{" "}
+                                {(userSignature.size / 1024).toFixed(0)} KB
+                              </p>
+                            )}
+                          </div>
+                          <Input
+                            icon={FilePlus}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              setUserSignature(e.target.files[0])
+                            }
+                          />
+                        </div>
+
+                        {userSignature && (
+                          <img
+                            src={
+                              userSignature
+                                ? URL.createObjectURL(userSignature)
+                                : ""
+                            }
+                            alt="User Signature Preview"
+                            className="w-10, h-10 object-cover rounded-full"
+                          />
+                        )}
+
+                        <motion.div
+                          className="w-fit text-nowrap py-2 px-2 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white text-sm flex items-center justify-center"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          // type="submit"
+                          icon={FilePenLine}
+                          onClick={handleUploadSignature}
+                          disabled={signatureUploadProgress}
+                        >
+                          {signatureUploadProgress ? (
+                            <div className="flex items-center gap-2">
+                              <CircularProgressbar
+                                className="h-8 w-8"
+                                value={signatureUploadProgress}
+                              />
+                              <span>{`${signatureUploadProgress || 0}%`}</span>
+                            </div>
+                          ) : (
+                            // "Upload Signature"
+                            <CloudUpload />
+                          )}
+                        </motion.div>
+                      </div>
+                    )}
+
+                    {signatureUploadError && (
+                      <span className="text-red-500">
+                        {signatureUploadError}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* password strength meter */}
+                <PasswordStrengthMeter password={password} />
+              </div>
             </div>
 
             {error && (

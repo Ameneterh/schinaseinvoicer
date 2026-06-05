@@ -14,6 +14,7 @@ import {
   Loader,
   Eye,
   EyeOff,
+  CloudUpload,
 } from "lucide-react";
 import {
   getDownloadURL,
@@ -431,8 +432,8 @@ export default function RegisterBusiness() {
               <div className="flex flex-col lg:flex-row gap-4 mt-2">
                 {/* add user avatar */}
                 <div className="flex flex-col w-full">
-                  {regPackage !== "freeTrial" && (
-                    <div className="flex flex-col md:flex-row gap-4 items-end justify-between rounded-lg">
+                  {regPackage !== "trial" && (
+                    <div className="flex flex-col md:flex-row gap-4 items-end rounded-lg">
                       <div className="flex flex-col font-light w-full md:w-1/2">
                         <div className="text-sm font-medium">
                           <p className="md:text-nowrap">
@@ -462,7 +463,7 @@ export default function RegisterBusiness() {
                       )}
 
                       <motion.div
-                        className="w-fit text-nowrap py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                        className="w-fit text-nowrap py-2 px-2 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white text-sm flex items-center justify-center"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         // type="submit"
@@ -479,7 +480,8 @@ export default function RegisterBusiness() {
                             <span>{`${avatarUploadProgress || 0}%`}</span>
                           </div>
                         ) : (
-                          "Upload Avatar"
+                          // "Upload Avatar"
+                          <CloudUpload />
                         )}
                       </motion.div>
                     </div>
@@ -494,8 +496,8 @@ export default function RegisterBusiness() {
 
                 {/* add user signature */}
                 <div className="flex flex-col w-full">
-                  {regPackage !== "freeTrial" && (
-                    <div className="flex flex-col md:flex-row gap-4 items-end justify-between rounded-lg">
+                  {regPackage !== "trial" && (
+                    <div className="flex flex-col md:flex-row gap-4 items-end rounded-lg">
                       <div className="flex flex-col font-light w-full md:w-1/2">
                         <div className="text-sm font-medium">
                           <p className="md:text-nowrap">
@@ -529,7 +531,7 @@ export default function RegisterBusiness() {
                       )}
 
                       <motion.div
-                        className="w-fit text-nowrap py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                        className="w-fit text-nowrap py-2 px-2 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white text-sm flex items-center justify-center"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         // type="submit"
@@ -546,7 +548,8 @@ export default function RegisterBusiness() {
                             <span>{`${signatureUploadProgress || 0}%`}</span>
                           </div>
                         ) : (
-                          "Upload Signature"
+                          // "Upload Signature"
+                          <CloudUpload />
                         )}
                       </motion.div>
                     </div>
@@ -615,8 +618,8 @@ export default function RegisterBusiness() {
               /> */}
 
               <div className="flex flex-col mb-2">
-                {regPackage !== "freeTrial" && (
-                  <div className="flex flex-col md:flex-row gap-4 items-end justify-between p-3 rounded-lg">
+                {regPackage !== "trial" && (
+                  <div className="flex flex-col md:flex-row gap-4 items-end p-3 rounded-lg">
                     <div className="flex flex-col font-light w-full">
                       <div className="text-sm font-medium">
                         <p className="md:text-nowrap">
@@ -646,7 +649,7 @@ export default function RegisterBusiness() {
                     )}
 
                     <motion.div
-                      className="w-full py-3 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white flex items-center justify-center"
+                      className="w-fit text-nowrap py-2 px-4 bg-gradient-to-r from-green-700 to-emerald-700 font-normal rounded-lg hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-1 focus:ring-green-800 focus:ring-offset-1 focus:ring-offset-gray-900 transition duration-200 cursor-pointer text-white text-sm flex items-center justify-center"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       // type="submit"
@@ -663,7 +666,10 @@ export default function RegisterBusiness() {
                           <span>{`${imageUploadProgress || 0}%`}</span>
                         </div>
                       ) : (
-                        "Upload Logo"
+                        <span className="flex items-center gap-2">
+                          <CloudUpload />
+                          Upload Logo
+                        </span>
                       )}
                     </motion.div>
                   </div>

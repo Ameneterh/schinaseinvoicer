@@ -131,15 +131,7 @@ export const addHandler = async (req, res) => {
     role,
     avatar,
     staff_signature,
-    business_logo,
     business,
-    business_name,
-    business_email,
-    business_phone,
-    business_address,
-    banker,
-    account_name,
-    account_number,
   } = req.body;
 
   try {

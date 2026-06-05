@@ -296,7 +296,7 @@ export default function DashInvoices() {
                       className={`text-blue-700 size-4 transition-all duration-300 ${invoice.totalAmountReceived === invoice.total ? "opacity-40 cursor-not-allowed text-gray-500" : "hover:scale-125"}`}
                     />
                   </button>
-                  <button
+                  {/* <button
                     title="Delete this invoice"
                     onClick={() => {
                       // setUserIdToDelete(user._id);
@@ -308,9 +308,9 @@ export default function DashInvoices() {
                     <Trash2
                       className={`text-red-600 size-4 transition-all duration-300 ${invoice.totalAmountReceived > 0 ? "opacity-40 cursor-not-allowed text-gray-500" : "hover:scale-125"}`}
                     />
-                  </button>
+                  </button> */}
 
-                  <button
+                  {/* <button
                     title="Edit this invoice"
                     onClick={() => {
                       // setShowModal(true);
@@ -324,7 +324,7 @@ export default function DashInvoices() {
                           : "hover:scale-125"
                       }`}
                     />
-                  </button>
+                  </button> */}
                   <Link
                     title="Create PDF"
                     to={`/print-pdf/${invoice._id}`}
