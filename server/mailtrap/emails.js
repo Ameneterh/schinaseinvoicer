@@ -1,25 +1,27 @@
+import dotenv from "dotenv";
 import {
+  VERIFICATION_EMAIL_TEMPLATE,
+  WELCOME_EMAIL_TEMPLATE,
   HANDLER_VERIFICATION_TEMPLATE,
   PASSWORD_RESET_REQUEST_TEMPLATE,
   PASSWORD_RESET_SUCCESS_TEMPLATE,
   TEMPORARY_HANDLER_CREDENTIALS,
-  VERIFICATION_EMAIL_TEMPLATE,
 } from "./emailTemplates.js";
-import { mailtrapClient, sender } from "./mailtrap.config.js";
+import transporter from "../services/email.service.js";
+
+dotenv.config();
 
 export const sendVerificationEmail = async (email, verificationToken) => {
-  const recipient = [{ email }];
-
   try {
-    const response = await mailtrapClient.send({
-      from: sender,
-      to: recipient,
-      subject: "Verify Your Email",
+    const response = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Verify Your Account",
+
       html: VERIFICATION_EMAIL_TEMPLATE.replace(
         "{verificationCode}",
         verificationToken,
       ),
-      category: "Email Verification",
     });
     console.log("Email sent successfully", response);
   } catch (error) {
@@ -28,39 +30,23 @@ export const sendVerificationEmail = async (email, verificationToken) => {
   }
 };
 
-export const sendHandlerActivationEmail = async (email, verificationToken) => {
-  const recipient = [{ email }];
-
+export const sendWelcomeEmail = async (email, fullname) => {
   try {
-    const response = await mailtrapClient.send({
-      from: sender,
-      to: recipient,
-      subject: "Activate Added Handler",
-      html: HANDLER_VERIFICATION_TEMPLATE.replace(
-        "{verificationCode}",
-        verificationToken,
-      ),
-      category: "User Verification",
-    });
-    console.log("Email sent successfully", response);
-  } catch (error) {
-    console.log(`Error sending verification`, error);
-    throw new Error(`Error sending Verification Email: ${error}`);
-  }
-};
+    // const response = await transporter.sendMail({
+    //   from: process.env.EMAIL_USER,
+    //   to: email,
+    //   template_uuid: "977525a2-4a2a-4905-b5ba-0e5ff179353c",
+    //   template_variables: {
+    //     company_info_name: "Invoicer App",
+    //     name: name,
+    //   },
+    // });
+    const response = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome to Schinase InvoiceCore",
 
-export const sendWelcomeEmail = async (email, name) => {
-  const recipient = [{ email }];
-
-  try {
-    const response = await mailtrapClient.send({
-      from: sender,
-      to: recipient,
-      template_uuid: "977525a2-4a2a-4905-b5ba-0e5ff179353c",
-      template_variables: {
-        company_info_name: "Invoicer App",
-        name: name,
-      },
+      html: WELCOME_EMAIL_TEMPLATE.replace("{fullname}", fullname),
     });
     console.log("Welcome email sent successfully", response);
   } catch (error) {
@@ -86,6 +72,27 @@ export const sendHandlerActivatedEmail = async (email, name) => {
   } catch (error) {
     console.log("Error sending handler activation email", error);
     throw new Error(`Error sending handler activation email: ${error}`);
+  }
+};
+
+export const sendHandlerActivationEmail = async (email, verificationToken) => {
+  const recipient = [{ email }];
+
+  try {
+    const response = await mailtrapClient.send({
+      from: sender,
+      to: recipient,
+      subject: "Activate Added Handler",
+      html: HANDLER_VERIFICATION_TEMPLATE.replace(
+        "{verificationCode}",
+        verificationToken,
+      ),
+      category: "User Verification",
+    });
+    console.log("Email sent successfully", response);
+  } catch (error) {
+    console.log(`Error sending verification`, error);
+    throw new Error(`Error sending Verification Email: ${error}`);
   }
 };
 

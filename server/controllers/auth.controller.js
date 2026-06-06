@@ -9,6 +9,8 @@ import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
   sendTemporaryHandlerCredentials,
+  sendVerificationEmail,
+  sendWelcomeEmail,
 } from "../mailtrap/emails.js";
 import { log } from "console";
 
@@ -104,17 +106,16 @@ export const addUser = async (req, res) => {
 
     // generate cookie with jwt
     generateTokenAndSetCookie(res, user._id);
-    await sendTemporaryHandlerCredentials(user.email, password);
+    // await sendTemporaryHandlerCredentials(user.email, password);
 
     // const savedUser = await User.findOne({ email }).populate("business");
 
-    await sendHandlerActivationEmail(user.email, verificationToken);
+    await sendVerificationEmail(user.email, verificationToken);
 
     res.status(201).json({
       success: true,
       message: "New Business and Owner Created Successfully",
       user: { ...user._doc, password: undefined },
-      business,
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -405,12 +406,12 @@ export const verifyEmail = async (req, res) => {
     user.verificationTokenExpiresAt = undefined;
     await user.save();
 
-    await sendHandlerActivationEmail(user.email, user.fullname);
+    await sendWelcomeEmail(user.email, user.fullname);
 
     res.status(200).json({
       success: true,
       message: "User Account Activated Successfully",
-      user: { ...user._doc, user_password: undefined },
+      user: { ...user._doc, password: undefined },
     });
   } catch (error) {
     console.log("Error in verifyHandlerRegistration", error);

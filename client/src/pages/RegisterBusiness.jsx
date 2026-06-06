@@ -356,6 +356,10 @@ export default function RegisterBusiness() {
                 </p>
                 <p className="h-[2px] bg-orange-500 w-full flex-1 hidden md:inline-block"></p>
               </div>
+              <p className="py-1 w-full bg-slate-300 rounded text-center text-sm font-semibold">
+                PS: Please, use a valid email account you have access to; you
+                will receive a code to activate your account.
+              </p>
 
               <div className="flex flex-col lg:flex-row gap-4">
                 <Input
