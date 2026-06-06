@@ -24,6 +24,7 @@ import {
   EyeOff,
   Eye,
   KeySquare,
+  Squirrel,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -290,10 +291,10 @@ export default function DashProfile() {
               </div>
             </div>
             <div
-              className="text-xs font-bold px-2 py-2 bg-blue-600 rounded text-white hover:opacity-75 cursor-pointer"
+              className="flex items-center gap-2 text-xs font-bold px-2 py-2 bg-blue-600 rounded text-white hover:opacity-75 cursor-pointer hover:scale-110 transition-all duration-300"
               onClick={() => setShowUpdatePassword(true)}
             >
-              Update
+              <Squirrel size={20} /> Update
             </div>
           </div>
 

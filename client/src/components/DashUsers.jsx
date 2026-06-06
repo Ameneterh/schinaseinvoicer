@@ -119,7 +119,9 @@ export default function DashUsers() {
           <thead className="bg-gray-400">
             <tr className="border-b-black border-b-2 text-sm">
               <th className="px-4 py-1 text-left">Name of User</th>
-              <th className="px-4 py-1 text-left">Affiliation</th>
+              {user.role === "architect" && (
+                <th className="px-4 py-1 text-left">Affiliation</th>
+              )}
               <th className="px-4 py-1 text-left">User Email</th>
               <th className="px-4 py-1 text-left">User Phone</th>
               <th className="px-4 py-1 text-left">User Role</th>
@@ -132,9 +134,11 @@ export default function DashUsers() {
                 <td className="px-4 py-1 text-sm text-nowrap">
                   {user.fullname}
                 </td>
-                <td className="px-4 py-1 text-sm text-nowrap">
-                  {user.business.business_name}
-                </td>
+                {user.role === "architect" && (
+                  <td className="px-4 py-1 text-sm text-nowrap">
+                    {user.business.business_name}
+                  </td>
+                )}
                 <td className="px-4 py-1 text-sm text-nowrap">{user.email}</td>
                 <td className="px-4 py-1 text-sm text-nowrap">
                   {user.phoneNumber}

@@ -118,7 +118,9 @@ export default function DashClients() {
           <thead className="bg-gray-400">
             <tr className="border-b-[2px] border-b-black text-sm">
               <th className="text-left px-4 py-1">Reg Date</th>
-              <th className="text-left px-4 py-1">Client Registrar</th>
+              {user.role === "architect" && (
+                <th className="text-left px-4 py-1">Client Registrar</th>
+              )}
               <th className="text-left px-4 py-1">Client Name</th>
               <th className="text-left px-4 py-1">Phone Number</th>
               <th className="text-left px-4 py-1">Email</th>
@@ -136,17 +138,20 @@ export default function DashClients() {
                       })
                     : ""}
                 </td>
-                <td className="px-4 text-sm py-1">
-                  <button
-                    title="View client details"
-                    onClick={() => {
-                      handleViewClientDetails(client);
-                    }}
-                    className="text-blue-900 text-sm hover:font-bold hover:underline underline-offset-2 capitalize"
-                  >
-                    {client.staff.business.business_name}
-                  </button>
-                </td>
+
+                {user.role === "architect" && (
+                  <td className="px-4 text-sm py-1">
+                    <button
+                      title="View client details"
+                      onClick={() => {
+                        handleViewClientDetails(client);
+                      }}
+                      className="text-blue-900 text-sm hover:font-bold hover:underline underline-offset-2 capitalize"
+                    >
+                      {client.staff.business.business_name}
+                    </button>
+                  </td>
+                )}
                 <td className="px-4 text-sm py-1">
                   <button
                     title="View client details"

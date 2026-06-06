@@ -335,12 +335,8 @@ export default function RegisterBusiness() {
                       Select your preferred account type
                     </option>
                     <option value="trial">Free Trial</option>
-                    <option value="basic" disabled>
-                      Basic Package
-                    </option>
-                    <option value="premium" disabled>
-                      Premium Package
-                    </option>
+                    <option value="basic">Basic Package</option>
+                    {/* <option value="premium">Premium Package</option> */}
                   </select>
                 </div>
 
