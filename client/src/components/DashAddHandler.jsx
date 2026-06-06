@@ -202,11 +202,11 @@ export default function DashAddHandler() {
         phoneNumber,
         password,
         role,
-        avatar: addedAvatar ? addedAvatar.image : null,
-        staff_signature: addedSignature ? addedSignature.image : null,
+        avatar: addedAvatar?.image,
+        staff_signature: addedSignature?.image,
         business: user.business._id,
       });
-      navigate("/activate-handler");
+      navigate("/verify-email");
     } catch (error) {
       console.log(error);
     }

@@ -122,6 +122,44 @@ export const addUser = async (req, res) => {
   }
 };
 
+// verify handler registration
+export const verifyEmail = async (req, res) => {
+  const { code } = req.body;
+
+  try {
+    const user = await User.findOne({
+      verificationToken: code,
+      verificationTokenExpiresAt: { $gt: Date.now() },
+    }).populate("business");
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification code",
+      });
+    }
+
+    user.isActive = true;
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+    await user.save();
+
+    if (user.role === "businessAdmin") {
+      await sendWelcomeEmail(user.email, user.fullname);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User Account Activated Successfully",
+      user: { ...user._doc, password: undefined },
+    });
+  } catch (error) {
+    console.log("Error in verifyHandlerRegistration", error);
+    res.status(500).json({ success: false, message: "Server Error!" });
+  }
+};
+
 // add handler
 export const addHandler = async (req, res) => {
   const {
@@ -175,44 +213,30 @@ export const addHandler = async (req, res) => {
       verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    // after saving user, save business affiliation
-    // const savedUser = await User.findOne({ email });
-
-    if (role === "businessOwner") {
-      // check if business already exists
-      const businessAlreadyExists = await Business.findOne({ business_email });
-      if (businessAlreadyExists) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Business Already Exists!" });
-      }
-
-      // save new business
-      const business = await Business.create({
-        business_logo,
-        business_name,
-        business_email,
-        business_phone,
-        business_address,
-        banker,
-        account_name,
-        account_number,
-        owner: user._id,
-      });
-
-      // await business.save();
-      user.business = business._id;
-    }
-
     await user.save();
 
     // generate cookie with jwt
     generateTokenAndSetCookie(res, user._id);
-    await sendTemporaryHandlerCredentials(user.email, password);
 
-    const savedUser = await User.findOne({ email }).populate("business");
+    const savedUser = await User.findOne({ email }).populate({
+      path: "business",
+      populate: {
+        path: "owner",
+      },
+    });
 
-    await sendHandlerActivationEmail(user.email, verificationToken);
+    await sendHandlerActivationEmail(
+      savedUser.business.owner.email,
+      verificationToken,
+    );
+
+    await sendTemporaryHandlerCredentials({
+      email: savedUser.email,
+      fullname: savedUser.fullname,
+      password,
+      owner: savedUser.business.owner.fullname,
+      business_name: savedUser.business.business_name,
+    });
 
     res.status(201).json({
       success: true,
@@ -383,42 +407,6 @@ export const updatePassword = async (req, res) => {
   }
 };
 
-// verify handler registration
-export const verifyEmail = async (req, res) => {
-  const { code } = req.body;
-
-  try {
-    const user = await User.findOne({
-      verificationToken: code,
-      verificationTokenExpiresAt: { $gt: Date.now() },
-    }).populate("business");
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid or expired verification code",
-      });
-    }
-
-    user.isActive = true;
-    user.isVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpiresAt = undefined;
-    await user.save();
-
-    await sendWelcomeEmail(user.email, user.fullname);
-
-    res.status(200).json({
-      success: true,
-      message: "User Account Activated Successfully",
-      user: { ...user._doc, password: undefined },
-    });
-  } catch (error) {
-    console.log("Error in verifyHandlerRegistration", error);
-    res.status(500).json({ success: false, message: "Server Error!" });
-  }
-};
-
 // user login
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -471,10 +459,10 @@ export const logout = async (req, res) => {
 
 // forgot password
 export const forgotPassword = async (req, res) => {
-  const { user_email } = req.body;
+  const { email } = req.body;
 
   try {
-    const user = await User.findOne({ user_email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(400).json({
@@ -494,7 +482,7 @@ export const forgotPassword = async (req, res) => {
 
     // send email
     await sendPasswordResetEmail(
-      user.user_email,
+      user.email,
       `${process.env.CLIENT_URL}/reset-password/${resetToken}`,
     );
 

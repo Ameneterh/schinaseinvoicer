@@ -49,7 +49,7 @@ export default function AddHandler() {
 
     try {
       await addUser({ fullname, email, phoneNumber, password, role, business });
-      navigate("/activate-handler");
+      navigate("/verify-email");
     } catch (error) {
       console.log(error);
     }

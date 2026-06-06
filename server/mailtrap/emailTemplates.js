@@ -66,11 +66,11 @@ export const HANDLER_VERIFICATION_TEMPLATE = `
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="background: linear-gradient(to right, #4CAF50, #45a049); padding: 20px; text-align: center;">
-    <h1 style="color: white; margin: 0;">Activate Added Handler</h1>
+    <h1 style="color: white; margin: 0;">Activate Handler Account</h1>
   </div>
   <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
     <p>Hello,</p>
-    <p>You initiated addition of a handler for your invoices on Invoicer! The verification code to activate the account is:</p>
+    <p>You initiated addition of a handler for your invoices on Schinase InvoiceCore! The verification code to activate the account is:</p>
     <div style="text-align: center; margin: 30px 0;">
       <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #4CAF50;">{verificationCode}</span>
     </div>
@@ -99,14 +99,14 @@ export const TEMPORARY_HANDLER_CREDENTIALS = `
     <h1 style="color: white; margin: 0;">Your Temporary Credentials</h1>
   </div>
   <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-    <p>Hello,</p>
-    <p>You have been added to our platform (Invoicer App) as a <b>Finance Officer</b>. Your temporary password is:</p>
+    <p>Hello {fullname},</p>
+    <p><b>{owner}</b> of <b>{business_name}</b> added you to our platform <b><i>(Schinase InvoiceCore)</i></b> as a <b>Handler</b>. Your temporary password is:</p>
     <div style="text-align: center; margin: 30px 0;">
       <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #4CAF50;">{temporaryPassword}</span>
     </div>
     <p>Use this password to log into your account.</p>
     <p>For the security of your account, please, change this password on your first login to a unique password.</p>
-    <p>If you are not aware of this activity, please, contact us on +8154230654 or ameneterh@gmail.com.</p>
+    <p>If you are not aware of this activity or affiliated with the company, please, contact us on +2349028531506 or schinasetech@gmail.com.</p>
     <p>Best regards,<br>Your App Team</p>
   </div>
   <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
