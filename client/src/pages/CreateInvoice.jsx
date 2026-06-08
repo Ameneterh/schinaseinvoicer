@@ -27,6 +27,7 @@ import {
 import { MdAddBusiness, MdLockReset } from "react-icons/md";
 import { VscPreview } from "react-icons/vsc";
 import { FaSave } from "react-icons/fa";
+import Counter from "../../../server/models/counter.model.js";
 
 export default function CreateInvoice() {
   const { user } = useAuthStore();
@@ -44,7 +45,7 @@ export default function CreateInvoice() {
   const [client_address, setAddress] = useState("");
   const [client_phone, setPhone] = useState("");
   const [client_email, setEmail] = useState("");
-  const [invoiceNumber, setInvNumber] = useState("");
+  // const [invoiceNumber, setInvNumber] = useState("");
   // const [invDate, setInvDate] = useState(Date.now());
   const [invoiceType, setInvoiceType] = useState("");
   const [validity, setValidity] = useState("");
@@ -72,25 +73,24 @@ export default function CreateInvoice() {
       const filteredClients = clients.filter(
         (client) => user.business._id === client.staff.business._id,
       );
-      console.log(filteredClients);
       setClients(filteredClients);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getInvoices = async () => {
-    try {
-      const { invoices } = await getAllInvoices();
-      // const filteredInvoices = invoices.filter(
-      //   (invoice) => user.business._id === invoice.company._id,
-      // );
-      setInvoices(invoices);
-      setInvNumber((invoices.length + 1).toString().padStart(6, "0"));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getInvoices = async () => {
+  //   try {
+  //     const { invoices } = await getAllInvoices();
+  //     // const filteredInvoices = invoices.filter(
+  //     //   (invoice) => user.business._id === invoice.company._id,
+  //     // );
+  //     setInvoices(invoices);
+  //     // setInvNumber((invoices.length + 1).toString().padStart(6, "0"));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // const getInvoices = async () => {
   //   try {
@@ -109,7 +109,7 @@ export default function CreateInvoice() {
       navigate("/add-handler");
     }
     getRegisteredClients();
-    getInvoices();
+    // getInvoices();
   }, []);
 
   const getClient = async (clientId) => {
@@ -157,22 +157,25 @@ export default function CreateInvoice() {
   // save invoice
   const saveInvoice = async () => {
     const invoiceDate = new Date().toISOString();
-    getInvoices();
+    // getInvoices();
 
     try {
       await createInvoice({
         validity,
-        invoiceNumber: "INV/" + new Date().getFullYear() + "/" + invoiceNumber,
+        // invoiceNumber: "INV/" + new Date().getFullYear() + "/" + invoiceNumber,
+        // invoiceNumber: generateInvoiceNumber(),
         invDate: invoiceDate,
         items: list,
-        total,
+        // total,
         invoiceType,
-        createdBy: user._id,
+        // createdBy: user._id,
         client: client._id,
       });
+
       toast.success("Invoice saved successfully");
       navigate("/user-dashboard?tab=invoices");
     } catch (error) {
+      toast.error(error.response.data.message);
       console.log(error);
     }
   };
@@ -190,7 +193,7 @@ export default function CreateInvoice() {
         {/* content of invoice to print */}
         {showInvoice ? (
           <>
-            <div ref={contentRef} className="w-full px-20 py-10">
+            <div ref={contentRef} className="w-full px-20 py-10 relative">
               <CompanyDetails business={user.business} />
 
               <ClientDetails
@@ -198,7 +201,8 @@ export default function CreateInvoice() {
                 client_address={client_address}
                 client_phone={client_phone}
                 client_email={client_email}
-                inv_number={invoiceNumber}
+                // inv_number={invoiceNumber}
+                inv_number="Auto Gen"
                 // inv_date={new Date()}
                 validity={validity}
                 invoiceType={invoiceType}
@@ -257,8 +261,8 @@ export default function CreateInvoice() {
                       {clients &&
                         clients.map((client, index) => {
                           return (
-                            <option key={index} value={client._id}>
-                              {client.client_name}
+                            <option key={index} value={client?._id}>
+                              {client?.client_name}
                             </option>
                           );
                         })}
@@ -301,10 +305,10 @@ export default function CreateInvoice() {
                   <div className="flex flex-col">
                     <h1 className="font-bold">Invoice to:</h1>
                     <div className="ml-2 sm:ml-5">
-                      <p>{client.client_name}</p>
-                      <p className="text-xs">{client.client_address}</p>
-                      <p className="text-xs">{client.client_email}</p>
-                      <p className="text-xs">{client.client_phone}</p>
+                      <p>{client?.client_name}</p>
+                      <p className="text-xs">{client?.client_address}</p>
+                      <p className="text-xs">{client?.client_email}</p>
+                      <p className="text-xs">{client?.client_phone}</p>
                     </div>
                   </div>
                 )}
@@ -439,7 +443,7 @@ export default function CreateInvoice() {
                       label="Invoice Number"
                       // placeholder="Invoice Number"
                       autoComplete="off"
-                      value={invoiceNumber}
+                      value="Auto Generated"
                       // onChange={(e) => setInvNumber(e.target.value)}
                       disabled
                     />

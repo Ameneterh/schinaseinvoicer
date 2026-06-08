@@ -24,21 +24,23 @@ export default function OurClientListComponent({ clients }) {
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-4">
-        {clients.map((client, id) => (
-          <div
-            className="flex flex-col gap-3 items-center rounded-md p-2 shadow-md border"
-            key={id}
-          >
-            <img
-              src={client.business_logo}
-              alt={client.business_name}
-              className="h-12"
-            />
-            <h1 className="text-sm font-extrabold text-gray-500 line-clamp-1">
-              {client.business_name}
-            </h1>
-          </div>
-        ))}
+        {clients
+          .filter((client) => client.plan !== "trial")
+          .map((client, id) => (
+            <div
+              className="flex flex-col gap-3 items-center rounded-md p-2 shadow-md border"
+              key={id}
+            >
+              <img
+                src={client.business_logo}
+                alt={client.business_name}
+                className="h-12"
+              />
+              <h1 className="text-sm font-extrabold text-gray-500 line-clamp-1">
+                {client.business_name}
+              </h1>
+            </div>
+          ))}
       </div>
     </motion.div>
   );

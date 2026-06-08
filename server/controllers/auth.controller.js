@@ -179,6 +179,24 @@ export const addHandler = async (req, res) => {
       throw new Error("All fields are required!");
     }
 
+    const [handlerCount, businessRecord] = await Promise.all([
+      User.countDocuments({
+        business: business,
+        role: "handler",
+      }),
+      Business.findById(business),
+    ]);
+
+    if (!businessRecord) {
+      throw new Error("Business not found");
+    }
+
+    if (handlerCount >= businessRecord.maxHandlers) {
+      throw new Error(
+        `Handler limit reached. Your plan allows a maximum of ${businessRecord.maxHandlers} handlers.`,
+      );
+    }
+
     // check if user already exists
     const userAlreadyExists = await User.findOne({ email });
     if (userAlreadyExists) {
@@ -186,10 +204,6 @@ export const addHandler = async (req, res) => {
         .status(400)
         .json({ success: false, message: "User already exists" });
     }
-
-    // generate temporary password
-    // const tempPassword =
-    //   "Invoice@app" + Math.floor(100000 + Math.random() * 900000).toString();
 
     // hash password and generate verification token
     const hashedPassword = bcryptjs.hashSync(password, 10);

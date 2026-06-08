@@ -1,10 +1,12 @@
+import { generateInvoiceNumber } from "../utils/generateInvoiceNumber.js";
 import Invoice from "../models/invoice.model.js";
 import User from "../models/user.model.js";
+import { DateTime } from "luxon";
 
 // create invoice
 export const createInvoice = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).populate("business");
 
     if (!user) {
       return res.status(404).json({
@@ -13,8 +15,42 @@ export const createInvoice = async (req, res) => {
       });
     }
 
-    const { invoiceNumber, invoiceType, validity, items, notes, client } =
-      req.body;
+    const businessId = user.business._id;
+    const businessName = user.business.business_name;
+
+    const invoiceNumber = await generateInvoiceNumber(businessId, businessName);
+
+    // find out how many invoices company has created today
+    const startOfDay = DateTime.now()
+      .setZone("Africa/Lagos")
+      .startOf("day")
+      .toUTC()
+      .toJSDate();
+
+    const endOfDay = DateTime.now()
+      .setZone("Africa/Lagos")
+      .endOf("day")
+      .toUTC()
+      .toJSDate();
+
+    const invoiceCountToday = await Invoice.countDocuments({
+      company: user.business._id,
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    });
+
+    if (invoiceCountToday >= user?.business?.invoiceLimit) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Daily invoice limit reached; please upgrade your account to create more invoices",
+      });
+    }
+
+    // create invoice
+    const { invoiceType, validity, items, notes, client } = req.body;
 
     if (!items || !Array.isArray(items)) {
       return res.status(400).json({

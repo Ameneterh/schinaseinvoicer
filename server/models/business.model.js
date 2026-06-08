@@ -51,6 +51,21 @@ const businessSchema = new mongoose.Schema(
       ref: "User",
     },
 
+    // invoicePrefix: {
+    //   type: String,
+    //   required: true,
+    // },
+
+    invoiceLimit: {
+      type: Number,
+      default: 5,
+    },
+
+    maxHandlers: {
+      type: Number,
+      default: 1,
+    },
+
     status: {
       type: String,
       enum: ["active", "suspended", "banned"],

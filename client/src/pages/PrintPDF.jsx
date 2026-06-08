@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { MdAddCall, MdEmail, MdLocationCity } from "react-icons/md";
+import { MdAddCall, MdEmail, MdLocationCity, MdWhatsapp } from "react-icons/md";
 import Divider from "../components/Divider";
 
 import { useReactToPrint } from "react-to-print";
@@ -166,7 +166,7 @@ export default function PrintPDF() {
         transition={{ duration: 0.5 }}
         className="min-h-screen max-w-7xl w-full mx-auto mt-2 mb-10 p-4 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl bg-white"
       >
-        <div ref={contentRef} className="w-full px-20 py-10">
+        <div ref={contentRef} className="w-full px-20 py-10 relative">
           <CompanyDetails business={invoice?.company} />
 
           <ClientDetails
@@ -198,6 +198,20 @@ export default function PrintPDF() {
           <PdfInvoiceNotes invoice={invoice} />
 
           <PdfInvoiceFooter invoice={invoice} />
+
+          {/* company advert on footer */}
+          <div className="text-xs flex items-center gap-2 w-full justify-center fixed bottom-0 left-0 text-center text-gray-500 py-2">
+            <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
+            <span className="flex items-center">
+              <MdWhatsapp /> <MdAddCall className="mx-1" />
+              <Link
+                to="tel:+2349028531506"
+                className="text-blue-600 hover:underline underline-offset-2 font-bold"
+              >
+                09028531506
+              </Link>
+            </span>
+          </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-y-3 gap-x-3 items-center justify-center border-t border-gray-500 py-4 mt-4">
           <Button

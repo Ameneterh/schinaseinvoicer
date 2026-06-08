@@ -59,7 +59,7 @@ export default function CallToActionComponent() {
                   <li className="list-disc">Payment tracking</li>
                   <li className="list-disc">Dashboard overview</li>
                   <li className="list-disc">
-                    Up to a limited 10 invoices per month
+                    Up to a limited 5 invoices per day
                   </li>
                 </ul>
               </div>
@@ -69,7 +69,7 @@ export default function CallToActionComponent() {
                 <ul className="-mt-3">
                   <li className="list-disc">Schinase branding on invoices</li>
                   <li className="list-disc">No advanced reports</li>
-                  <li className="list-disc">No staff accounts</li>
+                  <li className="list-disc">No handler accounts</li>
                   <li className="list-disc">No custom branding/logo upload</li>
                 </ul>
               </div>
@@ -185,9 +185,10 @@ export default function CallToActionComponent() {
                   <li className="list-disc">
                     All services of Free Trial Tier +
                   </li>
-                  <li className="list-disc">Unlimited invoices generation</li>
+                  <li className="list-disc">Up to 50 invoices per day</li>
                   <li className="list-disc">Business logo on invoices</li>
-                  <li className="list-disc">1–2 handler accounts</li>
+                  <li className="list-disc">User Image/Signature upload</li>
+                  <li className="list-disc">Maximum 2 handler accounts</li>
                   <li className="list-disc">Email support</li>
                 </ul>
               </div>
@@ -196,9 +197,9 @@ export default function CallToActionComponent() {
                 <p className="font-bold mt-2">Optional Add-ons</p>
                 <ul className="-mt-3">
                   <li className="list-disc">Additional Handlers</li>
-                  <li className="list-disc">SMS reminders</li>
-                  <li className="list-disc">Custom invoice templates</li>
-                  <li className="list-disc">custom branding/logo upload</li>
+                  {/* <li className="list-disc">SMS reminders</li> */}
+                  {/* <li className="list-disc">Custom invoice templates</li> */}
+                  {/* <li className="list-disc">Custom branding/logo upload</li> */}
                 </ul>
               </div>
 

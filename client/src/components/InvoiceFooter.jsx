@@ -43,7 +43,8 @@ export default function InvoiceFooter() {
         </p>
         <Divider />
       </div>
-      <div className="text-xs flex items-center gap-2 w-full justify-center">
+      {/* company advert for trial plans */}
+      <div className="fixed bottom-0 left-0 w-full text-center text-xs text-gray-500 py-2 flex items-center gap-2 justify-center">
         <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
         <span className="flex items-center">
           <MdWhatsapp /> <MdAddCall className="mx-1" />
@@ -103,18 +104,6 @@ export function PdfInvoiceFooter({ invoice }) {
           </span>
         </p>
         <Divider />
-      </div>
-      <div className="text-xs flex items-center gap-2 w-full justify-center">
-        <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
-        <span className="flex items-center">
-          <MdWhatsapp /> <MdAddCall className="mx-1" />
-          <Link
-            to="tel:+2349028531506"
-            className="text-blue-600 hover:underline underline-offset-2 font-bold"
-          >
-            09028531506
-          </Link>
-        </span>
       </div>
     </footer>
   );

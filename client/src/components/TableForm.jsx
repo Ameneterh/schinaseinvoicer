@@ -110,7 +110,7 @@ export default function TableForm({
               onChange={(e) => setJobTitle(e.target.value)}
             />
           </div>
-          <div className="flex flex-col relative">
+          <div className="flex flex-col relative mt-5 md:mt-0">
             <label
               htmlFor="job_description"
               className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
@@ -147,7 +147,7 @@ export default function TableForm({
               onChange={(e) => setQuantity(e.target.value)}
             />
           </div>
-          <div className="flex flex-col relative">
+          <div className="flex flex-col relative mt-5 md:mt-0">
             <label
               htmlFor="rate"
               className="text-sm px-1 mb-1 absolute -top-[10px] left-2 bg-white"
@@ -164,7 +164,7 @@ export default function TableForm({
               onChange={(e) => setRate(e.target.value)}
             />
           </div>
-          <div className="flex flex-col relative">
+          <div className="flex flex-col relative mt-5 md:mt-0">
             <label
               htmlFor="amount"
               className="text-sm px-1 mb-1 absolute -top-[10px] left-2"

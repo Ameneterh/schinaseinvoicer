@@ -63,7 +63,7 @@ const invoiceSchema = new mongoose.Schema(
     invoiceNumber: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
 
     invoiceType: {
@@ -145,6 +145,17 @@ const invoiceSchema = new mongoose.Schema(
     },
   },
   { timestamps: true },
+);
+
+// ADD INDEXES HERE
+invoiceSchema.index(
+  {
+    company: 1,
+    invoiceNumber: 1,
+  },
+  {
+    unique: true,
+  },
 );
 
 const Invoice = mongoose.model("Invoice", invoiceSchema);

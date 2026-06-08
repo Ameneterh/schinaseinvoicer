@@ -17,29 +17,26 @@ export const useInvoiceStore = create((set) => ({
   //   add new invoice
   createInvoice: async ({
     validity,
-    invoiceNumber,
+    // invoiceNumber,
     items,
     total,
     invoiceType,
-    createdBy,
     client,
   }) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post(`${API_URL}/invoice/create-invoice`, {
         validity,
-        invoiceNumber,
+        // invoiceNumber,
         items,
         total,
         invoiceType,
-        createdBy,
         client,
       });
       set({
-        // invoice: response.data.invoice,
-        // isAuthenticated: true,
         isLoading: false,
       });
+      return response.data;
     } catch (error) {
       set({
         error: error.response.data.message || "Error adding invoice",

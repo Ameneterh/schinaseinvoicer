@@ -73,7 +73,10 @@ export default function HandlerActivationPage() {
         <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
           Activate Your Account
         </h2>
-        <p className="text-center text-gray-300 mb-6">
+        <p className="text-sm font-bold w-full text-center text-yellow-500">
+          If the email is not in your inbox, check the spam folder
+        </p>
+        <p className="text-center text-gray-300 my-6">
           Enter the 6-digit code sent to your email address.
         </p>
 

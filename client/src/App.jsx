@@ -17,7 +17,6 @@ import LoginPage from "./pages/LoginPage";
 import AddHandler from "./pages/AddHandler";
 import RegisterBusiness from "./pages/RegisterBusiness";
 import PasswordResetPage from "./pages/PasswordResetPage";
-import EmailVerificationPage from "./pages/EmailVerificationPage";
 import HandlerActivationPage from "./pages/HandlerActivationPage";
 import toast, { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore.js";
