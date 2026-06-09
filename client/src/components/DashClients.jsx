@@ -148,7 +148,7 @@ export default function DashClients() {
                       }}
                       className="text-blue-900 text-sm hover:font-bold hover:underline underline-offset-2 capitalize"
                     >
-                      {client.staff.business.business_name}
+                      {client?.staff?.business?.business_name}
                     </button>
                   </td>
                 )}
