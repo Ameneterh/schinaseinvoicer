@@ -46,6 +46,12 @@ const businessSchema = new mongoose.Schema(
         "https://img.freepik.com/premium-vector/black-white-handshake-symbol-with-starburst-background_1294240-23568.jpg",
     },
 
+    website: {
+      type: String,
+      lowercase: true,
+      trim: true,
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -25,6 +25,7 @@ export const addUser = async (req, res) => {
     avatar,
     staff_signature,
     business_logo,
+    website,
     business_name,
     business_email,
     business_phone,
@@ -88,6 +89,7 @@ export const addUser = async (req, res) => {
       // save new business
       const business = await Business.create({
         business_logo,
+        website,
         business_name,
         business_email,
         business_phone,

@@ -59,6 +59,7 @@ export default function RegisterBusiness() {
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("");
 
+  const [website, setWebsite] = useState("");
   const [business_name, setName] = useState("");
   const [business_email, setEmail] = useState("");
   const [business_phone, setPhone] = useState("");
@@ -286,6 +287,7 @@ export default function RegisterBusiness() {
         account_name,
         account_number,
         business_logo: addedLogo?.image,
+        website,
       });
       navigate("/verify-email");
     } catch (error) {
@@ -589,9 +591,6 @@ export default function RegisterBusiness() {
                   value={business_email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-              </div>
-
-              <div className="flex flex-col lg:flex-row gap-4">
                 <Input
                   icon={Lock}
                   type="text"
@@ -600,6 +599,9 @@ export default function RegisterBusiness() {
                   value={business_phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
+              </div>
+
+              <div className="flex flex-col lg:flex-row gap-4">
                 <Input
                   icon={MapPinHouse}
                   type="text"
@@ -607,6 +609,14 @@ export default function RegisterBusiness() {
                   label="Business Address"
                   value={business_address}
                   onChange={(e) => setAddress(e.target.value)}
+                />
+                <Input
+                  icon={MapPinHouse}
+                  type="text"
+                  // placeholder="Business Address"
+                  label="Business Website (optional)"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
                 />
               </div>
 
