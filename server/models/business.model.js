@@ -69,7 +69,7 @@ const businessSchema = new mongoose.Schema(
 
     maxHandlers: {
       type: Number,
-      default: 1,
+      default: 0,
     },
 
     status: {

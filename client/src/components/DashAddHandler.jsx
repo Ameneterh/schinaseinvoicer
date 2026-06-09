@@ -53,7 +53,7 @@ export default function DashAddHandler() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState("handler");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [business, setBusiness] = useState("");
 
   const [businesses, setBusinesses] = useState([]);
@@ -200,7 +200,6 @@ export default function DashAddHandler() {
         fullname,
         email,
         phoneNumber,
-        password,
         role,
         avatar: addedAvatar?.image,
         staff_signature: addedSignature?.image,
@@ -298,7 +297,7 @@ export default function DashAddHandler() {
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
 
-                <div className="relative flex items-center w-full">
+                {/* <div className="relative flex items-center w-full">
                   <Input
                     icon={Lock}
                     type={showPassword ? "text" : "password"}
@@ -317,7 +316,7 @@ export default function DashAddHandler() {
                       <Eye className="size-5 text-green-500" />
                     )}
                   </div>
-                </div>
+                </div> */}
                 <div className="p-3 w-full bg-sky-50 text-sm text-center mt-2 rounded-md">
                   <p>
                     By clicking on <b>Add Handler</b>, you indicate your
@@ -469,7 +468,7 @@ export default function DashAddHandler() {
                 </div>
 
                 {/* password strength meter */}
-                <PasswordStrengthMeter password={password} />
+                {/* <PasswordStrengthMeter password={password} /> */}
               </div>
             </div>
 

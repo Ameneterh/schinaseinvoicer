@@ -1,7 +1,14 @@
 import { motion } from "framer-motion";
 import schinaseLogo from "../../assets/InvoiceCore_logoName.png";
-import aboutcontent from "./aboutcontent.json";
 import { Link } from "react-router-dom";
+import { company_info } from "../../assets/company_info";
+import {
+  MdLocationOn,
+  MdOutlineMarkEmailRead,
+  MdOutlinePhoneInTalk,
+  MdWhatsapp,
+} from "react-icons/md";
+import { GiClockwork } from "react-icons/gi";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -60,22 +67,72 @@ export default function AboutUsComponent() {
           className="font-extralight md:mb-6"
         >
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {aboutcontent.map((content) => (
-              <div
-                key={content.id}
-                className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700 flex flex-col gap-2"
-              >
-                <img
-                  src={content.logo}
-                  alt={content.title}
-                  className="w-10 h-10 rounded-full"
-                />
-                <h3 className="font-extrabold text-gray-800">
-                  {content.title}
-                </h3>
-                <p className="text-sm">{content.text}</p>
-              </div>
-            ))}
+            {/* address field */}
+            <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700 flex flex-col gap-2">
+              <h3 className="flex items-center gap-1 font-extrabold text-gray-800">
+                <MdLocationOn size={40} className="text-red-600" />
+                Business Address:
+              </h3>
+              <span className="">{company_info.address}</span>
+            </div>
+
+            {/* contact phones */}
+            <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700 flex flex-col gap-2">
+              <h3 className="flex items-center gap-1 font-extrabold text-gray-800">
+                <MdOutlinePhoneInTalk size={40} className="text-red-600" />
+                Business Contacts:
+              </h3>
+              <p className="flex flex-col items-start">
+                <span className="flex items-center gap-1">
+                  <MdOutlinePhoneInTalk size={16} />
+                  <a
+                    href={`tel:${company_info.call_number}`}
+                    className="hover:scale-105 hover:underline underline-offset-2"
+                  >
+                    {company_info.call_number}
+                  </a>
+                </span>
+                <span className="flex items-center gap-1">
+                  <MdWhatsapp size={16} />
+                  <a
+                    href={`https://wa.me/${company_info.call_number}`}
+                    target="_blank"
+                    className="hover:scale-105 hover:underline underline-offset-2"
+                  >
+                    {company_info.whatsapp_number}
+                  </a>
+                </span>
+              </p>
+            </div>
+
+            {/* email field */}
+            <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700 flex flex-col gap-2">
+              <h3 className="flex items-center gap-1 font-extrabold text-gray-800">
+                <MdOutlineMarkEmailRead size={40} className="text-red-600" />
+                Business Emails:
+              </h3>
+              <span className="flex items-center w-full gap-2">
+                <MdOutlineMarkEmailRead size={18} />
+                <Link
+                  to={`mailto:${company_info.email}`}
+                  className="hover:underline underline-offset-2 hover:scale-105"
+                >
+                  {company_info.email}
+                </Link>
+              </span>
+            </div>
+
+            {/* contact times */}
+            <div className="p-4 rounded-lg border border-gray-100 bg-slate-50/70 text-gray-700 flex flex-col gap-2">
+              <h3 className="flex items-center gap-1 font-extrabold text-gray-800">
+                <GiClockwork size={40} className="text-red-600" />
+                Contact Times:
+              </h3>
+              <p className="flex flex-col">
+                <span className="">{company_info.contact_days}</span>
+                <span className="-mt-1">{company_info.contact_times}</span>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>

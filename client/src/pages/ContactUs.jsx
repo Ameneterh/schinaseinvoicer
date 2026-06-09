@@ -1,17 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import { motion } from "framer-motion";
-import { FaUserInjured } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaLinkedin,
+  FaTwitter,
+  FaUserInjured,
+} from "react-icons/fa";
 import {
   MdOutlineMarkEmailRead,
   MdOutlineDriveFileRenameOutline,
   MdOutlinePhoneInTalk,
   MdOutlineMessage,
+  MdWhatsapp,
 } from "react-icons/md";
 import schBadge from "../assets/InvoiceCore_logoName.png";
 import { useState } from "react";
 import { useContactStore } from "../store/contactStore";
 import { useAuthStore } from "../store/authStore";
+import { company_info } from "../assets/company_info";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -65,9 +72,9 @@ export default function ContactUs() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex-1"
+          className="flex-1 w-full"
         >
-          <h1 className="text-xl md:text-3xl font-bold border-l-[6px] border-l-orange-600 pl-3 mb-6 leading-[10px]">
+          <h1 className="text-xl md:text-3xl font-bold border-l-[6px] border-l-orange-600 pl-3 mb-6 md:leading-[20px]">
             Get in touch <br />
             <span className="md:text-5xl">with us</span>
           </h1>
@@ -77,14 +84,14 @@ export default function ContactUs() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex-1 flex flex-col lg:flex-row"
+          className="flex-1 flex flex-col items-center lg:flex-row w-full"
         >
           {/* left hand side */}
           <motion.div
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="flex-1 flex flex-col items-center text-center mt-8 lg:mt-20"
+            className="flex-1 flex flex-col items-center justify-center text-center mt-8 w-full mb-8"
           >
             <div
               className="h-20 w-64 bg-cover bg-center bg-no-repeat text-black mb-5 bg-blue-950 p-2 rounded-md"
@@ -94,22 +101,62 @@ export default function ContactUs() {
             ></div>
             <div className="flex flex-col gap-0">
               <h1 className="text-4xl font-extrabold text-orange-700 -mb-1">
-                Schinase Tech Hubb
+                {company_info.name}
               </h1>
-              <p className="text-sm">
-                Km 8, Afe Babalola Way, Erifun, Ado-Ekiti, Ekiti State, Nigeria.
-              </p>
+              <p className="text-sm">{company_info.address}</p>
             </div>
             <div className="flex flex-col">
               <p className="flex items-center gap-3 text-sm">
-                <span>08154230654</span> <span>09038007503</span>
+                <span className="flex items-center gap-1">
+                  <MdOutlinePhoneInTalk size={18} />
+                  <a
+                    href={`tel:${company_info.call_number}`}
+                    className="hover:scale-105 hover:underline hover:text-blue-800 underline-offset-2"
+                  >
+                    {company_info.call_number}
+                  </a>
+                </span>{" "}
+                <span className="flex items-center gap-1">
+                  <MdWhatsapp size={18} />
+                  <a
+                    href={`https://wa.me/${company_info.call_number}`}
+                    target="_blank"
+                    className="hover:scale-105 hover:underline hover:text-blue-800 underline-offset-2"
+                  >
+                    {company_info.whatsapp_number}
+                  </a>
+                </span>
               </p>
-              <Link
-                to="mailto:schinase.industries@gmail.com"
-                className="text-blue-700 hover:underline underline-offset-2"
-              >
-                schinase.industries@gmail.com
-              </Link>
+              <div className="flex items-center justify-center gap-1 w-full">
+                <MdOutlineMarkEmailRead size={18} />
+                <Link
+                  to={`mailto:${company_info.email}`}
+                  className="hover:scale-105 hover:text-blue-800 hover:underline underline-offset-2"
+                >
+                  {company_info.email}
+                </Link>
+              </div>
+              <p className="flex items-center justify-center gap-2">
+                <span className="text-orange-600">Follow us:</span>
+                <Link
+                  to={`${company_info.twitter}`}
+                  className="hover:underline hover:font-semibold underline-offset-2"
+                >
+                  <FaTwitter size={20} className="hover:text-blue-700" />
+                </Link>
+                <Link
+                  to={`${company_info.facebook}`}
+                  className="hover:underline hover:font-semibold underline-offset-2"
+                >
+                  <FaFacebook size={20} className="hover:text-blue-700" />
+                </Link>
+                <Link
+                  to={`${company_info.linkedin}`}
+                  className="hover:underline hover:font-semibold underline-offset-2"
+                >
+                  <FaLinkedin size={20} className="hover:text-blue-700" />
+                </Link>
+              </p>
             </div>
           </motion.div>
 
@@ -118,11 +165,11 @@ export default function ContactUs() {
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="flex-1 flex flex-col lg:flex-row"
+            className="flex-1 flex flex-col lg:flex-row w-full"
           >
             <form
               onSubmit={handleSubmit}
-              className="w-full bg-white text-black rounded-sm lg:rounded-lg p-2 lg:p-4 flex flex-col"
+              className="w-full bg-white text-black rounded-md lg:rounded-lg p-2 lg:p-4 flex flex-col"
             >
               <p className="text-lg lg:text-2xl text-center font-bold mb-4">
                 Send us a direct message

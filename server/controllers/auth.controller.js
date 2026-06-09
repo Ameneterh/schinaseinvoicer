@@ -26,6 +26,7 @@ export const addUser = async (req, res) => {
     staff_signature,
     business_logo,
     website,
+    plan,
     business_name,
     business_email,
     business_phone,
@@ -48,10 +49,6 @@ export const addUser = async (req, res) => {
         .status(400)
         .json({ success: false, message: "User already exists" });
     }
-
-    // generate temporary password
-    // const tempPassword =
-    //   "Invoice@app" + Math.floor(100000 + Math.random() * 900000).toString();
 
     // hash password and generate verification token
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -86,6 +83,20 @@ export const addUser = async (req, res) => {
           .json({ success: false, message: "Business Already Exists!" });
       }
 
+      let invoiceLimit = "";
+      let maxHandlers = "";
+
+      if (plan === "trial") {
+        invoiceLimit = 5;
+        maxHandlers = 0;
+      } else if (plan === "basic") {
+        invoiceLimit = 50;
+        maxHandlers = 2;
+      } else {
+        invoiceLimit = 100;
+        maxHandlers = 10;
+      }
+
       // save new business
       const business = await Business.create({
         business_logo,
@@ -95,6 +106,9 @@ export const addUser = async (req, res) => {
         business_phone,
         business_address,
         banker,
+        plan,
+        invoiceLimit,
+        maxHandlers,
         account_name,
         account_number,
         owner: user._id,
@@ -168,7 +182,6 @@ export const addHandler = async (req, res) => {
     fullname,
     email,
     phoneNumber,
-    password,
     role,
     avatar,
     staff_signature,
@@ -177,7 +190,7 @@ export const addHandler = async (req, res) => {
 
   try {
     // check content from req.body
-    if (!fullname || !email || !phoneNumber || !password || !role) {
+    if (!fullname || !email || !phoneNumber || !role) {
       throw new Error("All fields are required!");
     }
 
@@ -207,8 +220,13 @@ export const addHandler = async (req, res) => {
         .json({ success: false, message: "User already exists" });
     }
 
+    // generate temporary password
+    const tempPassword =
+      "InvoiceCore@app" +
+      Math.floor(100000 + Math.random() * 900000).toString();
+
     // hash password and generate verification token
-    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const hashedPassword = bcryptjs.hashSync(tempPassword, 10);
 
     // generate verification token
     const verificationToken = Math.floor(
@@ -249,7 +267,7 @@ export const addHandler = async (req, res) => {
     await sendTemporaryHandlerCredentials({
       email: savedUser.email,
       fullname: savedUser.fullname,
-      password,
+      password: tempPassword,
       owner: savedUser.business.owner.fullname,
       business_name: savedUser.business.business_name,
     });

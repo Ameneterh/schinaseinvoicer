@@ -50,7 +50,7 @@ const fadeInUp = {
 export default function RegisterBusiness() {
   const navigate = useNavigate();
 
-  const [regPackage, setRegPackage] = useState("trial");
+  const [regPackage, setRegPackage] = useState("");
   const [fullname, setFullname] = useState("");
   const [email, setUserEmail] = useState("");
   const [phoneNumber, setUserPhone] = useState("");
@@ -321,34 +321,47 @@ export default function RegisterBusiness() {
               className="flex flex-col gap-3"
             >
               {/* account type */}
-              <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-start">
-                <div className="flex flex-col w-full md:w-1/2 relative mt-2">
-                  <label
-                    htmlFor="validity"
-                    className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-start">
+                  <div className="flex flex-col w-full md:w-1/2 relative mt-2">
+                    <label
+                      htmlFor="validity"
+                      className="text-sm mb-1 absolute -top-3 left-2 bg-white px-1"
+                    >
+                      Select your preferred Account Type
+                    </label>
+                    <select
+                      onChange={(e) => setRegPackage(e.target.value)}
+                      className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                    >
+                      <option value="" disabled>
+                        Select your preferred account type
+                      </option>
+                      <option value="trial">Free Trial</option>
+                      <option value="basic">Basic Package</option>
+                      {/* <option value="premium">Premium Package</option> */}
+                    </select>
+                  </div>
+
+                  <HashLink
+                    smooth
+                    to="/#account-types"
+                    className="bg-blue-900 px-4 py-2 hover:opacity-85 text-white rounded font-medium text-nowrap"
                   >
-                    Select your preferred Account Type
-                  </label>
-                  <select
-                    onChange={(e) => setRegPackage(e.target.value)}
-                    className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
-                  >
-                    <option value="" disabled>
-                      Select your preferred account type
-                    </option>
-                    <option value="trial">Free Trial</option>
-                    <option value="basic">Basic Package</option>
-                    {/* <option value="premium">Premium Package</option> */}
-                  </select>
+                    Review account types Here
+                  </HashLink>
                 </div>
 
-                <HashLink
-                  smooth
-                  to="/#account-types"
-                  className="bg-blue-900 px-4 py-2 hover:opacity-85 text-white rounded font-medium text-nowrap"
-                >
-                  Review account types Here
-                </HashLink>
+                {regPackage !== "trial" && (
+                  <p className="text-red-500 text-center font-bold bg-slate-100 rounded w-full p-2">
+                    NOTE:{" "}
+                    <span className="font-normal">
+                      If payment is not received 7 days following account
+                      creation, the account will be automatically downgraded to
+                      trial plan
+                    </span>
+                  </p>
+                )}
               </div>
 
               {/* business owner details */}

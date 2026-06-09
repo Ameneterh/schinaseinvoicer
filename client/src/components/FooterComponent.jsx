@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import logoImage from "../assets/InvoiceCore_logo.png";
 import { FaTwitter, FaFacebook, FaLinkedin } from "react-icons/fa";
-import { MdAddCall, MdAlternateEmail, MdLocationOn } from "react-icons/md";
+import {
+  MdAddCall,
+  MdAlternateEmail,
+  MdLocationOn,
+  MdOutlineMarkEmailRead,
+  MdOutlinePhoneInTalk,
+  MdWhatsapp,
+} from "react-icons/md";
+import { company_info } from "../assets/company_info";
 
 export default function FooterComponent() {
   return (
@@ -50,19 +58,19 @@ export default function FooterComponent() {
               <p className="flex items-center gap-2">
                 <span className="text-orange-600">Follow us:</span>
                 <Link
-                  to="/twitter"
+                  to={`${company_info.twitter}`}
                   className="hover:underline hover:font-semibold underline-offset-2"
                 >
                   <FaTwitter size={20} className="hover:text-blue-700" />
                 </Link>
                 <Link
-                  to="/facebook"
+                  to={`${company_info.facebook}`}
                   className="hover:underline hover:font-semibold underline-offset-2"
                 >
                   <FaFacebook size={20} className="hover:text-blue-700" />
                 </Link>
                 <Link
-                  to="/linkedin"
+                  to={`${company_info.linkedin}`}
                   className="hover:underline hover:font-semibold underline-offset-2"
                 >
                   <FaLinkedin size={20} className="hover:text-blue-700" />
@@ -77,22 +85,42 @@ export default function FooterComponent() {
           <h3 className="text-orange-700 font-bold">Contact Us:</h3>
           <ul className="text-sm list-none -ml-5">
             <li className="flex gap-2 items-center">
-              <MdAddCall size={16} className="" />
               <div className="flex items-start gap-1 w-full">
-                <span>08154230654.</span> <span>08100000000.</span>
+                <p className="flex items-center gap-3 text-sm">
+                  <span className="flex items-center gap-1">
+                    <MdOutlinePhoneInTalk size={16} />
+                    <a
+                      href={`tel:${company_info.call_number}`}
+                      className="hover:scale-105 hover:underline underline-offset-2"
+                    >
+                      {company_info.call_number}
+                    </a>
+                  </span>{" "}
+                  <span className="flex items-center gap-1">
+                    <MdWhatsapp size={16} />
+                    <a
+                      href={`https://wa.me/${company_info.call_number}`}
+                      target="_blank"
+                      className="hover:scale-105 hover:underline underline-offset-2"
+                    >
+                      {company_info.whatsapp_number}
+                    </a>
+                  </span>
+                </p>
               </div>
             </li>
-            <li className="mt-2 flex gap-2 items-center">
-              <MdAlternateEmail size={16} />
-              <Link to="mailto:schinase.industries@gmail.com">
-                schinase.industries@gmail.com
+            <li className="flex items-center w-full mt-2 gap-2">
+              <MdOutlineMarkEmailRead size={18} />
+              <Link
+                to={`mailto:${company_info.email}`}
+                className="hover:underline underline-offset-2 hover:scale-105"
+              >
+                {company_info.email}
               </Link>
             </li>
             <li className="mt-2 flex gap-2 items-start">
               <MdLocationOn size={16} />
-              <span className="line-clamp-1">
-                Km 8, Afe Babalola Way, Erifun, Ado-Ekiti, Ekiti State, Nigeria.
-              </span>
+              <span className="line-clamp-1">{company_info.address}</span>
             </li>
           </ul>
         </div>

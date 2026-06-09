@@ -86,7 +86,7 @@ export default function CustomerFeedbackComponent({ ratings }) {
               </div>
               <p className="h-[1px] bg-gray-400 w-full my-2"></p>
               <p
-                className="text-left text-xs line-clamp-6 cursor-pointer"
+                className="text-left text-xs line-clamp-4 cursor-pointer"
                 onClick={() => handleReadMessage(rating)}
               >
                 {rating.comment}
