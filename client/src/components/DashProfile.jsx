@@ -223,7 +223,7 @@ export default function DashProfile() {
             id="fullname"
             label="User Full Name"
             placeholder="fullname"
-            defaultValue={user.fullname}
+            defaultValue={user?.fullname}
             onChange={(e) =>
               setFormData({ ...formData, fullname: e.target.value })
             }
@@ -236,7 +236,7 @@ export default function DashProfile() {
             label="* User Affiliation"
             color="red"
             placeholder="Business Affiliation"
-            defaultValue={user.business.business_name}
+            defaultValue={user?.business?.business_name}
             disabled
           />
           <Input
