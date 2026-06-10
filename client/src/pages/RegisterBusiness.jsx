@@ -25,7 +25,7 @@ import {
 import { app } from "../firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 
@@ -50,7 +50,7 @@ const fadeInUp = {
 export default function RegisterBusiness() {
   const navigate = useNavigate();
 
-  const [regPackage, setRegPackage] = useState("");
+  const [regPackage, setRegPackage] = useState("trial");
   const [fullname, setFullname] = useState("");
   const [email, setUserEmail] = useState("");
   const [phoneNumber, setUserPhone] = useState("");
@@ -85,6 +85,8 @@ export default function RegisterBusiness() {
 
   const [signatureUploadProgress, setSignatureUploadProgress] = useState(null);
   const [signatureUploadError, setSignatureUploadError] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
 
   const { addUser, error, isLoading } = useAuthStore();
 
@@ -289,12 +291,19 @@ export default function RegisterBusiness() {
         business_logo: addedLogo?.image,
         website,
       });
+      toast.success("Business Registered Successfully");
       navigate("/verify-email");
     } catch (error) {
       console.log(error);
       toast.error("Failed to register business owner.");
     }
   };
+
+  useEffect(() => {
+    if (regPackage !== "trial") {
+      setShowModal(true);
+    }
+  }, [regPackage]);
 
   return (
     <MainLayout>
@@ -782,6 +791,33 @@ export default function RegisterBusiness() {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* modal pop up */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-96">
+            <h2 className="text-lg md:text-xl mb-2 font-bold text-center text-red-600">
+              Notification
+            </h2>
+            <p className="text-center">
+              Note that registration with <b>{regPackage.toUpperCase()} Plan</b>{" "}
+              will require payment.
+            </p>
+
+            <div className="flex mt-2 rounded">
+              {/* buttons */}
+              <div className="flex justify-center items-center gap-2 mt-4 w-full">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-500 text-white px-4 rounded py-2"
+                >
+                  Understood
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </MainLayout>
   );
 }
