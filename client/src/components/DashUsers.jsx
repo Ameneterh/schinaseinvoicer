@@ -44,7 +44,7 @@ export default function DashUsers() {
     }
   }, [user._id]);
 
-  // console.log(users);
+  console.log(users);
 
   // useEffect(() => {
   //   const fetchUsers = async () => {
@@ -129,27 +129,29 @@ export default function DashUsers() {
             </tr>
           </thead>
           <tbody className="">
-            {users.map((user) => (
+            {users.map((pickedUser) => (
               <tr key={user._id} className="">
                 <td className="px-4 py-1 text-sm text-nowrap">
-                  {user.fullname}
+                  {pickedUser.fullname}
                 </td>
                 {user.role === "architect" && (
                   <td className="px-4 py-1 text-sm text-nowrap">
-                    {user.business.business_name}
+                    {pickedUser?.business?.business_name}
                   </td>
                 )}
-                <td className="px-4 py-1 text-sm text-nowrap">{user.email}</td>
                 <td className="px-4 py-1 text-sm text-nowrap">
-                  {user.phoneNumber}
+                  {pickedUser.email}
+                </td>
+                <td className="px-4 py-1 text-sm text-nowrap">
+                  {pickedUser.phoneNumber}
                 </td>
                 <td className="px-4 py-1 text-sm text-nowrap capitalize">
-                  {user.role}
+                  {pickedUser.role}
                 </td>
                 <td className="px-4 py-1 text-sm text-nowrap">
                   <button
                     onClick={() => {
-                      setUserIdToDelete(user._id);
+                      setUserIdToDelete(pickedUser._id);
                       setShowModal(true);
                     }}
                   >

@@ -117,8 +117,6 @@ export default function DashInvoices() {
     .filter((invoice) => {
       const search = searchTerm.toLowerCase();
 
-      console.log(invoice);
-
       const matchesSearch =
         invoice.invoiceNumber?.toLowerCase().includes(search) ||
         invoice.client?.client_name?.toLowerCase().includes(search) ||
@@ -236,7 +234,7 @@ export default function DashInvoices() {
                 {selectedInvoices.map((invoice) => (
                   <tr key={invoice._id} className="text-xs">
                     <td
-                      className="px-4 py-1 text-nowrap"
+                      className="px-4 py-1 line-clamp-1"
                       title={new Date(invoice.invDate).toLocaleString("en-US", {
                         year: "numeric",
                         month: "short",

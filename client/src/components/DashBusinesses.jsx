@@ -119,20 +119,39 @@ export default function DashBusinesses() {
             <thead className=" bg-gray-500">
               <tr className="border-b-[2px] border-b-black text-sm">
                 <th className="text-left px-4 py-1 text-nowrap">Status</th>
+                <th className="text-left px-4 py-1 text-nowrap">Package</th>
                 <th className="text-left px-4 py-1 text-nowrap">
                   Business Details
                 </th>
                 <th className="text-left px-4 py-1 text-nowrap">
                   Business Owner Details
                 </th>
-                <th className="px-4 py-1">Actions</th>
               </tr>
             </thead>
             <tbody>
               {businesses.map((business) => (
                 <tr key={business._id} className="border-b border-b-gray-600">
+                  <td className="px-4 py-1">
+                    <span className="text-sm capitalize text-nowrap mr-1 border-r-2 border-gray-950 pr-2">
+                      {business.status}
+                    </span>
+                    <select className="bg-transparent text-xs border-none focus:border-none focus:outline-none">
+                      <option>Update Status</option>
+                      <option>Active</option>
+                      <option>Suspended</option>
+                      <option>Banned</option>
+                    </select>
+                  </td>
                   <td className="px-4 py-1 text-sm capitalize text-nowrap">
-                    {business.status}
+                    <span className="text-sm capitalize text-nowrap mr-1 border-r-2 border-gray-950 pr-2">
+                      {business.plan}
+                    </span>
+                    <select className="bg-transparent text-xs border-none focus:border-none focus:outline-none">
+                      <option>Update Plan</option>
+                      <option>Trial</option>
+                      <option>Basic</option>
+                      <option>Premium</option>
+                    </select>
                   </td>
                   <td className="px-4 py-1 text-sm text-nowrap flex flex-col">
                     <p className="font-bold">{business.business_name}</p>
@@ -168,15 +187,6 @@ export default function DashBusinesses() {
                         {business.owner.phoneNumber}
                       </Link>
                     </p>
-                  </td>
-
-                  <td className="px-4 py-1 text-sm text-nowrap">
-                    <select className="bg-transparent">
-                      <option>Update Status</option>
-                      <option>Active</option>
-                      <option>Suspended</option>
-                      <option>Banned</option>
-                    </select>
                   </td>
                 </tr>
               ))}
