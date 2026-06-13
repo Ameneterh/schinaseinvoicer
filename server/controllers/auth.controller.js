@@ -306,7 +306,7 @@ export const updateUser = async (req, res) => {
       "phoneNumber",
       "avatar",
       "isDeleted",
-      "isActive",
+      "status",
     ];
 
     for (const field of allowedFields) {
@@ -443,7 +443,8 @@ export const updatePassword = async (req, res) => {
 
 // user login
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
+  const email = req.body.email.toLowerCase().trim();
   try {
     const user = await User.findOne({ email }).populate("business");
 
@@ -453,13 +454,7 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Invalid User Email!" });
     }
 
-    if (!user.isActive) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User not activated, contact HR" });
-    }
-
-    const isValidPassword = bcryptjs.compareSync(password, user.password);
+    const isValidPassword = await bcryptjs.compare(password, user.password);
     if (!isValidPassword) {
       return res.status(400).json({
         success: false,
@@ -467,10 +462,52 @@ export const login = async (req, res) => {
       });
     }
 
+    if (user.status === "suspended") {
+      return res.status(400).json({
+        success: false,
+        message: "Your account has been suspended! Contact Schinase Tech Team.",
+      });
+    }
+
+    if (user.status === "banned") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Your account has been blacklisted! Contact Schinase Tech Team.",
+      });
+    }
+
+    if (user.isDeleted) {
+      return res
+        .status(400)
+        .json({ success: false, message: "You have no active account!" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "Please, verify your account before you login",
+      });
+    }
+
     generateTokenAndSetCookie(res, user._id);
 
-    user.lastLogin = new Date();
-    await user.save();
+    await User.findByIdAndUpdate(user._id, {
+      lastLogin: new Date(),
+    });
+
+    // user.lastLogin = new Date();
+    // await user.save();
+
+    // const safeUser = {
+    //   _id:user._id,
+    //   fullname:user.fullname,
+    //   email:user.email,
+    //   role:user.role,
+    //   business:user.business,
+    //   avatar:user.avatar,
+    //   lastLogin:new Date()
+    // };
 
     res.status(200).json({
       success: true,

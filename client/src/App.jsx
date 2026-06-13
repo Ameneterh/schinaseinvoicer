@@ -37,18 +37,24 @@ import AdmissionEnquiry from "./pages/AdmissionEquiry.jsx";
 import PrivacyAndTerms from "./pages/PrivacyTerms.jsx";
 import { useBusinessStore } from "./store/businessStore.js";
 import PrintPDF from "./pages/PrintPDF.jsx";
+import { useLocation } from "react-router-dom";
 
 // protected routes
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, justLoggedOut, setJustLoggedOut } =
+    useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated && !justLoggedOut) {
+      toast.error("You need to log in to access this page");
+    }
+  }, [isAuthenticated, justLoggedOut, setJustLoggedOut]);
 
   if (!isAuthenticated) {
-    toast.error("You need to log in to access this page");
     return <Navigate to="/user-login" replace />;
   }
 
-  if (!user.isActive) {
-    toast.error("Your account is not active, contact Support!");
+  if (user?.status !== "active") {
     return <Navigate to="/verify-handler" replace />;
   }
 
@@ -59,9 +65,10 @@ const ProtectedRoute = ({ children }) => {
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
-  if (isAuthenticated && user.isActive) {
+  if (isAuthenticated && user?.status === "active") {
     return <Navigate to="/user-dashboard?tab=dash" replace />;
   }
+
   return children;
 };
 
@@ -106,7 +113,7 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated && user?.isActive ? (
+            isAuthenticated && user?.status === "active" ? (
               <Navigate to="/user-dashboard?tab=dash" replace />
             ) : (
               <HomePage />
@@ -116,7 +123,7 @@ function App() {
         <Route
           path="/about"
           element={
-            isAuthenticated && user?.isActive ? (
+            isAuthenticated && user?.status === "active" ? (
               <Navigate to="/user-dashboard?tab=dash" replace />
             ) : (
               <AboutUs />

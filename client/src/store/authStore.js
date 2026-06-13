@@ -16,6 +16,7 @@ export const useAuthStore = create((set) => ({
   isLoading: false,
   isCheckingAuth: true,
   message: null,
+  justLoggedOut: false,
 
   //   add new new user account
   addUser: async ({
@@ -216,6 +217,7 @@ export const useAuthStore = create((set) => ({
         isAuthenticated: false,
         error: null,
         isLoading: false,
+        justLoggedOut: true,
       });
     } catch (error) {
       set({ error: "Error logging out", isLoading: false });
@@ -318,11 +320,11 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       set({ isLoading: false });
 
-      // throw (
-      //   error.response?.data || {
-      //     message: "Failed to update user",
-      //   }
-      // );
+      throw (
+        error.response?.data || {
+          message: "Failed to update user",
+        }
+      );
     }
   },
 

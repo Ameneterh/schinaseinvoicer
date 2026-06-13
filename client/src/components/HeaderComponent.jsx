@@ -71,11 +71,10 @@ export default function HeaderComponent({ business }) {
   const confirmLogout = () => {
     try {
       logout();
-      setShowModal(false);
+      navigate("/");
+      // setShowModal(false);
     } catch (error) {
       console.log("Error logging out!");
-    } finally {
-      navigate("/");
     }
   };
 
