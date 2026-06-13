@@ -38,7 +38,6 @@ export const useContactStore = create((set) => ({
     }
   },
 
-  // general users actions: get all users, get one user, update user, delete user
   // 1. get all messages
   getAllMessages: async () => {
     set({ isLoading: true, error: null });
@@ -52,6 +51,31 @@ export const useContactStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response.data.message || "Error getting Messages",
+        isLoading: false,
+      });
+      throw error;
+    }
+  },
+
+  //   read a message
+  readMessage: async ({ status, readBy, messageId }) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.put(`${API_URL}/read-message`, {
+        status,
+        readBy,
+        messageId,
+      });
+      set({
+        // contact: response.data.contact,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message ||
+          error.message ||
+          "Error reading message",
         isLoading: false,
       });
       throw error;

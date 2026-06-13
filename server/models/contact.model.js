@@ -29,6 +29,11 @@ const contactSchema = new mongoose.Schema(
       enum: ["unread", "read", "deleted"],
       default: "unread",
     },
+
+    readBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true },
 );

@@ -81,6 +81,44 @@ export const getMessages = async (req, res) => {
   }
 };
 
+export const readMessage = async (req, res) => {
+  const { status, readBy, messageId } = req.body;
+
+  try {
+    const message = await Contact.findById(messageId);
+
+    if (!message) {
+      return res.status(404).json({
+        success: false,
+        message: "Message not found",
+      });
+    }
+
+    const updatedMessage = await Contact.findByIdAndUpdate(
+      messageId,
+      { $set: { status, readBy } },
+      {
+        new: true,
+        // runValidators: true,
+      },
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Message read successfully",
+      // message: message,
+    });
+  } catch (error) {
+    console.error("Message Read Error:", error);
+    console.error(error.stack);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to read message",
+    });
+  }
+};
+
 // get one invoice
 export const getInvoice = async (req, res) => {
   const invoiceId = req.params.invoiceId;

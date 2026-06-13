@@ -112,6 +112,7 @@ export default function DashClients() {
         client?.client_name?.toLowerCase().includes(search) ||
         client?.staff?.business?.business_name
           ?.toLowerCase()
+
           .includes(search) ||
         new Date(client?.createdAt)
           .toLocaleDateString("en-GB")
@@ -165,6 +166,7 @@ export default function DashClients() {
         />
       )}
       <div className="flex flex-col gap-5 w-full">
+        <h1 className="text-xl font-extrabold">List of Clients:</h1>
         <div className="flex gap-5 items-center">
           {!showFilters && (
             <div

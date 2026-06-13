@@ -37,23 +37,24 @@ export default function DashInvoices() {
 
   const [selectedInvoice, setSelectedInvoice] = useState(null);
 
-  useEffect(() => {
-    const getInvoices = async () => {
-      try {
-        const { invoices } = await getAllInvoices();
+  const getInvoices = async () => {
+    try {
+      const { invoices } = await getAllInvoices();
 
-        if (user.role === "architect") {
-          setInvoices(invoices);
-        } else {
-          const filteredInvoice = invoices.filter(
-            (invoice) => user.business._id === invoice.company._id,
-          );
-          setInvoices(filteredInvoice);
-        }
-      } catch (error) {
-        console.log(error);
+      if (user.role === "architect") {
+        setInvoices(invoices);
+      } else {
+        const filteredInvoice = invoices.filter(
+          (invoice) => user.business._id === invoice.company._id,
+        );
+        setInvoices(filteredInvoice);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     if (
       user.role === "architect" ||
       user.role === "businessAdmin" ||
@@ -185,6 +186,7 @@ export default function DashInvoices() {
         />
       )}
       <div className="flex flex-col gap-5 w-full">
+        <h1 className="text-xl font-extrabold">List of Invoices:</h1>
         <div className="flex gap-5 items-center">
           {!showFilters && (
             <div
@@ -409,6 +411,7 @@ export default function DashInvoices() {
           invoice={selectedInvoice}
           showModal={showModal}
           setShowModal={setShowModal}
+          getInvoices={getInvoices}
         />
       )}
     </div>

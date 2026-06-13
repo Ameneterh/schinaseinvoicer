@@ -9,6 +9,7 @@ export default function DashInvoicePayUpdate({
   invoice,
   showModal,
   setShowModal,
+  getInvoices,
 }) {
   const { user } = useAuthStore();
   const { updateInvoicePayment, getAllInvoices } = useInvoiceStore();
@@ -19,26 +20,26 @@ export default function DashInvoicePayUpdate({
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
 
-  const getInvoices = async () => {
-    try {
-      const { invoices } = await getAllInvoices();
+  // const getInvoices = async () => {
+  //   try {
+  //     const { invoices } = await getAllInvoices();
 
-      if (user.role === "architect") {
-        setInvoices(invoices);
-      } else {
-        const filteredInvoice = invoices.filter(
-          (invoice) => user.business._id === invoice.company._id,
-        );
-        setInvoices(filteredInvoice);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (user.role === "architect") {
+  //       setInvoices(invoices);
+  //     } else {
+  //       const filteredInvoice = invoices.filter(
+  //         (invoice) => user.business._id === invoice.company._id,
+  //       );
+  //       setInvoices(filteredInvoice);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getInvoices();
-  }, [invoice.totalAmountReceived]);
+  // useEffect(() => {
+  //   getInvoices();
+  // }, [invoice.totalAmountReceived]);
 
   const formatNumber = (value) => {
     if (!value) return "";
@@ -75,6 +76,7 @@ export default function DashInvoicePayUpdate({
         paymentMethod,
         reference,
       );
+      getInvoices();
       toast.success("Invoice payment updated successfully");
     } catch (error) {
       toast.error(
