@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
@@ -31,7 +32,7 @@ const fadeInUp = {
 
 export default function DashBusinesses() {
   const { user } = useAuthStore();
-  const { getAllBusinesses } = useBusinessStore();
+  const { getAllBusinesses, updateBusiness } = useBusinessStore();
 
   // sorting and filtering states
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,34 +43,70 @@ export default function DashBusinesses() {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState(false);
 
+  const [formData, setFormData] = useState({});
+
   // others
   const [businesses, setBusinesses] = useState([]);
 
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [userIdToDelete, setUserIdToDelete] = useState("");
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   const [selectedBusiness, setSelectedBusiness] = useState(null);
 
-  console.log(businesses);
+  const getBusinesses = async () => {
+    try {
+      const { businesses } = await getAllBusinesses();
+      setBusinesses(businesses);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const getBusinesses = async () => {
-      try {
-        const { businesses } = await getAllBusinesses();
-        setBusinesses(businesses);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     if (user.role === "architect") {
       getBusinesses();
     }
   }, [user._id]);
 
-  const handleOpenPayUpdateModal = (invoice) => {
-    setSelectedInvoice(invoice);
+  const handleOpenModal = (businessToUpdate) => {
+    setSelectedBusiness(businessToUpdate);
     setShowModal(true);
+  };
+
+  const handleOpenPlanModal = (businessToUpdate) => {
+    setSelectedBusiness(businessToUpdate);
+    setShowPlanModal(true);
+  };
+
+  const handleUpdateBusinessStatus = async (e) => {
+    e.preventDefault();
+
+    if (Object.keys(formData).length === 0) {
+      // setUpdateUserError("No changes made!");
+      toast.error("No changes made!");
+      return;
+    }
+
+    try {
+      const changedFields = {};
+
+      if (formData.status !== selectedBusiness.status)
+        changedFields.status = formData.status;
+
+      if (formData.plan !== selectedBusiness.plan)
+        changedFields.plan = formData.plan;
+
+      await updateBusiness(selectedBusiness._id, changedFields);
+      setShowModal(false);
+      setShowPlanModal(false);
+
+      getBusinesses();
+      toast.success("Business status updated successfully!");
+    } catch (error) {
+      toast.error(error.message);
+      // setUpdateUserError(data.message);
+    }
   };
 
   const handleShowMore = async () => {
@@ -218,26 +255,20 @@ export default function DashBusinesses() {
                 {selectedBusinesses.map((business) => (
                   <tr key={business._id} className="border-b border-b-gray-600">
                     <td className="px-4 py-1">
-                      <span className="text-sm capitalize text-nowrap mr-1 border-r-2 border-gray-950 pr-2">
+                      <span
+                        className={`text-sm capitalize cursor-pointer ${business.status === "active" ? "text-green-800" : business.status === "suspended" ? "text-orange-600" : "text-red-600"}`}
+                        onClick={() => handleOpenModal(business)}
+                      >
                         {business.status}
                       </span>
-                      <select className="bg-transparent text-xs border-none focus:border-none focus:outline-none">
-                        <option>Update Status</option>
-                        <option>Active</option>
-                        <option>Suspended</option>
-                        <option>Banned</option>
-                      </select>
                     </td>
                     <td className="px-4 py-1 text-sm capitalize text-nowrap">
-                      <span className="text-sm capitalize text-nowrap mr-1 border-r-2 border-gray-950 pr-2">
+                      <span
+                        className={`text-sm capitalize cursor-pointer ${business.plan === "basic" ? "text-blue-900" : business.plan === "premium" ? "text-yellow-900" : "text-red-600"}`}
+                        onClick={() => handleOpenPlanModal(business)}
+                      >
                         {business.plan}
                       </span>
-                      <select className="bg-transparent text-xs border-none focus:border-none focus:outline-none">
-                        <option>Update Plan</option>
-                        <option>Trial</option>
-                        <option>Basic</option>
-                        <option>Premium</option>
-                      </select>
                     </td>
                     <td className="px-4 py-1 text-sm text-nowrap flex flex-col">
                       <p className="font-bold">{business.business_name}</p>
@@ -285,6 +316,176 @@ export default function DashBusinesses() {
           )}
         </motion.div>
       </div>
+
+      {/* modal to update user status */}
+      {showPlanModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-96">
+            <div className="flex flex-col p-2 rounded border text-sm">
+              <div className="flex flex-col pb-2 border-b-2">
+                <p className="capitalize font-bold text-lg text-center text-red-500">
+                  Update Business Plan
+                </p>
+              </div>
+
+              {/*  */}
+              <div className="flex mt-3 rounded">
+                <form
+                  onSubmit={handleUpdateBusinessStatus}
+                  className="w-full flex flex-col gap-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative px-2 py-1 h-[34px] border border-gray-950 rounded w-full mt-2">
+                      <p className="bg-white text-xs font-semibold absolute left-2 -top-2 px-1 text-nowrap">
+                        Current User Plan:
+                      </p>
+                      <p className="capitalize mt-1 w-full text-center text-green-900">
+                        {selectedBusiness.plan}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col w-full relative mt-2">
+                      <label
+                        htmlFor="validity"
+                        className="text-xs font-semibold absolute -top-2 left-2 bg-white px-1"
+                      >
+                        Choose New Plan
+                      </label>
+                      <select
+                        onChange={(e) =>
+                          setFormData({ ...formData, plan: e.target.value })
+                        }
+                        // onChange={(e) => setStatus(e.target.value)}
+                        className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                      >
+                        <option value="">Choose ...</option>
+                        <option
+                          value="trial"
+                          disabled={selectedBusiness.plan === "trial"}
+                        >
+                          Set Trial Plan
+                        </option>
+                        <option
+                          value="basic"
+                          disabled={selectedBusiness.plan === "basic"}
+                        >
+                          Set Basic Plan
+                        </option>
+                        <option
+                          value="premium"
+                          disabled={selectedBusiness.status === "premium"}
+                        >
+                          Set Premium Plan
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 mt-4">
+                    <button
+                      className="bg-red-700 text-white px-4 rounded py-1 text-xs hover:scale-105 transition-all duration-300 hover:bg-red-800"
+                      onClick={() => setShowPlanModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-blue-700 text-white px-4 rounded py-1 text-xs hover:scale-105 transition-all duration-300 hover:bg-blue-800"
+                    >
+                      Okay
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* modal to update user status */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-96">
+            <div className="flex flex-col p-2 rounded border text-sm">
+              <div className="flex flex-col pb-2 border-b-2">
+                <p className="capitalize font-bold text-lg text-center text-red-500">
+                  Update Business Status
+                </p>
+              </div>
+
+              {/*  */}
+              <div className="flex mt-3 rounded">
+                <form
+                  onSubmit={handleUpdateBusinessStatus}
+                  className="w-full flex flex-col gap-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative px-2 py-1 h-[34px] border border-gray-950 rounded w-full mt-2">
+                      <p className="bg-white text-xs font-semibold absolute left-2 -top-2 px-1 text-nowrap">
+                        Current User Status:
+                      </p>
+                      <p className="capitalize mt-1 w-full text-center text-green-900">
+                        {selectedBusiness.status}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col w-full relative mt-2">
+                      <label
+                        htmlFor="validity"
+                        className="text-xs font-semibold absolute -top-2 left-2 bg-white px-1"
+                      >
+                        Choose New Status
+                      </label>
+                      <select
+                        onChange={(e) =>
+                          setFormData({ ...formData, status: e.target.value })
+                        }
+                        // onChange={(e) => setStatus(e.target.value)}
+                        className="w-full pl-3 pr-3 py-[6px] bg-white rounded-lg border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-500 text-green-800 placeholder-green-800 transition duration-200"
+                      >
+                        <option value="">Choose ...</option>
+                        <option
+                          value="active"
+                          disabled={selectedBusiness.status === "active"}
+                        >
+                          Activate Business
+                        </option>
+                        <option
+                          value="suspended"
+                          disabled={selectedBusiness.status === "suspended"}
+                        >
+                          Suspend Business
+                        </option>
+                        <option
+                          value="banned"
+                          disabled={selectedBusiness.status === "banned"}
+                        >
+                          Blacklist Business
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 mt-4">
+                    <button
+                      className="bg-red-700 text-white px-4 rounded py-1 text-xs hover:scale-105 transition-all duration-300 hover:bg-red-800"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-blue-700 text-white px-4 rounded py-1 text-xs hover:scale-105 transition-all duration-300 hover:bg-blue-800"
+                    >
+                      Okay
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

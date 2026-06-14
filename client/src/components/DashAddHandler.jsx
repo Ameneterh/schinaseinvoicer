@@ -29,6 +29,7 @@ import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { useAuthStore } from "../store/authStore.js";
 import { useBusinessStore } from "../store/businessStore.js";
 import MainLayout from "../layout/MainLayout.jsx";
+import { PhoneField } from "../components/Input.jsx";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -288,35 +289,20 @@ export default function DashAddHandler() {
 
             <div className="flex flex-col items-start lg:flex-row gap-4">
               <div className="flex flex-col gap-3 w-full md:max-w-80">
-                <Input
+                {/* <Input
                   icon={Phone}
                   type={"text"}
                   // placeholder="Handler Phone Number"
                   label="Handler Phone Number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
+                /> */}
+                <PhoneField
+                  phoneNumber={phoneNumber}
+                  setUserPhone={setPhoneNumber}
+                  label="Handler Phone Number"
                 />
 
-                {/* <div className="relative flex items-center w-full">
-                  <Input
-                    icon={Lock}
-                    type={showPassword ? "text" : "password"}
-                    // placeholder="Enter Strong Password"
-                    label="Enter Strong Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <div
-                    className="absolute right-2 inset-y-0 cursor-pointer flex items-center mt-2"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="size-5 text-green-500" />
-                    ) : (
-                      <Eye className="size-5 text-green-500" />
-                    )}
-                  </div>
-                </div> */}
                 <div className="p-3 w-full bg-sky-50 text-sm text-center mt-2 rounded-md">
                   <p>
                     By clicking on <b>Add Handler</b>, you indicate your

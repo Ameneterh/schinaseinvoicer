@@ -33,6 +33,7 @@ import MainLayout from "../layout/MainLayout";
 import { useBusinessStore } from "../store/businessStore";
 import { useAuthStore } from "../store/authStore";
 // import { useBusinessStore } from "../store/businessStore";
+import { PhoneField } from "../components/Input.jsx";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -405,13 +406,19 @@ export default function RegisterBusiness() {
               </div>
 
               <div className="flex flex-col items-start lg:flex-row gap-4">
-                <Input
+                {/* <Input
                   icon={Headset}
                   type="text"
-                  // placeholder="Business Owner's Phone"
+                  placeholder="e.g. +2348154230654"
                   label="Business Owner's Phone"
                   value={phoneNumber}
                   onChange={(e) => setUserPhone(e.target.value)}
+                  /> */}
+                <PhoneField
+                  // onChange={(e) => setUserPhone(e.target.value)}
+                  phoneNumber={phoneNumber}
+                  setUserPhone={setUserPhone}
+                  label="Business Owner's Phone"
                 />
                 <div className="flex flex-col gap-3 w-full">
                   <div className="relative flex items-center w-full">
@@ -613,13 +620,18 @@ export default function RegisterBusiness() {
                   value={business_email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <Input
+                {/* <Input
                   icon={Lock}
                   type="text"
                   // placeholder="Business Phone"
                   label="Business Phone"
                   value={business_phone}
                   onChange={(e) => setPhone(e.target.value)}
+                /> */}
+                <PhoneField
+                  phoneNumber={business_phone}
+                  setUserPhone={setPhone}
+                  label="Business Phone"
                 />
               </div>
 

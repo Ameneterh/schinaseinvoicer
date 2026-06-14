@@ -32,29 +32,32 @@ export default function InvoiceFooter() {
           </div>
         </div>
       </div>
-      <div>
-        <p className="text-xs text-right mb-1 text-gray-500">
-          Invoice created on{" "}
-          <span>
-            {today.getDate().toString().padStart(2, "0")}/
-            {(today.getMonth() + 1).toString().padStart(2, "0")}/
-            {today.getFullYear()} - {today.toLocaleTimeString()}
-          </span>
-        </p>
-        <Divider />
-      </div>
+
       {/* company advert for trial plans */}
-      <div className="fixed bottom-0 left-0 w-full text-center text-xs text-gray-500 py-2 flex items-center gap-2 justify-center">
-        <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
-        <span className="flex items-center">
-          <MdWhatsapp /> <MdAddCall className="mx-1" />
-          <Link
-            to="tel:+2349028531506"
-            className="text-blue-600 hover:underline underline-offset-2 font-bold"
-          >
-            09028531506
-          </Link>
-        </span>
+      <div className="fixed bottom-0 left-0 w-full text-center text-xs text-gray-500 py-2 flex flex-col items-center gap-2 justify-center">
+        <div>
+          <p className="text-xs text-right mb-1 text-gray-500">
+            Invoice created on{" "}
+            <span>
+              {today.getDate().toString().padStart(2, "0")}/
+              {(today.getMonth() + 1).toString().padStart(2, "0")}/
+              {today.getFullYear()} - {today.toLocaleTimeString()}
+            </span>
+          </p>
+          <Divider />
+        </div>
+        <div className="flex items-center gap-2 justify-center">
+          <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
+          <span className="flex items-center">
+            <MdWhatsapp /> <MdAddCall className="mx-1" />
+            <Link
+              to="tel:+2349028531506"
+              className="text-blue-600 hover:underline underline-offset-2 font-bold"
+            >
+              09028531506
+            </Link>
+          </span>
+        </div>
       </div>
     </footer>
   );

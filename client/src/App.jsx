@@ -33,7 +33,6 @@ import StaffRollCall from "./pages/StaffRollCall.jsx";
 import StaffDetails from "./components/StaffDetails.jsx";
 import FrequentlyAskedQuestions from "./pages/FrequentlyAskedQuestions.jsx";
 import AwardsAndPrices from "./pages/AwardsAndPrices.jsx";
-import AdmissionEnquiry from "./pages/AdmissionEquiry.jsx";
 import PrivacyAndTerms from "./pages/PrivacyTerms.jsx";
 import { useBusinessStore } from "./store/businessStore.js";
 import PrintPDF from "./pages/PrintPDF.jsx";

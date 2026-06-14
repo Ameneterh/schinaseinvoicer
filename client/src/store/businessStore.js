@@ -34,24 +34,35 @@ export const useBusinessStore = create((set) => ({
   },
 
   // verify email
-  verifyBusiness: async (code) => {
-    set({ isBizLoading: true, bizError: null });
+  updateBusiness: async (businessId, formData) => {
     try {
-      const response = await axios.post(`${API_URL}/verify-email`, {
-        code,
-      });
-      set({
-        business: response.data.business,
-        isBizAuthenticated: true,
-        isBizLoading: false,
-      });
+      set({ isLoading: true, error: null });
+
+      const response = await axios.put(
+        `${API_URL}/update-business/${businessId}`,
+        formData,
+      );
+
+      set((state) => ({
+        businesses: state.businesses.map((business) =>
+          business._id === businessId ? response.data.business : business,
+        ),
+        business:
+          state.business?._id === businessId
+            ? response.data.business
+            : state.business,
+        isLoading: false,
+      }));
+
       return response.data;
     } catch (error) {
-      set({
-        bizError: error.response.data.message || "Error verifying email",
-        isBizLoading: false,
-      });
-      throw error;
+      set({ isLoading: false });
+
+      throw (
+        error.response?.data || {
+          message: "Failed to update business",
+        }
+      );
     }
   },
 }));

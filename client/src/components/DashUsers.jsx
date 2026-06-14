@@ -5,7 +5,7 @@ import { MdOutlineDeleteSweep, MdFilterList } from "react-icons/md";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { useAuthStore } from "../store/authStore";
 import { useClientStore } from "../store/clientStore";
-import { Search, Trash2 } from "lucide-react";
+import { Search, Trash2, BadgeCheck } from "lucide-react";
 import { Input } from "./Input";
 import { UserFiltersComponent } from "./DashFilterComponent";
 
@@ -43,8 +43,6 @@ export default function DashUsers() {
             user.business._id === bizuser?.business?._id &&
             bizuser.isDeleted !== true,
         );
-
-        // console.log(filteredUsers);
 
         setUsers(filteredUsers);
       }
@@ -112,6 +110,7 @@ export default function DashUsers() {
         user?.email?.toLowerCase().includes(search) ||
         user?.role?.toLowerCase().includes(search) ||
         user?.fullname?.toLowerCase().includes(search) ||
+        user?.status?.toLowerCase().includes(search) ||
         user?.business?.business_name?.toLowerCase().includes(search) ||
         new Date(user?.createdAt)
           .toLocaleDateString("en-GB")
@@ -130,6 +129,10 @@ export default function DashUsers() {
 
         case "user":
           result = a.fullname.localeCompare(b.fullname);
+          break;
+
+        case "status":
+          result = a.status.localeCompare(b.status);
           break;
 
         case "company":
@@ -209,7 +212,7 @@ export default function DashUsers() {
             <Input
               icon={Search}
               type="text"
-              placeholder="Search User, Affiliation, Phone, Email, Role ..."
+              placeholder="Search User, Affiliation, Phone, Email, Status, Role ..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -241,6 +244,13 @@ export default function DashUsers() {
                       <MdOutlineDeleteSweep
                         size={16}
                         className="text-red-800 ml-1"
+                        title="User Deleted!"
+                      />
+                    )}
+                    {pickedUser.isVerified && !pickedUser.isDeleted && (
+                      <BadgeCheck
+                        size={16}
+                        className="text-blue-800 ml-1 font-extrabold"
                         title="User Deleted!"
                       />
                     )}

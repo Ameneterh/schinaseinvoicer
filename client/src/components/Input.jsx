@@ -1,4 +1,29 @@
 import { Eye } from "lucide-react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { isValidPhoneNumber } from "react-phone-number-input";
+
+export const PhoneField = ({ phoneNumber, setUserPhone, label, color }) => {
+  return (
+    <div className="flex flex-col relative w-full mt-1 pt-3 rounded px-2">
+      <p
+        className={`text-sm absolute -top-2 left-2 px-1 z-50 bg-white ${color && "text-red-600"}`}
+      >
+        {label}
+      </p>
+      <div className="relative w-full mt-1">
+        <PhoneInput
+          international
+          defaultCountry="NG"
+          value={phoneNumber}
+          onChange={setUserPhone}
+          placeholder="Enter phone number"
+          className="border-none outline-none"
+        />
+      </div>
+    </div>
+  );
+};
 
 export const Input = ({ icon: Icon, label, color, ...props }) => {
   return (

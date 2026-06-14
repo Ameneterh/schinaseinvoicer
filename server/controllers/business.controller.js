@@ -80,95 +80,89 @@ export const addBusiness = async (req, res) => {
   }
 };
 
-// verify email
-export const verifyEmail = async (req, res) => {
-  const { code } = req.body;
-
+// update a user
+export const updateBusiness = async (req, res) => {
   try {
-    const business = await Business.findOne({
-      verificationToken: code,
-      verificationTokenExpiresAt: { $gt: Date.now() },
-    });
+    const { businessId } = req.params;
 
-    if (!business) {
-      return res.status(400).json({
+    const existingBusiness =
+      await Business.findById(businessId).populate("owner");
+
+    if (!existingBusiness) {
+      return res.status(404).json({
         success: false,
-        message: "Invalid or expired verification code",
+        message: "Business not found",
       });
     }
 
-    business.isVerified = true;
-    business.verificationToken = undefined;
-    business.verificationTokenExpiresAt = undefined;
-    await business.save();
+    const updates = {};
 
-    await sendWelcomeEmail(business.business_email, business.business_name);
+    // Only update fields that were actually sent
+    const allowedFields = [
+      "business_name",
+      "business_email",
+      "business_phone",
+      "business_address",
+      "banker",
+      "account_name",
+      "account_number",
+      "website",
+      "status",
+      "plan",
+    ];
 
-    res.status(200).json({
-      success: true,
-      message: "Business Email verified successfully",
-      business: {
-        ...business._doc,
+    for (const field of allowedFields) {
+      if (
+        req.body[field] !== undefined &&
+        String(req.body[field]) !== String(existingBusiness[field] ?? "")
+      ) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    // Avatar plan restriction
+    // if (updates.avatar) {
+    //   const business = existingUser.business;
+
+    //   if (business?.plan?.toLowerCase() === "trial") {
+    //     return res.status(403).json({
+    //       success: false,
+    //       message:
+    //         "Avatar updates are available only on Basic and Premium plans. Upgrade your subscription to update avatar.",
+    //     });
+    //   }
+    // }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No changes detected",
+      });
+    }
+
+    const updatedBusiness = await Business.findByIdAndUpdate(
+      businessId,
+      { $set: updates },
+      {
+        new: true,
+        // runValidators: true,
       },
-    });
-  } catch (error) {
-    console.log("Error in verifyEmail", error);
-    res.status(500).json({ success: false, message: "Server Error!" });
-  }
-};
+    ).populate("owner");
 
-// business login
-export const businessLogin = async (req, res) => {
-  const { business_email, business_password } = req.body;
-  try {
-    const business = await Business.findOne({ business_email });
-
-    if (!business) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid Business Email!" });
-    }
-
-    if (business.status !== "active") {
-      return res.status(400).json({
-        success: false,
-        message: "Business not activated, contact support",
-      });
-    }
-
-    const isValidPassword = bcryptjs.compareSync(
-      business_password,
-      business.business_password,
-    );
-    if (!isValidPassword) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Business Password Credentials!",
-      });
-    }
-
-    generateTokenAndSetCookie(res, business._id);
-
-    business.lastLogin = new Date();
-    await business.save();
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: "Logged in successfully",
-      business: { ...business._doc, password: undefined },
+      message: "Business updated successfully",
+      user: updatedBusiness,
     });
   } catch (error) {
-    console.log("Error in login", error);
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
+    console.error("Update Business Error:", error);
+    console.error(error.stack);
 
-// business logout
-export const logout = async (req, res) => {
-  res.clearCookie("token");
-  res
-    .status(200)
-    .json({ success: true, message: "Business Logged Out Successfully" });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update business",
+    });
+  }
 };
 
 // get all registered businesses
@@ -197,26 +191,6 @@ export const getBusinesses = async (req, res) => {
       lastMonthBusinesses,
     });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-// check authentication
-export const BizCheckAuth = async (req, res) => {
-  try {
-    const business = await Business.findById(req.businessId).select(
-      "-business_password",
-    );
-
-    if (!business) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Business not found" });
-    }
-
-    res.status(200).json({ success: true, business });
-  } catch (error) {
-    console.log("Error in checkAuth", error);
     res.status(400).json({ success: false, message: error.message });
   }
 };
