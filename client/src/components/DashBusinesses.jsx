@@ -241,6 +241,7 @@ export default function DashBusinesses() {
             <table className="border-collapse w-full border-none">
               <thead className=" bg-gray-500">
                 <tr className="border-b-[2px] border-b-black text-sm">
+                  <th className="text-left px-4 py-1 text-nowrap">Reg Date</th>
                   <th className="text-left px-4 py-1 text-nowrap">Status</th>
                   <th className="text-left px-4 py-1 text-nowrap">Package</th>
                   <th className="text-left px-4 py-1 text-nowrap">
@@ -249,11 +250,26 @@ export default function DashBusinesses() {
                   <th className="text-left px-4 py-1 text-nowrap">
                     Business Owner Details
                   </th>
+                  <th className="text-left px-4 py-1 text-nowrap">
+                    Subscription Details
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {selectedBusinesses.map((business) => (
                   <tr key={business._id} className="border-b border-b-gray-600">
+                    <td className="px-4 py-1 text-sm">
+                      {business.createdAt
+                        ? new Date(business.createdAt).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            // hour: "numeric",
+                            // minute: "2-digit",
+                            // hour12: true,
+                          })
+                        : ""}
+                    </td>
                     <td className="px-4 py-1">
                       <span
                         className={`text-sm capitalize cursor-pointer ${business.status === "active" ? "text-green-800" : business.status === "suspended" ? "text-orange-600" : "text-red-600"}`}
@@ -289,10 +305,17 @@ export default function DashBusinesses() {
                           {business.business_phone}
                         </Link>
                       </p>
+                      <Link
+                        to={business.website}
+                        target="_blank"
+                        className="text-blue-700 text-xs hover:underline underline-offset-1"
+                      >
+                        {business.website && business.website}
+                      </Link>
                     </td>
                     <td className="px-4 py-1 text-sm text-nowrap">
                       <p className="font-bold">{business.owner.fullname}</p>
-                      <p className="text-xs -mt-1 flex items-center gap-3">
+                      <p className="text-xs -mt-1 flex flex-col items-start">
                         <Link
                           to={`mailto:${business.owner.email}`}
                           className="text-blue-700 hover:underline underline-offset-1"
@@ -305,6 +328,32 @@ export default function DashBusinesses() {
                         >
                           {business.owner.phoneNumber}
                         </Link>
+                      </p>
+                    </td>
+                    <td className="px-4 py-1 text-sm text-nowrap">
+                      <p className="flex items-center gap-1">
+                        Package:{" "}
+                        <span className="font-bold capitalize">
+                          {business.plan}
+                        </span>
+                      </p>
+
+                      {/* payment info */}
+                      <p className="text-xs -mt-1 flex flex-col items-start">
+                        <span className="flex items-center gap-1">
+                          Renewed On:{" "}
+                          <span className="font-bold capitalize">
+                            {business.plan}
+                          </span>
+                        </span>
+                      </p>
+                      <p className="text-xs -mt-1 flex flex-col items-start">
+                        <span className="flex items-center gap-1">
+                          Expire On:{" "}
+                          <span className="font-bold capitalize">
+                            {business.plan}
+                          </span>
+                        </span>
                       </p>
                     </td>
                   </tr>

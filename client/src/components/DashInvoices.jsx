@@ -213,7 +213,7 @@ export default function DashInvoices() {
         {/* invoices grid  */}
         <div
           className={`grid grid-cols-1 gap-5 w-full ${
-            showFilters ? "grid-cols-2" : "grid-cols-1"
+            showFilters ? "grid-cols-1" : "grid-cols-1"
           }`}
         >
           {selectedInvoices.length > 0 ? (

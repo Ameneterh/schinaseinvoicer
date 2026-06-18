@@ -98,9 +98,9 @@ export default function CallToActionComponent() {
             <div className="p-4 w-full h-fit bg-white rounded-lg">
               <h3 className="font-bold w-full p-2 rounded bg-[#DAA520]">
                 PREMIUM PLAN <br />
-                ₦20,000 – ₦75,000/MONTH
+                ₦50,000/MONTH
               </h3>
-              <p>Full business management solution for growing businesses</p>
+              <p>Full business management solution</p>
               {/* positioning */}
               <div className="text-left text-sm">
                 <p className="font-bold mt-2">Ideal For</p>
@@ -162,7 +162,7 @@ export default function CallToActionComponent() {
             <div className="p-4 w-full h-fit bg-white rounded-lg">
               <h3 className="font-bold w-full p-2 rounded bg-[#C4C4C4]">
                 BASIC PLAN <br />
-                ₦5,000 – ₦15,000/MONTH
+                ₦10,000/MONTH
               </h3>
               <p>Affordable entry-level for small businesses</p>
               {/* positioning */}
@@ -211,15 +211,9 @@ export default function CallToActionComponent() {
                   {isLoading ? (
                     <Loader className="animate-spin mx-auto" />
                   ) : (
-                    "Try InvoiceCore Now!"
+                    "Get Basic Account Now!"
                   )}
                 </Link>
-                {/* <Link
-                  to="add-new-business"
-                  className="bg-blue-600 hover:bg-blue-400 text-white hover:scale-125 transition-all duration-300 p-2 rounded"
-                >
-                  Start free for 30 days — no card required
-                </Link> */}
               </div>
             </div>
           </div>

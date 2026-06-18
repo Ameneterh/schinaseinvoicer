@@ -93,21 +93,6 @@ export function PdfInvoiceFooter({ invoice }) {
           </div>
         </div>
       </div>
-      <div>
-        <p className="text-xs text-right mb-1 text-gray-500">
-          Invoice created on{" "}
-          <span>
-            {invoice?.invDate &&
-              new Date(invoice?.invDate).toLocaleDateString("en-GB", {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              })}{" "}
-            - {new Date(invoice?.invDate).toLocaleTimeString()}
-          </span>
-        </p>
-        <Divider />
-      </div>
     </footer>
   );
 }

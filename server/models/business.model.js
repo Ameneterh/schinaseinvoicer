@@ -52,6 +52,33 @@ const businessSchema = new mongoose.Schema(
       trim: true,
     },
 
+    subscription: {
+      plan: {
+        type: String,
+        enum: ["free", "monthly", "yearly", "lifetime"],
+        default: "free",
+      },
+
+      status: {
+        type: String,
+        enum: ["active", "expired", "cancelled"],
+        default: "active",
+      },
+
+      startedAt: {
+        type: Date,
+      },
+
+      expiresAt: {
+        type: Date,
+      },
+
+      autoRenew: {
+        type: Boolean,
+        default: true,
+      },
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

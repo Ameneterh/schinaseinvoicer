@@ -15,7 +15,7 @@ import MainLayout from "../layout/MainLayout";
 import { useAuthStore } from "../store/authStore";
 import { useClientStore } from "../store/clientStore";
 import { useInvoiceStore } from "../store/invoiceStore";
-import { Input, InvInput } from "../components/Input";
+import { Input, InvInput, PhoneField } from "../components/Input";
 import {
   CalendarDays,
   FileDigit,
@@ -71,7 +71,7 @@ export default function CreateInvoice() {
     try {
       const { clients } = await getAllClients();
       const filteredClients = clients.filter(
-        (client) => user.business._id === client.staff.business._id,
+        (client) => user?.business._id === client?.staff?.business._id,
       );
       setClients(filteredClients);
     } catch (error) {
@@ -350,13 +350,12 @@ export default function CreateInvoice() {
                             />
                           </div>
                           <div className="flex flex-col flex-1">
-                            {/* <label
-                              htmlFor="client_phone"
-                              className="text-sm mb-1"
-                            >
-                              Enter Client's Phone
-                            </label> */}
-                            <InvInput
+                            <PhoneField
+                              phoneNumber={client_phone}
+                              setUserPhone={setPhone}
+                              label="Handler Phone Number"
+                            />
+                            {/* <InvInput
                               icon={PhoneCall}
                               type="text"
                               name="client_phone"
@@ -367,7 +366,7 @@ export default function CreateInvoice() {
                               value={client?.client_phone || client_phone}
                               onChange={(e) => setPhone(e.target.value)}
                               disabled={!isChecked}
-                            />
+                            /> */}
                           </div>
                           <div className="flex flex-col flex-1">
                             {/* <label

@@ -136,26 +136,26 @@ export default function PrintPDF() {
   };
 
   // save invoice
-  const saveInvoice = async () => {
-    const invoiceDate = new Date().toISOString();
-    getInvoices();
+  // const saveInvoice = async () => {
+  //   const invoiceDate = new Date().toISOString();
+  //   getInvoices();
 
-    try {
-      await createInvoice({
-        validity,
-        invoiceNumber: "INV/" + new Date().getFullYear() + "/" + invoiceNumber,
-        invDate: invoiceDate,
-        items: list,
-        total,
-        invoiceType,
-        createdBy: user._id,
-        client: client._id,
-      });
-      navigate("/user-dashboard?tab=invoices");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //   try {
+  //     await createInvoice({
+  //       validity,
+  //       invoiceNumber: "INV/" + new Date().getFullYear() + "/" + invoiceNumber,
+  //       invDate: invoiceDate,
+  //       items: list,
+  //       total,
+  //       invoiceType,
+  //       createdBy: user._id,
+  //       client: client._id,
+  //     });
+  //     navigate("/user-dashboard?tab=invoices");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="md:px-10">
@@ -200,17 +200,35 @@ export default function PrintPDF() {
           <PdfInvoiceFooter invoice={invoice} />
 
           {/* company advert on footer */}
-          <div className="text-xs flex items-center gap-2 w-full justify-center fixed bottom-0 left-0 text-center text-gray-500 py-2">
-            <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
-            <span className="flex items-center">
-              <MdWhatsapp /> <MdAddCall className="mx-1" />
-              <Link
-                to="tel:+2349028531506"
-                className="text-blue-600 hover:underline underline-offset-2 font-bold"
-              >
-                09028531506
-              </Link>
-            </span>
+          <div className="text-xs flex items-center gap-2 w-full justify-between fixed bottom-0 left-0 text-center text-gray-500 py-2 px-10">
+            <div>
+              <p className="text-xs text-right text-gray-500">
+                Invoice created on{" "}
+                <span>
+                  {invoice?.invDate &&
+                    new Date(invoice?.invDate).toLocaleDateString("en-GB", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}{" "}
+                  - {new Date(invoice?.invDate).toLocaleTimeString()}
+                </span>
+              </p>
+              {/* <Divider /> */}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <b>Schinase InvoiceCore</b> - coded and maintained by{" "}
+              <span className="flex items-center">
+                <MdWhatsapp /> <MdAddCall className="mx-1" />
+                <Link
+                  to="tel:+2349028531506"
+                  className="text-blue-600 hover:underline underline-offset-2 font-bold"
+                >
+                  09028531506
+                </Link>
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-y-3 gap-x-3 items-center justify-center border-t border-gray-500 py-4 mt-4">
